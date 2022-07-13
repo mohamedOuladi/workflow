@@ -28,6 +28,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@labshare/ls-font/css/lsfontset.css",
               "src/styles.scss"
             ],
             "scripts": []
