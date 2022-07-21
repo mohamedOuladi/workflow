@@ -3,12 +3,11 @@
         <img src="/assets/logo.png" alt="">
     </header>
     <main>
-        <article class="grid">
-            <div class="example-box" cdkDrag (cdkDragEnded)="dropped($event)">
-                Drag me around
-            </div>
+        <article class="grid" (dragover)="allowDrop($event)" (drop)="dropped($event)" #container>
         </article>
-        <nav>Nav</nav>
+        <nav>
+            <app-plugin-library></app-plugin-library>
+        </nav>
         <aside>Aside</aside>
     </main>
 </body>

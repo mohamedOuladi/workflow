@@ -2,18 +2,22 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { LayoutComponent } from './components/layout/layout.component';
+import { PluginLibraryComponent } from './components/plugin-library/plugin-library.component';
+import { PluginAComponent } from './components/plugin-a/plugin-a.component';
+import { PluginDraggableComponent } from './components/plugin-draggable/plugin-draggable.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LayoutComponent
+    LayoutComponent,
+    PluginLibraryComponent,
+    PluginAComponent,
+    PluginDraggableComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

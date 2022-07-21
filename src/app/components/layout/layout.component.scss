@@ -14,6 +14,7 @@ main {
 
 main > article {
     flex: 1;
+    position: relative;
 }
 
 main > nav,
@@ -21,6 +22,7 @@ main > aside {
     flex: 0 0 $left-menu-width;
     background: $primary-bg-color;
 }
+
 main > nav {
     order: -1;
 }

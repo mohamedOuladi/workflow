@@ -1,20 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef } from '@angular/core';
+import { PluginAComponent } from '../plugin-a/plugin-a.component';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss']
 })
-export class LayoutComponent implements OnInit {
+export class LayoutComponent {
 
-  constructor() { }
+  @ViewChild('container', { read: ViewContainerRef }) container!: ViewContainerRef;
 
-  ngOnInit(): void {
+  dropped(event: DragEvent) {
+    const data = JSON.parse(event.dataTransfer!.getData('data'));
+    const compoonent = this.container.createComponent(PluginAComponent);
+    compoonent.instance.x =  event.clientX - data.x;
+    compoonent.instance.y =  event.clientY - data.y * 2; // temp hack
+
+    // TODO: instead of creating a new component, add it to the State and then render it
   }
 
-
-  dropped(event: any) {
-    console.log(event);
+  allowDrop(event: any) {
+    event.preventDefault();
   }
-
 }
