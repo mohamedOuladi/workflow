@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-plugin-a',
@@ -8,7 +8,6 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 export class PluginAComponent implements OnInit {
   x: number = 0;
   y: number = 0;
-  @ViewChild('chartContainer', { read: ElementRef }) myChartContainer!: ElementRef;
 
   constructor(private element: ElementRef) { }
 

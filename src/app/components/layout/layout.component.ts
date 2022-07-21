@@ -17,6 +17,7 @@ export class LayoutComponent {
     compoonent.instance.y =  event.clientY - data.y * 2; // temp hack
 
     // TODO: instead of creating a new component, add it to the State and then render it
+    // TODO: distinguish between new and existing components
   }
 
   allowDrop(event: any) {
