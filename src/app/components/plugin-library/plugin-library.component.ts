@@ -23,6 +23,7 @@ export class PluginLibraryComponent {
   plugins = MOCK_PLUGINS;
 
   start(e: DragEvent) {
+    // get mouse coordinates relative to the clicked element
     const x = e.offsetX;
     const y = e.offsetY;
 

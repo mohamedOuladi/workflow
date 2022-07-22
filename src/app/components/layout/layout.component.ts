@@ -12,17 +12,16 @@ export class LayoutComponent {
 
   isDragging = false;
   draggedElement?: HTMLElement;
-  offsetX: number = 0;
-  offsetY: number = 0;
-
+  draggedOffsetX: number = 0; // offset of currenlty dragged element
+  draggedOffsetY: number = 0; // offset of currenlty dragged element
 
   dropped(event: DragEvent) {
     const dataJ = event.dataTransfer!.getData('data');
     if (dataJ) {
       const data = JSON.parse(dataJ);
       const compoonent = this.container.createComponent(PluginAComponent);
-      compoonent.instance.x = event.clientX - data.x;
-      compoonent.instance.y = event.clientY - data.y * 2; // temp hack
+      compoonent.instance.x = event.offsetX - data.x;
+      compoonent.instance.y = event.offsetY - data.y;
     }
 
     // TODO: instead of creating a new component, add it to the State and then render it
@@ -51,8 +50,8 @@ export class LayoutComponent {
       const mouseY = e.y;
       
       // calculate the offset between the mouse and the element
-      this.offsetX = mouseX - elementX;
-      this.offsetY = mouseY - elementY;
+      this.draggedOffsetX = mouseX - elementX;
+      this.draggedOffsetY = mouseY - elementY;
     }
   }
 
@@ -61,8 +60,8 @@ export class LayoutComponent {
     const containerClientY = this.containerEl.nativeElement.offsetTop;
 
     if (this.isDragging && this.draggedElement) {
-      this.draggedElement.style.left = (e.clientX - containerClientX - this.offsetX) + 'px'
-      this.draggedElement.style.top = (e.clientY - containerClientY - this.offsetY ) + 'px'
+      this.draggedElement.style.left = (e.clientX - containerClientX - this.draggedOffsetX) + 'px'
+      this.draggedElement.style.top = (e.clientY - containerClientY - this.draggedOffsetY ) + 'px'
 
       // TODO: update the state of the component instead of setting style directly
     }
