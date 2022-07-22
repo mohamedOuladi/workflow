@@ -6,6 +6,7 @@ import { LayoutComponent } from './components/layout/layout.component';
 import { PluginLibraryComponent } from './components/plugin-library/plugin-library.component';
 import { PluginAComponent } from './components/plugin-a/plugin-a.component';
 import { PluginDraggableComponent } from './components/plugin-draggable/plugin-draggable.component';
+import { DynamicPluginDirective } from './directives/dynamic-plugin.directive';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { PluginDraggableComponent } from './components/plugin-draggable/plugin-d
     LayoutComponent,
     PluginLibraryComponent,
     PluginAComponent,
-    PluginDraggableComponent
+    PluginDraggableComponent,
+    DynamicPluginDirective
   ],
   imports: [
     BrowserModule,

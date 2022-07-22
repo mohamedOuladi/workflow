@@ -1,14 +1,18 @@
-<body>
-    <header>
-        <img src="/assets/logo.png" alt="">
-    </header>
-    <main>
-        <article class="grid"  #containerEl (dragover)="allowDrop($event)" (drop)="dropped($event)" (mousedown)="mouseDown($event)" (mousemove)="mouseMove($event)" (mouseup)="mouseUp()">
-            <ng-template  #container></ng-template>
-        </article>
-        <nav>
-            <app-plugin-library></app-plugin-library>
-        </nav>
-        <aside>Aside</aside>
-    </main>
-</body>
+<!-- TODO: separate into layout and workspace -->
+
+<header>
+    <img src="/assets/logo.png" alt="">
+</header>
+<main>
+    <article class="grid" #containerEl (dragover)="allowDrop($event)" (drop)="dropped($event)"
+        (mousedown)="mouseDown($event)" (mousemove)="mouseMove($event)" (mouseup)="mouseUp()"> 
+        <ng-container *ngFor="let plugin of plugins">
+            <div appDynamicPlugin [id]="plugin.id!" [x]="plugin.x" [y]="plugin.y"></div>
+        </ng-container>
+    </article>
+    <nav>
+        <app-plugin-library></app-plugin-library>
+    </nav>
+    <aside>Aside</aside>
+</main>
+<button (click)="clear()"></button>

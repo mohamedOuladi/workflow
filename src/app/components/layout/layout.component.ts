@@ -1,5 +1,7 @@
-import { Component, ElementRef, ViewChild, ViewContainerRef } from '@angular/core';
-import { PluginAComponent } from '../plugin-a/plugin-a.component';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { updatePluginCoordinates } from 'src/app/redux/actions';
+import { Store } from 'src/app/redux/store';
+import { PluginX } from 'src/app/types';
 
 @Component({
   selector: 'app-layout',
@@ -7,25 +9,31 @@ import { PluginAComponent } from '../plugin-a/plugin-a.component';
   styleUrls: ['./layout.component.scss']
 })
 export class LayoutComponent {
-  @ViewChild('container', { read: ViewContainerRef }) container!: ViewContainerRef;
   @ViewChild('containerEl', { read: ElementRef }) containerEl!: ElementRef;
 
   isDragging = false;
-  draggedElement?: HTMLElement;
+  draggedElementId: number = -1;
   draggedOffsetX: number = 0; // offset of currenlty dragged element
   draggedOffsetY: number = 0; // offset of currenlty dragged element
 
-  dropped(event: DragEvent) {
-    const dataJ = event.dataTransfer!.getData('data');
-    if (dataJ) {
-      const data = JSON.parse(dataJ);
-      const compoonent = this.container.createComponent(PluginAComponent);
-      compoonent.instance.x = event.offsetX - data.x;
-      compoonent.instance.y = event.offsetY - data.y;
-    }
+  plugins = [] as PluginX[];
 
-    // TODO: instead of creating a new component, add it to the State and then render it
-    // TODO: distinguish between new and existing components
+  constructor(private store: Store) {
+    this.store.state$.subscribe(state => {
+      this.render(state.plugins);
+    })
+  }
+
+  dropped(event: DragEvent) {
+    const dataJson = event.dataTransfer!.getData('data');
+    if (dataJson) {
+      const data = JSON.parse(dataJson);
+      const x = event.offsetX - data.x;
+      const y = event.offsetY - data.y;
+      const name = 'Lorem ipsum';
+      const plugin = { name, x, y, };
+      this.store.dispatch({ type: 'ADD_PLUGIN', payload: plugin });
+    }
   }
 
   allowDrop(event: any) {
@@ -38,7 +46,7 @@ export class LayoutComponent {
     // only certain elements can be dragged
     if (element) {
       this.isDragging = true;
-      this.draggedElement = element as HTMLElement;
+      this.draggedElementId = parseInt(element.getAttribute('data-id')!, 10)
 
       // get coordinates of the element relative to the document
       const rect = element.getBoundingClientRect();
@@ -48,7 +56,7 @@ export class LayoutComponent {
       // get mouse coordinates relative to the document
       const mouseX = e.x;
       const mouseY = e.y;
-      
+
       // calculate the offset between the mouse and the element
       this.draggedOffsetX = mouseX - elementX;
       this.draggedOffsetY = mouseY - elementY;
@@ -59,16 +67,23 @@ export class LayoutComponent {
     const containerClientX = this.containerEl.nativeElement.offsetLeft;
     const containerClientY = this.containerEl.nativeElement.offsetTop;
 
-    if (this.isDragging && this.draggedElement) {
-      this.draggedElement.style.left = (e.clientX - containerClientX - this.draggedOffsetX) + 'px'
-      this.draggedElement.style.top = (e.clientY - containerClientY - this.draggedOffsetY ) + 'px'
-
-      // TODO: update the state of the component instead of setting style directly
+    if (this.isDragging && this.draggedElementId >= 0) {
+      const newX = e.clientX - containerClientX - this.draggedOffsetX;
+      const newY = e.clientY - containerClientY - this.draggedOffsetY;
+      this.store.dispatch(updatePluginCoordinates(this.draggedElementId, newX, newY));
     }
   }
 
   mouseUp() {
     this.isDragging = false;
-    this.draggedElement = undefined;
+    this.draggedElementId = -1;
+  }
+
+  render(plugins: PluginX[]) {
+    this.plugins = plugins;
+  }
+
+  clear(){
+    this.plugins = [];
   }
 }
