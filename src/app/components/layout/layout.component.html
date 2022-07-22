@@ -3,7 +3,8 @@
         <img src="/assets/logo.png" alt="">
     </header>
     <main>
-        <article class="grid" (dragover)="allowDrop($event)" (drop)="dropped($event)" #container>
+        <article class="grid"  #containerEl (dragover)="allowDrop($event)" (drop)="dropped($event)" (mousedown)="mouseDown($event)" (mousemove)="mouseMove($event)" (mouseup)="mouseUp()">
+            <ng-template  #container></ng-template>
         </article>
         <nav>
             <app-plugin-library></app-plugin-library>
