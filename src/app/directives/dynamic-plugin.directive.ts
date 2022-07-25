@@ -1,6 +1,5 @@
 import { ComponentRef, Directive, Input, ViewContainerRef } from '@angular/core';
 import { PluginAComponent } from '../components/plugin-a/plugin-a.component';
-import { PluginX } from '../types';
 
 @Directive({
   selector: '[appDynamicPlugin]'
