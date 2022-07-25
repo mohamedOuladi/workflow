@@ -15,6 +15,9 @@ export function pluginReducer(plugins: PluginX[] = [], action: Action): PluginX[
                 plugin.y = action.payload.y;
             }
             return [...plugins];
+        case ActionTypes.LOAD_STATE:
+            pluginId = (action.payload.plugins as PluginX[]).reduce((max, p) => Math.max(max, p.id || 0), 0) + 1;
+            return action.payload.plugins;
         default:
             return plugins;
     }

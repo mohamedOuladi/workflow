@@ -9,8 +9,10 @@ export interface Action {
     payload?: any;
 }
 
+
 export enum ActionTypes {
     ADD_PLUGIN = 'ADD_PLUGIN',
-    UPDATE_PLUGIN_COORDINATES = "UPDATE_PLUGIN_COORDINATES"
+    UPDATE_PLUGIN_COORDINATES = "UPDATE_PLUGIN_COORDINATES",
+    LOAD_STATE = "LOAD_STATE"
 }
 

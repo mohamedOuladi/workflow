@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { updatePluginCoordinates } from 'src/app/redux/actions';
+import { loadState, updatePluginCoordinates } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { PluginX } from 'src/app/types';
 
@@ -83,7 +83,20 @@ export class LayoutComponent {
     this.plugins = plugins;
   }
 
-  clear(){
+  clear() {
     this.plugins = [];
+  }
+
+  save() {
+    const state = this.store.state;
+    sessionStorage.setItem('state', JSON.stringify(state));
+  }
+
+  load() {
+    const stateStr = sessionStorage.getItem('state');
+    if (stateStr) {
+      const state = JSON.parse(stateStr);
+      this.store.dispatch(loadState(state));
+    }
   }
 }
