@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-plugin-a',
   templateUrl: './plugin-a.component.html',
-  styleUrls: ['./plugin-a.component.scss']
+  styleUrls: ['./plugin-a.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class PluginAComponent implements AfterViewInit {
   x: number = 0;

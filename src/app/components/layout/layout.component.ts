@@ -1,4 +1,5 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, ElementRef, Inject, inject, ViewChild } from '@angular/core';
 import { loadState, updatePluginCoordinates } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { PluginX } from 'src/app/types';
@@ -12,13 +13,17 @@ export class LayoutComponent {
   @ViewChild('containerEl', { read: ElementRef }) containerEl!: ElementRef;
 
   isDragging = false;
+  isDrawing = false;
   draggedElementId: number = -1;
   draggedOffsetX: number = 0; // offset of currenlty dragged element
   draggedOffsetY: number = 0; // offset of currenlty dragged element
 
+  svgElement: any;
+  newLine: any;
+
   plugins = [] as PluginX[];
 
-  constructor(private store: Store) {
+  constructor(private store: Store, @Inject(DOCUMENT) private document: Document) {
     this.store.state$.subscribe(state => {
       this.render(state.plugins);
     })
@@ -36,15 +41,12 @@ export class LayoutComponent {
     }
   }
 
-  allowDrop(event: any) {
-    event.preventDefault();
-  }
-
   mouseDown(e: MouseEvent) {
+    const outlet = (e.target as HTMLElement)!.closest('.outlet'); // TODO: classname from shared constant
     const element = (e.target as HTMLElement)!.closest('.plugin'); // TODO: classname from shared constant
 
     // only certain elements can be dragged
-    if (element) {
+    if (!outlet && element) {
       this.isDragging = true;
       this.draggedElementId = parseInt(element.getAttribute('data-id')!, 10)
 
@@ -61,6 +63,31 @@ export class LayoutComponent {
       this.draggedOffsetX = mouseX - elementX;
       this.draggedOffsetY = mouseY - elementY;
     }
+
+    if (outlet) {
+      this.isDrawing = true;
+      this.draggedElementId = -1;
+
+      let svgElement = this.document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svgElement.setAttribute("style", "position: absolute;");
+      svgElement.setAttribute("height", "1");
+      svgElement.setAttribute("width", "1");
+      this.containerEl.nativeElement.appendChild(svgElement);
+      this.svgElement = svgElement;
+
+      const newLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+      //newLine.setAttribute('id', 'line2');
+      newLine.setAttribute("stroke", "red");
+      newLine.setAttribute("x1", e.clientX + "px");
+      newLine.setAttribute("y1", e.clientY + "px");
+      newLine.setAttribute("x2", e.clientX + "px");
+      newLine.setAttribute("y2", e.clientY + "px");
+      newLine.classList.add('main-path')
+      this.newLine = newLine;
+
+      svgElement.appendChild(newLine);
+    }
   }
 
   mouseMove(e: MouseEvent) {
@@ -72,19 +99,27 @@ export class LayoutComponent {
       const newY = e.clientY - containerClientY - this.draggedOffsetY;
       this.store.dispatch(updatePluginCoordinates(this.draggedElementId, newX, newY));
     }
+
+    if (this.isDrawing) {
+      console.log(e.clientX, e.clientY);
+      this.newLine.setAttribute("x2", e.clientX);
+      this.newLine.setAttribute("y2", e.clientY);
+    }
   }
 
   mouseUp() {
     this.isDragging = false;
+    this.isDrawing = false;
     this.draggedElementId = -1;
+
   }
 
   render(plugins: PluginX[]) {
     this.plugins = plugins;
   }
 
-  clear() {
-    this.plugins = [];
+  allowDrop(event: any) {
+    event.preventDefault();
   }
 
   save() {
