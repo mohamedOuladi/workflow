@@ -1,0 +1,32 @@
+$width: 200px;
+$height: 40px;
+$outlet-size: 20px;
+
+.plugin {
+    border: 2px solid gray;
+    width: $width;
+    height: $height;
+    padding: 10px;
+    cursor: grab;
+
+    &:active {
+        cursor: grabbing;
+    }
+
+    .outlet {
+        border: 2px solid gray;
+        width: $outlet-size;
+        height: $outlet-size;
+        position: absolute;
+        top: calc(50% - $outlet-size / 2);
+        left: calc(100% - $outlet-size / 2 + 1px);
+        border-radius: 50%;
+        background-color: #fff;
+
+        &:hover {
+            background-color: orange;
+            cursor: crosshair;
+        }
+    }
+}
+

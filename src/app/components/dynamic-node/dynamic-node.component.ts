@@ -28,7 +28,6 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit {
     this.host.nativeElement.style.left = this.x + 'px';
     this.host.nativeElement.style.top = this.y + 'px';
     this.host.nativeElement.setAttribute('data-id', this.id.toString());
-    console.log('set id ', this.id);
   }
 
   ngOnChanges(changes: any): void {

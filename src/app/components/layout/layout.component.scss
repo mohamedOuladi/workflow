@@ -49,3 +49,15 @@ header {
         repeating-linear-gradient(90deg, #2b2c2c 0 1px, transparent 1px 100%);
     background-size: 71px 71px;
 }
+
+
+svg {
+    z-index: 0;
+    position: absolute;
+    overflow: visible !important;
+}
+
+.main-path {
+    stroke: #4ea9ff;
+    stroke-width: 3px;
+}

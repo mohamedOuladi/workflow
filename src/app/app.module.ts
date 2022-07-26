@@ -7,6 +7,8 @@ import { PluginLibraryComponent } from './components/plugin-library/plugin-libra
 import { PluginAComponent } from './components/plugin-a/plugin-a.component';
 import { PluginDraggableComponent } from './components/plugin-draggable/plugin-draggable.component';
 import { DynamicNodeComponent } from './components/dynamic-node/dynamic-node.component';
+import { ConnectionComponent } from './components/connection/connection.component';
+import { PluginBComponent } from './components/plugin-b/plugin-b.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,9 @@ import { DynamicNodeComponent } from './components/dynamic-node/dynamic-node.com
     PluginLibraryComponent,
     PluginAComponent,
     PluginDraggableComponent,
-    DynamicNodeComponent
+    DynamicNodeComponent,
+    ConnectionComponent,
+    PluginBComponent
   ],
   imports: [
     BrowserModule,
