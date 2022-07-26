@@ -46,12 +46,15 @@ export class LayoutComponent {
 
   mouseDown(e: MouseEvent) {
     const outlet = (e.target as HTMLElement)!.closest('.outlet'); // TODO: classname from shared constant
-    const element = (e.target as HTMLElement)!.closest('.plugin'); // TODO: classname from shared constant
+    const element = (e.target as HTMLElement)!.closest('[data-id]'); // TODO: classname from shared constant
 
     // only certain elements can be dragged
     if (!outlet && element) {
+    
       this.isDragging = true;
       this.draggedElementId = parseInt(element.getAttribute('data-id')!, 10)
+
+      console.log('id', this.draggedElementId);
 
       // get coordinates of the element relative to the document
       const rect = element.getBoundingClientRect();
@@ -128,7 +131,7 @@ export class LayoutComponent {
 
     if (this.isDrawing) {
       const outlet = (e.target as HTMLElement)!.closest('.outlet'); // TODO: classname from shared constant
-      const element = (e.target as HTMLElement)!.closest('.plugin'); // TODO: classname from shared constant
+      const element = (e.target as HTMLElement)!.closest('[data-id]'); // TODO: classname from shared constant
 
       if (outlet && element) {
         const targetId = parseInt(element.getAttribute('data-id')!, 10);
