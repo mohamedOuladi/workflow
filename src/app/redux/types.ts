@@ -1,7 +1,8 @@
-import { PluginX } from "../types";
+import { ConnectionX, PluginX } from "../types";
 
 export interface State {
     plugins: PluginX[];
+    connections: ConnectionX[];
 }
 
 export interface Action {
@@ -9,10 +10,11 @@ export interface Action {
     payload?: any;
 }
 
-
 export enum ActionTypes {
     ADD_PLUGIN = 'ADD_PLUGIN',
-    UPDATE_PLUGIN_COORDINATES = "UPDATE_PLUGIN_COORDINATES",
-    LOAD_STATE = "LOAD_STATE"
+    MOVE_PLUGIN = "MOVE_PLUGIN",
+    LOAD_STATE = "LOAD_STATE",
+    START_CONNECTION = "START_CONNECTION",
+    FINISH_CONNECTION = "FINISH_CONNECTION",
+    CANCEL_CONNECTION = "CANCEL_CONNECTION"
 }
-

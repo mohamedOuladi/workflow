@@ -3,7 +3,7 @@
 </header>
 <main>
     <article class="grid" #containerEl (dragover)="allowDrop($event)" (drop)="dropped($event)"
-        (mousedown)="mouseDown($event)" (mousemove)="mouseMove($event)" (mouseup)="mouseUp()">
+        (mousedown)="mouseDown($event)" (mousemove)="mouseMove($event)" (mouseup)="mouseUp($event)">
         <ng-container *ngFor="let plugin of plugins">
             <div appDynamicPlugin [id]="plugin.id!" [x]="plugin.x" [y]="plugin.y"></div>
         </ng-container>
@@ -14,6 +14,7 @@
     <aside>
         <div><button (click)="save()">Save</button></div>
         <div><button (click)="load()">Load</button></div>
+        <pre><code>{{ state | json }}</code></pre>
     </aside>
 </main>
 

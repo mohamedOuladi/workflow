@@ -4,3 +4,9 @@ export interface PluginX {
     y: number;
     id?: number;
 }
+
+export interface ConnectionX {
+    sourceId?: number;
+    targetId?: number;
+    id?: number;
+}

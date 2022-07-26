@@ -1,7 +1,8 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, ElementRef, Inject, inject, ViewChild } from '@angular/core';
-import { loadState, updatePluginCoordinates } from 'src/app/redux/actions';
+import { loadState, startConnection, movePlugin, cancelConnection, finishConnection } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
+import { State } from 'src/app/redux/types';
 import { PluginX } from 'src/app/types';
 
 @Component({
@@ -14,17 +15,19 @@ export class LayoutComponent {
 
   isDragging = false;
   isDrawing = false;
+
   draggedElementId: number = -1;
   draggedOffsetX: number = 0; // offset of currenlty dragged element
   draggedOffsetY: number = 0; // offset of currenlty dragged element
 
-  svgElement: any;
-  newLine: any;
+  drawedConnectionId: number = -1;
 
   plugins = [] as PluginX[];
+  state?: State;
 
   constructor(private store: Store, @Inject(DOCUMENT) private document: Document) {
     this.store.state$.subscribe(state => {
+      this.state = state;
       this.render(state.plugins);
     })
   }
@@ -64,29 +67,41 @@ export class LayoutComponent {
       this.draggedOffsetY = mouseY - elementY;
     }
 
-    if (outlet) {
+    if (outlet && element) {
+      // TODO: new connection vs existing connection
+
       this.isDrawing = true;
-      this.draggedElementId = -1;
 
-      let svgElement = this.document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      svgElement.setAttribute("style", "position: absolute;");
-      svgElement.setAttribute("height", "1");
-      svgElement.setAttribute("width", "1");
-      this.containerEl.nativeElement.appendChild(svgElement);
-      this.svgElement = svgElement;
+      const sourcePluginId = parseInt(element.getAttribute('data-id')!, 10)
+      this.store.dispatch(startConnection(sourcePluginId));
 
-      const newLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      // const containerClientX = this.containerEl.nativeElement.offsetLeft;
+      // const containerClientY = this.containerEl.nativeElement.offsetTop;
 
-      //newLine.setAttribute('id', 'line2');
-      newLine.setAttribute("stroke", "red");
-      newLine.setAttribute("x1", e.clientX + "px");
-      newLine.setAttribute("y1", e.clientY + "px");
-      newLine.setAttribute("x2", e.clientX + "px");
-      newLine.setAttribute("y2", e.clientY + "px");
-      newLine.classList.add('main-path')
-      this.newLine = newLine;
+      // const x = e.clientX - containerClientX;
+      // const y = e.clientY - containerClientY;
 
-      svgElement.appendChild(newLine);
+      // this.draggedElementId = -1;
+
+      // let svgElement = this.document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      // svgElement.setAttribute("style", "position: absolute; top: 0; left: 0;");
+      // svgElement.setAttribute("height", "1");
+      // svgElement.setAttribute("width", "1");
+      // this.containerEl.nativeElement.appendChild(svgElement);
+      // this.svgElement = svgElement;
+
+      // const newLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+      // //newLine.setAttribute('id', 'line2');
+      // newLine.setAttribute("stroke", "red");
+      // newLine.setAttribute("x1", x + "px");
+      // newLine.setAttribute("y1", y + "px");
+      // newLine.setAttribute("x2", x + "px");
+      // newLine.setAttribute("y2", y + "px");
+      // newLine.classList.add('main-path')
+      // this.newLine = newLine;
+
+      // svgElement.appendChild(newLine);
     }
   }
 
@@ -97,17 +112,34 @@ export class LayoutComponent {
     if (this.isDragging && this.draggedElementId >= 0) {
       const newX = e.clientX - containerClientX - this.draggedOffsetX;
       const newY = e.clientY - containerClientY - this.draggedOffsetY;
-      this.store.dispatch(updatePluginCoordinates(this.draggedElementId, newX, newY));
+      this.store.dispatch(movePlugin(this.draggedElementId, newX, newY));
     }
 
-    if (this.isDrawing) {
-      console.log(e.clientX, e.clientY);
-      this.newLine.setAttribute("x2", e.clientX);
-      this.newLine.setAttribute("y2", e.clientY);
-    }
+    // if (this.isDrawing) {
+    //   console.log(e.clientX, e.clientY);
+    //   this.newLine.setAttribute("x2", e.clientX);
+    //   this.newLine.setAttribute("y2", e.clientY);
+    // }
   }
 
-  mouseUp() {
+  mouseUp(e: MouseEvent) {
+    console.log('mouseUp', e);
+
+
+    if (this.isDrawing) {
+      const outlet = (e.target as HTMLElement)!.closest('.outlet'); // TODO: classname from shared constant
+      const element = (e.target as HTMLElement)!.closest('.plugin'); // TODO: classname from shared constant
+
+      if (outlet && element) {
+        const targetId = parseInt(element.getAttribute('data-id')!, 10);
+        this.store.dispatch(finishConnection(targetId));
+        console.log('connecting', targetId);
+      }  else {
+        // TODO: cancel new connection vs existing connection
+        this.store.dispatch(cancelConnection());
+      }
+    }
+
     this.isDragging = false;
     this.isDrawing = false;
     this.draggedElementId = -1;
@@ -134,4 +166,5 @@ export class LayoutComponent {
       this.store.dispatch(loadState(state));
     }
   }
+
 }

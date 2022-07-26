@@ -1,5 +1,5 @@
 $header-height: 75px;
-$left-menu-width: 200px;
+$left-menu-width: 400px;
 
 $primary-bg-color: #3e3e3e;
 $black-color: #0a0d0c;
@@ -8,7 +8,7 @@ $primary-text-color: #b5b5b5;
 main {
     display: flex;
     min-height: calc(100vh - $header-height);
-    // background-color: $black-color;
+    background-color: $black-color;
     color: $primary-text-color;
 }
 
@@ -20,7 +20,7 @@ main > article {
 main > nav,
 main > aside {
     flex: 0 0 $left-menu-width;
-    // background: $primary-bg-color;
+    background: $primary-bg-color;
 }
 
 main > nav {
@@ -44,8 +44,8 @@ header {
     background-size: cover;
 }
 
-// .grid {
-//     background-image: repeating-linear-gradient(#2b2c2c 0 1px, transparent 1px 100%),
-//         repeating-linear-gradient(90deg, #2b2c2c 0 1px, transparent 1px 100%);
-//     background-size: 71px 71px;
-// }
+.grid {
+    background-image: repeating-linear-gradient(#2b2c2c 0 1px, transparent 1px 100%),
+        repeating-linear-gradient(90deg, #2b2c2c 0 1px, transparent 1px 100%);
+    background-size: 71px 71px;
+}
