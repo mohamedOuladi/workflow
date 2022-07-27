@@ -12,7 +12,6 @@ export function pluginReducer(plugins: PluginX[] = [], action: Action): PluginX[
             return [...plugins, newPlugin];
 
         case ActionTypes.MOVE_PLUGIN:
-            console.log(action.payload);
             const plugin = plugins.find(p => p.id === action.payload.id);
             if (plugin) {
                 plugin.x = action.payload.x;
@@ -50,13 +49,23 @@ export function linkReducer(connections: Link[] = [], action: Action): Link[] {
         case ActionTypes.CANCEL_LINK:
             return action.payload === -1 ? connections.slice(0, -1) : connections.filter(c => c.id !== action.payload);
         
-        case ActionTypes.MOVE_LINK:
+        case ActionTypes.MOVE_LINK_TAIL:
             const { id, x, y } = action.payload;
 
             const connection2 = id > -1 ? connections.find(c => c.id === id) : connections[connections.length - 1];
             if (connection2) {
                 connection2.x2 = x;
                 connection2.y2 = y;
+            }
+            return [...connections];
+
+        case ActionTypes.MOVE_LINK_HEAD:
+            const { id: id2, x: x2, y: y2 } = action.payload;
+
+            const connection3 = id2 > -1 ? connections.find(c => c.id === id2) : connections[connections.length - 1];
+            if (connection3) {
+                connection3.x1 = x2;
+                connection3.y1 = y2;
             }
             return [...connections];
             

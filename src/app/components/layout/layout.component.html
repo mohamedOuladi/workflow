@@ -8,7 +8,7 @@
             <app-dynamic-node [data]="{x :plugin.x, y: plugin.y, id: plugin.id!, type: plugin.type }"></app-dynamic-node>
         </ng-container>
         <ng-container *ngFor="let c of state?.links">
-            <app-link [data]="{id: c.id, x1: c.x1, x2: c.x2, y1: c.y1, y2: c.y2  }"></app-link>
+            <app-link [data]="{ id: c.id, x1: c.x1, x2: c.x2, y1: c.y1, y2: c.y2 }"></app-link>
         </ng-container>
     </article>
     <nav>

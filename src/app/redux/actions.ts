@@ -31,7 +31,12 @@ export const cancelLink = (id = -1): Action => ({
     payload: id
 });
 
-export const moveLink = (x: number, y: number, id = -1): Action => ({
-    type: ActionTypes.MOVE_LINK,
+export const moveLinkTail = (x: number, y: number, id = -1): Action => ({
+    type: ActionTypes.MOVE_LINK_TAIL,
+    payload: { id, x, y }
+});
+
+export const moveLinkHead = (x: number, y: number, id = -1): Action => ({
+    type: ActionTypes.MOVE_LINK_HEAD,
     payload: { id, x, y }
 });

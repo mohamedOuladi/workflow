@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
-import { loadState, startLink, movePlugin, cancelLink, finishLink, moveLink } from 'src/app/redux/actions';
+import { loadState, startLink, movePlugin, cancelLink, finishLink, moveLinkTail, moveLinkHead } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
 
@@ -16,6 +16,7 @@ export class LayoutComponent {
   isDragging = false;
   isDrawing = false;
 
+  draggedElement?: Element;
   draggedElementId: number = -1;
   draggedOffsetX: number = 0; // offset of currenlty dragged element
   draggedOffsetY: number = 0; // offset of currenlty dragged element
@@ -42,13 +43,14 @@ export class LayoutComponent {
   mouseDown(e: MouseEvent) {
     // TODO: classname from shared constant
     const inlet = (e.target as HTMLElement)!.closest('.inlet');
-    const outlet = (e.target as HTMLElement)!.closest('.outlet'); 
-    const element = (e.target as HTMLElement)!.closest('[data-id]'); 
+    const outlet = (e.target as HTMLElement)!.closest('.outlet');
+    const element = (e.target as HTMLElement)!.closest('[data-id]');
 
     // dragging a plugin
     if (!outlet && element) {
       this.isDragging = true;
       this.draggedElementId = parseInt(element.getAttribute('data-id')!, 10)
+      this.draggedElement = element;
 
       // get coordinates of the element relative to the document
       const rect = element.getBoundingClientRect();
@@ -62,15 +64,13 @@ export class LayoutComponent {
       // this.store.dispatch(startLink(inlet, outlet));
     }
 
+
     if (outlet && element) {
-      // TODO: new connection vs existing connection
       this.isDrawing = true;
       const sourcePluginId = parseInt(element.getAttribute('data-id')!, 10);
-
-      // get outlet coordinates of center of outlet relative to the document 
       const rect = outlet.getBoundingClientRect();
-      const outletX = rect.left + rect.width / 2;
-      const outletY = rect.top + rect.height / 2;
+      const outletX = rect.left + rect.width / 2 - this.containerEl.nativeElement.offsetLeft;
+      const outletY = rect.top + rect.height / 2 - this.containerEl.nativeElement.offsetTop;
       this.store.dispatch(startLink(sourcePluginId, outletX, outletY));
     }
   }
@@ -83,10 +83,26 @@ export class LayoutComponent {
       const newX = e.clientX - containerClientX - this.draggedOffsetX;
       const newY = e.clientY - containerClientY - this.draggedOffsetY;
       this.store.dispatch(movePlugin(this.draggedElementId, newX, newY));
+
+      // get size of dragged element
+      // const rect = this.draggedElement!.getBoundingClientRect();
+      // const width = rect.width;
+      // const height = rect.height;
+
+      // calculate right outlet coordinates
+      // const outletX = newX + width;
+      // const outletY = newY + height / 2;
+
+      // this.state?.links.filter(link => link.sourceId === this.draggedElementId).forEach(link => {
+      //   this.store.dispatch(moveLinkHead(link.id, outletX, outletY));
+      //   console.log(link.id, outletX, outletY);
+      // });
     }
 
     if (this.isDrawing) {
-      this.store.dispatch(moveLink(e.clientX, e.clientY));
+      const x = e.clientX - containerClientX;
+      const y = e.clientY - containerClientY;
+      this.store.dispatch(moveLinkTail(x, y));
     }
   }
 
@@ -100,7 +116,9 @@ export class LayoutComponent {
         const outletRect = inlet.getBoundingClientRect();
         const outletX = outletRect.left + outletRect.width / 2;
         const outletY = outletRect.top + outletRect.height / 2;
-        this.store.dispatch(finishLink(targetId, outletX, outletY));
+        const x = outletX - this.containerEl.nativeElement.offsetLeft;
+        const y = outletY - this.containerEl.nativeElement.offsetTop;
+        this.store.dispatch(finishLink(targetId, x, y));
       } else {
         // TODO: new connection vs existing connection
         this.store.dispatch(cancelLink());
@@ -134,6 +152,8 @@ export class LayoutComponent {
 // TODO: add size to plugin
 
 // TODO: change offset of connections
+
+// TODO: new connection vs existing connection
 
 // TODO: if draw from inlet - unconnect existing connection
 
