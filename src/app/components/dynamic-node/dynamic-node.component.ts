@@ -36,10 +36,10 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit {
 
   ngOnChanges(changes: any): void {
     if (this.component) {
-      this.x = changes.data.currentValue.x|| this.x;
+      this.x = changes.data.currentValue.x || this.x;
       this.y = changes.data.currentValue.y || this.y;
       this.host.nativeElement.style.left = this.x + 'px';
-    this.host.nativeElement.style.top = this.y + 'px';
+      this.host.nativeElement.style.top = this.y + 'px';
     }
   }
 

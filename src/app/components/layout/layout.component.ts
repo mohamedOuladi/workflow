@@ -167,8 +167,11 @@ export class LayoutComponent {
 
 }
 
-// TODO: only 1 link per inlet
-// TODO: add size to node
-// TODO: new link vs existing link
+// TODO: try different content in nodes
+
+// TODO: select multiple nodes and move them
+
 // TODO: do not hover color of inlet if link was from inlet - pass state into dynamicNode component, and possibly node object
+
+// TODO: zoom in and out
 
