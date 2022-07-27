@@ -16,6 +16,11 @@ export const moveNode = (id: number, x: number, y: number): Action => ({
     payload: { id, x, y }
 });
 
+export const deleteNode = (id: number): Action => ({
+    type: ActionTypes.DELETE_NODE,
+    payload: id
+});
+
 export const createLink = (sourceId: number, x1: number, y1: number): Action => ({
     type: ActionTypes.CREATE_LINK,
     payload: { sourceId, x1, y1 }

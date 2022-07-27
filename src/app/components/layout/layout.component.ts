@@ -167,9 +167,11 @@ export class LayoutComponent {
 
 }
 
+// TODO: delete node
 // TODO: try different content in nodes
-
-// TODO: select multiple nodes and move them
+// TODO: select one
+// TODO: select multiple nodes
+// TODO: move multiple nodes
 
 // TODO: do not hover color of inlet if link was from inlet - pass state into dynamicNode component, and possibly node object
 

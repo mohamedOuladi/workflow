@@ -19,6 +19,9 @@ export function nodeReducer(nodes: NodeX[] = [], action: Action): NodeX[] {
             }
             return [...nodes];
 
+        case ActionTypes.DELETE_NODE:
+            return nodes.filter(p => p.id !== action.payload);
+
         case ActionTypes.LOAD_STATE:
             nodeId = (action.payload.nodes as NodeX[]).reduce((max, p) => Math.max(max, p.id || 0), 0) + 1;
             return action.payload.nodes;
@@ -70,6 +73,9 @@ export function linkReducer(links: Link[] = [], action: Action): Link[] {
             const link4 = links.find(c => c.id === action.payload)!;
             link4.targetId = undefined;
             return [...links];
+
+        case ActionTypes.DELETE_NODE:
+            return links.filter(c => c.sourceId !== action.payload && c.targetId !== action.payload);
 
         default:
             return links;
