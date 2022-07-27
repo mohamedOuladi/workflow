@@ -21,15 +21,10 @@ export class LayoutComponent {
   draggedOffsetX: number = 0; // offset of currenlty dragged element
   draggedOffsetY: number = 0; // offset of currenlty dragged element
 
-  plugins = [] as PluginX[];
-  connections = [] as ConnectionX[];
-
   state?: State;
-  svgElement?: SVGSVGElement;
 
   constructor(private store: Store) {
     this.store.state$.pipe(filter(x => !!x)).subscribe(state => {
-      this.render(state);
       this.state = state;
     })
   }
@@ -74,6 +69,7 @@ export class LayoutComponent {
       // TODO: new connection vs existing connection
       this.isDrawing = true;
       const sourcePluginId = parseInt(element.getAttribute('data-id')!, 10);
+
       // get outlet coordinates of center of outlet relative to the document 
       const rect = outlet.getBoundingClientRect();
       const outletX = rect.left + rect.width / 2;
@@ -98,8 +94,6 @@ export class LayoutComponent {
   }
 
   mouseUp(e: MouseEvent) {
-    console.log('mouseUp', e);
-
     if (this.isDrawing) {
       const outlet = (e.target as HTMLElement)!.closest('.outlet'); // TODO: classname from shared constant
       const element = (e.target as HTMLElement)!.closest('[data-id]'); // TODO: classname from shared constant
@@ -119,11 +113,6 @@ export class LayoutComponent {
     this.isDragging = false;
     this.isDrawing = false;
     this.draggedElementId = -1;
-  }
-
-  render(state: State) {
-    this.plugins = state.plugins;
-    this.connections = state.connections;
   }
 
   allowDrop(event: any) {

@@ -34,15 +34,9 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit {
     if (this.component) {
       this.x = changes.data.currentValue.x|| this.x;
       this.y = changes.data.currentValue.y || this.y;
-      this.updatePosition(this.x, this.y);
-    }
-  }
-
-  updatePosition(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-    this.host.nativeElement.style.left = this.x + 'px';
+      this.host.nativeElement.style.left = this.x + 'px';
     this.host.nativeElement.style.top = this.y + 'px';
+    }
   }
 
 }

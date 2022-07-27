@@ -12,6 +12,7 @@ export function pluginReducer(plugins: PluginX[] = [], action: Action): PluginX[
             return [...plugins, newPlugin];
 
         case ActionTypes.MOVE_PLUGIN:
+            console.log(action.payload);
             const plugin = plugins.find(p => p.id === action.payload.id);
             if (plugin) {
                 plugin.x = action.payload.x;
