@@ -6,7 +6,11 @@ export interface PluginX {
 }
 
 export interface ConnectionX {
-    sourceId?: number;
+    sourceId: number;
     targetId?: number;
-    id?: number;
+    id: number;
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
 }

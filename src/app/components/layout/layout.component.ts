@@ -1,9 +1,9 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
-import { loadState, startConnection, movePlugin, cancelConnection, finishConnection } from 'src/app/redux/actions';
+import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { filter } from 'rxjs';
+import { loadState, startConnection, movePlugin, cancelConnection, finishConnection, moveConnection } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
-import { PluginX } from 'src/app/types';
+import { ConnectionX, PluginX } from 'src/app/types';
 
 @Component({
   selector: 'app-layout',
@@ -21,28 +21,17 @@ export class LayoutComponent {
   draggedOffsetX: number = 0; // offset of currenlty dragged element
   draggedOffsetY: number = 0; // offset of currenlty dragged element
 
-  drawedConnectionId: number = -1;
-
   plugins = [] as PluginX[];
-  connections = [] as { x1: number, y1: number, x2: number, y2: number }[];
+  connections = [] as ConnectionX[];
+
   state?: State;
   svgElement?: SVGSVGElement;
 
-  constructor(private store: Store, @Inject(DOCUMENT) private document: Document) {
-    this.store.state$.subscribe(state => {
+  constructor(private store: Store) {
+    this.store.state$.pipe(filter(x => !!x)).subscribe(state => {
       this.render(state);
       this.state = state;
     })
-  }
-
-  ngAfterViewInit() {
-    let svgElement = this.document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svgElement.setAttribute("style", "position: fixed; top: 0; left: 0;");
-    svgElement.setAttribute("height", "1");
-    svgElement.setAttribute("width", "1");
-    this.containerEl.nativeElement.appendChild(svgElement);
-    this.svgElement = svgElement;
-    this.render(this.state!);
   }
 
   dropped(event: DragEvent) {
@@ -84,8 +73,12 @@ export class LayoutComponent {
     if (outlet && element) {
       // TODO: new connection vs existing connection
       this.isDrawing = true;
-      const sourcePluginId = parseInt(element.getAttribute('data-id')!, 10)
-      this.store.dispatch(startConnection(sourcePluginId));
+      const sourcePluginId = parseInt(element.getAttribute('data-id')!, 10);
+      // get outlet coordinates of center of outlet relative to the document 
+      const rect = outlet.getBoundingClientRect();
+      const outletX = rect.left + rect.width / 2;
+      const outletY = rect.top + rect.height / 2;
+      this.store.dispatch(startConnection(sourcePluginId, outletX, outletY));
     }
   }
 
@@ -99,16 +92,13 @@ export class LayoutComponent {
       this.store.dispatch(movePlugin(this.draggedElementId, newX, newY));
     }
 
-    // if (this.isDrawing) {
-    //   console.log(e.clientX, e.clientY);
-    //   this.newLine.setAttribute("x2", e.clientX);
-    //   this.newLine.setAttribute("y2", e.clientY);
-    // }
+    if (this.isDrawing) {
+      this.store.dispatch(moveConnection(e.clientX, e.clientY));
+    }
   }
 
   mouseUp(e: MouseEvent) {
     console.log('mouseUp', e);
-
 
     if (this.isDrawing) {
       const outlet = (e.target as HTMLElement)!.closest('.outlet'); // TODO: classname from shared constant
@@ -116,9 +106,12 @@ export class LayoutComponent {
 
       if (outlet && element) {
         const targetId = parseInt(element.getAttribute('data-id')!, 10);
-        this.store.dispatch(finishConnection(targetId));
+        const outletRect = outlet.getBoundingClientRect();
+        const outletX = outletRect.left + outletRect.width / 2;
+        const outletY = outletRect.top + outletRect.height / 2;
+        this.store.dispatch(finishConnection(targetId, outletX, outletY));
       } else {
-        // TODO: cancel new connection vs existing connection
+        // TODO: new connection vs existing connection
         this.store.dispatch(cancelConnection());
       }
     }
@@ -130,54 +123,7 @@ export class LayoutComponent {
 
   render(state: State) {
     this.plugins = state.plugins;
-    state.connections.map(c => {
-      console.log('connectionEl', c);
-
-      if (c.sourceId !== undefined && c.targetId !== undefined) {
-        const connectionEl = this.document?.querySelector(`[data-connection-id="${c.id!.toString()}"]`);
-
-        let newLine: SVGLineElement;
-        if (!connectionEl) {
-          const newLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-          newLine.setAttribute("stroke", "red");
-          newLine.setAttribute("x1", 0 + "px");
-          newLine.setAttribute("y1", 0 + "px");
-          newLine.setAttribute("x2", 1000 + "px");
-          newLine.setAttribute("y2", 1000 + "px");
-          newLine.setAttribute("data-connection-id", c.id!.toString());
-          newLine.classList.add('main-path')
-
-          this.svgElement!.appendChild(newLine);
-        } else {
-          newLine = connectionEl as SVGLineElement;
-        }
-
-        const sourceEl = this.document.querySelector(`[data-id="${c.sourceId}"]`);
-        console.log('sourceEl', sourceEl);
-        if (sourceEl) {
-          const outlet = sourceEl!.querySelector('.outlet');
-          const rect = outlet!.getBoundingClientRect();
-          const x1 = rect.left + rect.width / 2;
-          const y1 = rect.top + rect.height / 2;
-
-          const targetEl = this.document.querySelector(`[data-id="${c.targetId}"]`);
-          const outlet2 = targetEl!.querySelector('.outlet');
-          const rect2 = outlet2!.getBoundingClientRect();
-          const x2 = rect2.left + rect2.width / 2;
-          const y2 = rect2.top + rect2.height / 2;
-
-          console.log('x1', x1, 'y1', y1, 'x2', x2, 'y2', y2);
-          // update the line
-          newLine!.setAttribute("x1", x1 + "px");
-          newLine!.setAttribute("y1", y1 + "px");
-          newLine!.setAttribute("x2", x2 + "px");
-          newLine!.setAttribute("y2", y2 + "px");
-
-        }
-
-      }
-
-    })
+    this.connections = state.connections;
   }
 
   allowDrop(event: any) {

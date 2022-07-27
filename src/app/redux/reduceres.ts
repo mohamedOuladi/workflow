@@ -36,17 +36,28 @@ export function connectionReducer(connections: ConnectionX[] = [], action: Actio
             return action.payload.connections;
 
         case ActionTypes.START_CONNECTION:
-            return [...connections, { id: connectionId++, sourceId: action.payload }];
+            const { sourceId, x1, y1 } = action.payload;
+            return [...connections, { id: connectionId++, sourceId, x1, y1, x2: x1, y2: y1 }];
 
         case ActionTypes.FINISH_CONNECTION:
             const connection = connections.find(c => c.id === action.payload.id) || connections[connections.length - 1];
             connection.targetId = action.payload.targetId;
+            connection.x2 = action.payload.x;
+            connection.y2 = action.payload.y;
             return [...connections];
             
         case ActionTypes.CANCEL_CONNECTION:
-
             return action.payload === -1 ? connections.slice(0, -1) : connections.filter(c => c.id !== action.payload);
-            
+        
+        case ActionTypes.MOVE_CONNECTION:
+            const { id, x, y } = action.payload;
+
+            const connection2 = id > -1 ? connections.find(c => c.id === id) : connections[connections.length - 1];
+            if (connection2) {
+                connection2.x2 = x;
+                connection2.y2 = y;
+            }
+            return [...connections];
         default:
             return connections;
     }

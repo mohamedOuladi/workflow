@@ -7,7 +7,7 @@ import { PluginAComponent } from '../plugin-a/plugin-a.component';
   styleUrls: ['./dynamic-node.component.scss']
 })
 export class DynamicNodeComponent implements OnInit, AfterViewInit {
-  @ViewChild('outlet', { read: ViewContainerRef, static: false }) sample!: ViewContainerRef;
+  @ViewChild('outlet', { read: ViewContainerRef, static: false }) outlet!: ViewContainerRef;
   @ViewChild('host', { read: ElementRef }) host!: ElementRef;
 
   @Input() data?: { x: number, y: number, id: number };
@@ -23,7 +23,7 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.component = this.sample.createComponent(PluginAComponent); // TODO: do not hardcode component
+    this.component = this.outlet.createComponent(PluginAComponent); // TODO: do not hardcode component
     this.host.nativeElement.style.position = 'absolute';
     this.host.nativeElement.style.left = this.x + 'px';
     this.host.nativeElement.style.top = this.y + 'px';

@@ -7,6 +7,9 @@
         <ng-container *ngFor="let plugin of plugins">
             <app-dynamic-node [data]="{x :plugin.x, y: plugin.y, id: plugin.id! }"></app-dynamic-node>
         </ng-container>
+        <ng-container *ngFor="let c of connections">
+            <app-connection [data]="{id: c.id, x1: c.x1, x2: c.x2, y1: c.y1, y2: c.y2  }"></app-connection>
+        </ng-container>
     </article>
     <nav>
         <app-plugin-library></app-plugin-library>

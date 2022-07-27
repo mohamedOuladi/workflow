@@ -16,17 +16,22 @@ export const movePlugin = (id: number, x: number, y: number): Action => ({
     payload: { id, x, y }
 });
 
-export const startConnection = (sourceId: number): Action => ({
+export const startConnection = (sourceId: number, x1: number, y1: number): Action => ({
     type: ActionTypes.START_CONNECTION,
-    payload: sourceId
+    payload: { sourceId, x1, y1 }
 });
 
-export const finishConnection = (targetId: number, id = -1): Action => ({
+export const finishConnection = (targetId: number, x: number, y: number, id = -1,): Action => ({
     type: ActionTypes.FINISH_CONNECTION,
-    payload: { id, targetId }
+    payload: { id, targetId, x, y }
 });
 
 export const cancelConnection = (id = -1): Action => ({
     type: ActionTypes.CANCEL_CONNECTION,
     payload: id
+});
+
+export const moveConnection = (x: number, y: number, id = -1): Action => ({
+    type: ActionTypes.MOVE_CONNECTION,
+    payload: { id, x, y }
 });
