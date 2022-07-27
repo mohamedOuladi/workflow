@@ -29,7 +29,7 @@ export class ConnectionComponent implements OnInit, AfterViewInit, OnChanges {
   ngAfterViewInit(): void {
     const svgElement = this.renderer.createElement('svg', 'svg');
     this.renderer.setAttribute(svgElement, 'xmlns', 'http://www.w3.org/2000/svg');
-    this.renderer.setAttribute(svgElement, 'style', 'position: fixed; top: 0; left: 0;');
+    this.renderer.setAttribute(svgElement, 'style', 'position: fixed; top: 0; left: 0; z-index: 0; height: 1; width: 1;');
     this.renderer.appendChild(this.host.nativeElement, svgElement);
 
     const line = this.renderer.createElement('line', 'svg');
