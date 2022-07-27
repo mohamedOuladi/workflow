@@ -59,6 +59,7 @@ export function connectionReducer(connections: ConnectionX[] = [], action: Actio
                 connection2.y2 = y;
             }
             return [...connections];
+            
         default:
             return connections;
     }

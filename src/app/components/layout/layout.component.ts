@@ -3,7 +3,6 @@ import { filter } from 'rxjs';
 import { loadState, startConnection, movePlugin, cancelConnection, finishConnection, moveConnection } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
-import { ConnectionX, PluginX } from 'src/app/types';
 
 @Component({
   selector: 'app-layout',
@@ -35,8 +34,7 @@ export class LayoutComponent {
       const data = JSON.parse(dataJson);
       const x = event.offsetX - data.x;
       const y = event.offsetY - data.y;
-      const name = 'Lorem ipsum';
-      const plugin = { name, x, y, };
+      const plugin = { x, y, type: data.type };
       this.store.dispatch({ type: 'ADD_PLUGIN', payload: plugin });
     }
   }

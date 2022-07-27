@@ -1,8 +1,8 @@
 export interface PluginX {
-    name: string;
     x: number;
     y: number;
     id?: number;
+    type: string;
 }
 
 export interface ConnectionX {

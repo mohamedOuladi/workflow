@@ -1,18 +1,5 @@
-import { Component } from '@angular/core';
-import { PluginAComponent } from '../plugin-a/plugin-a.component';
-
-const MOCK_PLUGINS = [
-  {
-    name: 'Lorem ipsum',
-    icon: 'icon-lsi-plugins',
-    component: PluginAComponent
-  },
-  {
-    name: 'Dolor sit amet',
-    icon: 'icon-lsi-plugins',
-    component: PluginAComponent
-  }
-];
+import { Component } from '@angular/core'
+import { PLUGINS } from 'src/app/plugins';
 
 @Component({
   selector: 'app-plugin-library',
@@ -20,17 +7,17 @@ const MOCK_PLUGINS = [
   styleUrls: ['./plugin-library.component.scss']
 })
 export class PluginLibraryComponent {
-  plugins = MOCK_PLUGINS;
+  plugins = PLUGINS;
 
   start(e: DragEvent) {
-    // get mouse coordinates relative to the clicked element
     const x = e.offsetX;
     const y = e.offsetY;
 
     const data = {
       x: x,
-      y: y
+      y: y,
+      type: (e.target as HTMLElement)!.getAttribute('data-type')!, // TODO: do not use hardcoded classname
     };
-    e.dataTransfer!.setData('data', JSON.stringify(data));
+    e.dataTransfer!.setData('data', JSON.stringify(data)); // TODO: do not use hardcoded classname
   }
 }
