@@ -28,46 +28,46 @@ export function pluginReducer(plugins: PluginX[] = [], action: Action): PluginX[
     }
 }
 
-export function linkReducer(connections: Link[] = [], action: Action): Link[] {
+export function linkReducer(links: Link[] = [], action: Action): Link[] {
     switch (action.type) {
 
         case ActionTypes.LOAD_STATE:
-            connectionId = (action.payload.connections as Link[]).reduce((max, c) => Math.max(max, c.id || 0), 0) + 1;
-            return action.payload.connections;
+            connectionId = (action.payload.links as Link[]).reduce((max, c) => Math.max(max, c.id || 0), 0) + 1;
+            return action.payload.links;
 
         case ActionTypes.START_LINK:
             const { sourceId, x1, y1 } = action.payload;
-            return [...connections, { id: connectionId++, sourceId, x1, y1, x2: x1, y2: y1 }];
+            return [...links, { id: connectionId++, sourceId, x1, y1, x2: x1, y2: y1 }];
 
         case ActionTypes.FINISH_LINK:
-            const connection = connections.find(c => c.id === action.payload.id) || connections[connections.length - 1];
+            const connection = links.find(c => c.id === action.payload.id) || links[links.length - 1];
             connection.targetId = action.payload.targetId;
             connection.x2 = action.payload.x;
             connection.y2 = action.payload.y;
-            return [...connections];
+            return [...links];
 
         case ActionTypes.CANCEL_LINK:
-            return action.payload === -1 ? connections.slice(0, -1) : connections.filter(c => c.id !== action.payload);
+            return action.payload === -1 ? links.slice(0, -1) : links.filter(c => c.id !== action.payload);
 
         case ActionTypes.MOVE_LINK_TAIL:
             const { id, x, y } = action.payload;
 
-            const connection2 = id > -1 ? connections.find(c => c.id === id) : connections[connections.length - 1];
+            const connection2 = id > -1 ? links.find(c => c.id === id) : links[links.length - 1];
             if (connection2) {
                 connection2.x2 = x;
                 connection2.y2 = y;
             }
-            return [...connections];
+            return [...links];
 
         case ActionTypes.MOVE_LINK_HEAD:
             const { id: id2, x: x2, y: y2 } = action.payload;
-            const connection3 = connections.find(c => c.id === id2)!;
+            const connection3 = links.find(c => c.id === id2)!;
             connection3.x1 = x2;
             connection3.y1 = y2;
-            return [...connections];
+            return [...links];
 
         default:
-            return connections;
+            return links;
     }
 }
 
