@@ -1,18 +1,18 @@
-import { PluginX } from '../types';
+import { NodeX } from '../types';
 import { Action, ActionTypes } from './types';
 
-export const loadState = (state: PluginX[]): Action => ({
+export const loadState = (state: NodeX[]): Action => ({
     type: ActionTypes.LOAD_STATE,
     payload: state
 });
 
-export const addPlugin = (plugin: PluginX): Action => ({
-    type: ActionTypes.ADD_PLUGIN,
-    payload: plugin
+export const addNode = (node: NodeX): Action => ({
+    type: ActionTypes.ADD_NODE,
+    payload: node
 });
 
-export const movePlugin = (id: number, x: number, y: number): Action => ({
-    type: ActionTypes.MOVE_PLUGIN,
+export const moveNode = (id: number, x: number, y: number): Action => ({
+    type: ActionTypes.MOVE_NODE,
     payload: { id, x, y }
 });
 

@@ -1,7 +1,7 @@
-import { Link, PluginX } from "../types";
+import { Link, NodeX } from "../types";
 
 export interface State {
-    plugins: PluginX[];
+    nodes: NodeX[];
     links: Link[];
 }
 
@@ -11,8 +11,8 @@ export interface Action {
 }
 
 export enum ActionTypes {
-    ADD_PLUGIN = 'ADD_PLUGIN',
-    MOVE_PLUGIN = "MOVE_PLUGIN",
+    ADD_NODE = 'ADD_NODE',
+    MOVE_NODE = "MOVE_NODE",
     LOAD_STATE = "LOAD_STATE",
     CREATE_LINK = "CREATE_LINK",
     CONNECT_LINK = "CONNECT_LINK",

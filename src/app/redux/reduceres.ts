@@ -1,30 +1,30 @@
-import { Link, PluginX } from "../types";
+import { Link, NodeX } from "../types";
 import { Action, ActionTypes, State } from "./types";
 
-let pluginId = 1;
-let linkId = 1;
+let nodeId = 1; // latest node id
+let linkId = 1; // latest link id
 
-export function pluginReducer(plugins: PluginX[] = [], action: Action): PluginX[] {
+export function nodeReducer(nodes: NodeX[] = [], action: Action): NodeX[] {
     switch (action.type) {
 
-        case ActionTypes.ADD_PLUGIN:
-            const newPlugin = { ...action.payload, id: pluginId++ };
-            return [...plugins, newPlugin];
+        case ActionTypes.ADD_NODE:
+            const newNode = { ...action.payload, id: nodeId++ };
+            return [...nodes, newNode];
 
-        case ActionTypes.MOVE_PLUGIN:
-            const plugin = plugins.find(p => p.id === action.payload.id);
-            if (plugin) {
-                plugin.x = action.payload.x;
-                plugin.y = action.payload.y;
+        case ActionTypes.MOVE_NODE:
+            const node = nodes.find(p => p.id === action.payload.id);
+            if (node) {
+                node.x = action.payload.x;
+                node.y = action.payload.y;
             }
-            return [...plugins];
+            return [...nodes];
 
         case ActionTypes.LOAD_STATE:
-            pluginId = (action.payload.plugins as PluginX[]).reduce((max, p) => Math.max(max, p.id || 0), 0) + 1;
-            return action.payload.plugins;
+            nodeId = (action.payload.nodes as NodeX[]).reduce((max, p) => Math.max(max, p.id || 0), 0) + 1;
+            return action.payload.nodes;
 
         default:
-            return plugins;
+            return nodes;
     }
 }
 
@@ -68,7 +68,7 @@ export function linkReducer(links: Link[] = [], action: Action): Link[] {
 
         case ActionTypes.DISCONNECT_LINK:
             const link4 = links.find(c => c.id === action.payload)!;
-            link4.targetId = undefined
+            link4.targetId = undefined;
             return [...links];
 
         default:
@@ -78,7 +78,7 @@ export function linkReducer(links: Link[] = [], action: Action): Link[] {
 
 export function stateReducer(state: State, action: Action): State {
     return {
-        plugins: pluginReducer(state.plugins, action),
+        nodes: nodeReducer(state.nodes, action),
         links: linkReducer(state.links, action)
     };
 }

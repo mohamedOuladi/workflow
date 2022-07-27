@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
-import { loadState, createLink, movePlugin, destroyLink, connectLink, moveLinkTail, moveLinkHead, addPlugin, disconnectLink } from 'src/app/redux/actions';
+import { loadState, createLink, moveNode, destroyLink, connectLink, moveLinkTail, moveLinkHead, addNode, disconnectLink } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
 
@@ -37,8 +37,8 @@ export class LayoutComponent {
       const data = JSON.parse(dataJson);
       const x = event.offsetX - data.x;
       const y = event.offsetY - data.y;
-      const plugin = { x, y, type: data.type };
-      this.store.dispatch(addPlugin(plugin));
+      const node = { x, y, type: data.type };
+      this.store.dispatch(addNode(node));
     }
   }
 
@@ -49,7 +49,7 @@ export class LayoutComponent {
     const element = (e.target as HTMLElement)!.closest('[data-id]');
     const nodeId = parseInt(element?.getAttribute('data-id')!, 10);
 
-    // dragging a plugin
+    // dragging a node
     if (!outlet && !inlet && element) {
       this.isDragging = true;
       this.draggedElementId = nodeId;
@@ -72,11 +72,10 @@ export class LayoutComponent {
 
     if (outlet && element) {
       this.isDrawing = true;
-      const sourcePluginId = nodeId;
       const rect = outlet.getBoundingClientRect();
       const outletX = rect.left + rect.width / 2 - this.containerEl.nativeElement.offsetLeft;
       const outletY = rect.top + rect.height / 2 - this.containerEl.nativeElement.offsetTop;
-      this.store.dispatch(createLink(sourcePluginId, outletX, outletY));
+      this.store.dispatch(createLink(nodeId, outletX, outletY));
     }
   }
 
@@ -87,7 +86,7 @@ export class LayoutComponent {
     if (this.isDragging && this.draggedElementId >= 0) {
       const newX = e.clientX - containerClientX - this.draggedOffsetX;
       const newY = e.clientY - containerClientY - this.draggedOffsetY;
-      this.store.dispatch(movePlugin(this.draggedElementId, newX, newY));
+      this.store.dispatch(moveNode(this.draggedElementId, newX, newY));
 
       // get size of dragged element
       const rect = this.draggedElement!.getBoundingClientRect();
@@ -162,7 +161,7 @@ export class LayoutComponent {
 }
 
 // TODO: only 1 link per inlet
-// TODO: add size to plugin
+// TODO: add size to node
 // TODO: new link vs existing link
 // TODO: do not hover color of inlet if link was from inlet
 

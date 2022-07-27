@@ -5,8 +5,8 @@
     <article class="grid" #containerEl (dragover)="allowDrop($event)" (drop)="dropped($event)"
         (mousedown)="mouseDown($event)" (mousemove)="mouseMove($event)" (mouseup)="mouseUp($event)">
         <div>linkID {{ linkId }}</div>
-        <ng-container *ngFor="let plugin of state?.plugins">
-            <app-dynamic-node [data]="{x :plugin.x, y: plugin.y, id: plugin.id!, type: plugin.type }"></app-dynamic-node>
+        <ng-container *ngFor="let n of state?.nodes">
+            <app-dynamic-node [data]="{x :n.x, y: n.y, id: n.id!, type: n.type }"></app-dynamic-node>
         </ng-container>
         <ng-container *ngFor="let c of state?.links">
             <app-link [data]="{ id: c.id, x1: c.x1, x2: c.x2, y1: c.y1, y2: c.y2 }"></app-link>

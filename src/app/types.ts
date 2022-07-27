@@ -1,4 +1,4 @@
-export interface PluginX {
+export interface NodeX {
     x: number;
     y: number;
     id?: number;
