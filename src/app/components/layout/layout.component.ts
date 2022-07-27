@@ -58,7 +58,7 @@ export class LayoutComponent {
       this.draggedOffsetY = e.y - rect.top;
     }
 
-    // drawing a connection from an inlet
+    // drawing a link from an inlet
     if (inlet && element) {
       // this.isDrawing = true;
       // this.store.dispatch(startLink(inlet, outlet));
@@ -127,7 +127,7 @@ export class LayoutComponent {
         const y = outletY - this.containerEl.nativeElement.offsetTop;
         this.store.dispatch(finishLink(targetId, x, y));
       } else {
-        // TODO: new connection vs existing connection
+        // TODO: new link vs existing link
         this.store.dispatch(cancelLink());
       }
     }
@@ -158,9 +158,9 @@ export class LayoutComponent {
 
 // TODO: add size to plugin
 
-// TODO: new connection vs existing connection
+// TODO: new link vs existing link
 
-// TODO: if draw from inlet - unconnect existing connection
+// TODO: if draw from inlet - unconnect existing link
 
-// TODO: do not hover color of inlet if connection was from inlet
+// TODO: do not hover color of inlet if link was from inlet
 
