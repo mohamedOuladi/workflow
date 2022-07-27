@@ -40,12 +40,13 @@ export class LayoutComponent {
   }
 
   mouseDown(e: MouseEvent) {
-    const outlet = (e.target as HTMLElement)!.closest('.outlet'); // TODO: classname from shared constant
-    const element = (e.target as HTMLElement)!.closest('[data-id]'); // TODO: classname from shared constant
+    // TODO: classname from shared constant
+    const inlet = (e.target as HTMLElement)!.closest('.inlet');
+    const outlet = (e.target as HTMLElement)!.closest('.outlet'); 
+    const element = (e.target as HTMLElement)!.closest('[data-id]'); 
 
-    // only certain elements can be dragged
+    // dragging a plugin
     if (!outlet && element) {
-
       this.isDragging = true;
       this.draggedElementId = parseInt(element.getAttribute('data-id')!, 10)
 
@@ -53,6 +54,12 @@ export class LayoutComponent {
       const rect = element.getBoundingClientRect();
       this.draggedOffsetX = e.x - rect.left;
       this.draggedOffsetY = e.y - rect.top;
+    }
+
+    // drawing a connection from an inlet
+    if (inlet && element) {
+      // this.isDrawing = true;
+      // this.store.dispatch(startConnection(inlet, outlet));
     }
 
     if (outlet && element) {
@@ -85,12 +92,12 @@ export class LayoutComponent {
 
   mouseUp(e: MouseEvent) {
     if (this.isDrawing) {
-      const outlet = (e.target as HTMLElement)!.closest('.outlet'); // TODO: classname from shared constant
+      const inlet = (e.target as HTMLElement)!.closest('.inlet'); // TODO: classname from shared constant
       const element = (e.target as HTMLElement)!.closest('[data-id]'); // TODO: classname from shared constant
 
-      if (outlet && element) {
+      if (inlet && element) {
         const targetId = parseInt(element.getAttribute('data-id')!, 10);
-        const outletRect = outlet.getBoundingClientRect();
+        const outletRect = inlet.getBoundingClientRect();
         const outletX = outletRect.left + outletRect.width / 2;
         const outletY = outletRect.top + outletRect.height / 2;
         this.store.dispatch(finishConnection(targetId, outletX, outletY));
@@ -123,3 +130,8 @@ export class LayoutComponent {
   }
 
 }
+
+
+// TODO: create inlet and outlet in the plugin
+
+// TODO: do not hover color of inlet if connection was from inlet
