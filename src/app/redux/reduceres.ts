@@ -30,7 +30,7 @@ export function pluginReducer(plugins: PluginX[] = [], action: Action): PluginX[
 
 export function linkReducer(connections: Link[] = [], action: Action): Link[] {
     switch (action.type) {
-        
+
         case ActionTypes.LOAD_STATE:
             connectionId = (action.payload.connections as Link[]).reduce((max, c) => Math.max(max, c.id || 0), 0) + 1;
             return action.payload.connections;
@@ -45,10 +45,10 @@ export function linkReducer(connections: Link[] = [], action: Action): Link[] {
             connection.x2 = action.payload.x;
             connection.y2 = action.payload.y;
             return [...connections];
-            
+
         case ActionTypes.CANCEL_LINK:
             return action.payload === -1 ? connections.slice(0, -1) : connections.filter(c => c.id !== action.payload);
-        
+
         case ActionTypes.MOVE_LINK_TAIL:
             const { id, x, y } = action.payload;
 
@@ -61,14 +61,11 @@ export function linkReducer(connections: Link[] = [], action: Action): Link[] {
 
         case ActionTypes.MOVE_LINK_HEAD:
             const { id: id2, x: x2, y: y2 } = action.payload;
-
-            const connection3 = id2 > -1 ? connections.find(c => c.id === id2) : connections[connections.length - 1];
-            if (connection3) {
-                connection3.x1 = x2;
-                connection3.y1 = y2;
-            }
+            const connection3 = connections.find(c => c.id === id2)!;
+            connection3.x1 = x2;
+            connection3.y1 = y2;
             return [...connections];
-            
+
         default:
             return connections;
     }

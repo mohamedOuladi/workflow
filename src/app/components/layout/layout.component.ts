@@ -85,18 +85,17 @@ export class LayoutComponent {
       this.store.dispatch(movePlugin(this.draggedElementId, newX, newY));
 
       // get size of dragged element
-      // const rect = this.draggedElement!.getBoundingClientRect();
-      // const width = rect.width;
-      // const height = rect.height;
+      const rect = this.draggedElement!.getBoundingClientRect();
+      const width = rect.width;
+      const height = rect.height;
 
       // calculate right outlet coordinates
-      // const outletX = newX + width;
-      // const outletY = newY + height / 2;
+      const outletX = newX + width;
+      const outletY = newY + height / 2;
 
-      // this.state?.links.filter(link => link.sourceId === this.draggedElementId).forEach(link => {
-      //   this.store.dispatch(moveLinkHead(link.id, outletX, outletY));
-      //   console.log(link.id, outletX, outletY);
-      // });
+      this.state?.links.filter(link => link.sourceId === this.draggedElementId).forEach(link => {
+        this.store.dispatch(moveLinkHead(outletX, outletY, link.id));
+      });
     }
 
     if (this.isDrawing) {

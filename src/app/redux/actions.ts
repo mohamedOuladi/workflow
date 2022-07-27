@@ -36,7 +36,7 @@ export const moveLinkTail = (x: number, y: number, id = -1): Action => ({
     payload: { id, x, y }
 });
 
-export const moveLinkHead = (x: number, y: number, id = -1): Action => ({
+export const moveLinkHead = (x: number, y: number, id: number): Action => ({
     type: ActionTypes.MOVE_LINK_HEAD,
     payload: { id, x, y }
 });
