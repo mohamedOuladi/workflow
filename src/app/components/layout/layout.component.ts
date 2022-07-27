@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
-import { loadState, startLink, movePlugin, cancelLink, finishLink, moveLinkTail, moveLinkHead } from 'src/app/redux/actions';
+import { loadState, createLink, movePlugin, destroyLink, connectLink, moveLinkTail, moveLinkHead, addPlugin, disconnectLink } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
 
@@ -16,10 +16,12 @@ export class LayoutComponent {
   isDragging = false;
   isDrawing = false;
 
+  linkId = 0;
+
   draggedElement?: Element;
-  draggedElementId: number = -1;
-  draggedOffsetX: number = 0; // offset of currenlty dragged element
-  draggedOffsetY: number = 0; // offset of currenlty dragged element
+  draggedElementId = 0;
+  draggedOffsetX = 0; // offset of currenlty dragged element
+  draggedOffsetY = 0; // offset of currenlty dragged element
 
   state?: State;
 
@@ -36,7 +38,7 @@ export class LayoutComponent {
       const x = event.offsetX - data.x;
       const y = event.offsetY - data.y;
       const plugin = { x, y, type: data.type };
-      this.store.dispatch({ type: 'ADD_PLUGIN', payload: plugin });
+      this.store.dispatch(addPlugin(plugin));
     }
   }
 
@@ -45,11 +47,12 @@ export class LayoutComponent {
     const inlet = (e.target as HTMLElement)!.closest('.inlet');
     const outlet = (e.target as HTMLElement)!.closest('.outlet');
     const element = (e.target as HTMLElement)!.closest('[data-id]');
+    const nodeId = parseInt(element?.getAttribute('data-id')!, 10);
 
     // dragging a plugin
-    if (!outlet && element) {
+    if (!outlet && !inlet && element) {
       this.isDragging = true;
-      this.draggedElementId = parseInt(element.getAttribute('data-id')!, 10)
+      this.draggedElementId = nodeId;
       this.draggedElement = element;
 
       // get coordinates of the element relative to the document
@@ -58,20 +61,22 @@ export class LayoutComponent {
       this.draggedOffsetY = e.y - rect.top;
     }
 
-    // drawing a link from an inlet
     if (inlet && element) {
-      // this.isDrawing = true;
-      // this.store.dispatch(startLink(inlet, outlet));
+      const linkId = this.state?.links.find(link => link.targetId === nodeId)?.id;
+      if (linkId) {
+        this.linkId = linkId;
+        this.store.dispatch(disconnectLink(linkId));
+        this.isDrawing = true;
+      }
     }
-
 
     if (outlet && element) {
       this.isDrawing = true;
-      const sourcePluginId = parseInt(element.getAttribute('data-id')!, 10);
+      const sourcePluginId = nodeId;
       const rect = outlet.getBoundingClientRect();
       const outletX = rect.left + rect.width / 2 - this.containerEl.nativeElement.offsetLeft;
       const outletY = rect.top + rect.height / 2 - this.containerEl.nativeElement.offsetTop;
-      this.store.dispatch(startLink(sourcePluginId, outletX, outletY));
+      this.store.dispatch(createLink(sourcePluginId, outletX, outletY));
     }
   }
 
@@ -102,14 +107,14 @@ export class LayoutComponent {
       });
 
       this.state?.links.filter(link => link.targetId === this.draggedElementId).forEach(link => {
-        this.store.dispatch(moveLinkTail(inletX, inletY, link.id));
+        this.store.dispatch(moveLinkTail(link.id, inletX, inletY,));
       });
     }
 
     if (this.isDrawing) {
       const x = e.clientX - containerClientX;
       const y = e.clientY - containerClientY;
-      this.store.dispatch(moveLinkTail(x, y));
+      this.store.dispatch(moveLinkTail(this.linkId, x, y));
     }
   }
 
@@ -125,16 +130,16 @@ export class LayoutComponent {
         const outletY = outletRect.top + outletRect.height / 2;
         const x = outletX - this.containerEl.nativeElement.offsetLeft;
         const y = outletY - this.containerEl.nativeElement.offsetTop;
-        this.store.dispatch(finishLink(targetId, x, y));
+        this.store.dispatch(connectLink(this.linkId, targetId, x, y));
       } else {
-        // TODO: new link vs existing link
-        this.store.dispatch(cancelLink());
+        this.store.dispatch(destroyLink(this.linkId));
       }
     }
 
     this.isDragging = false;
     this.isDrawing = false;
-    this.draggedElementId = -1;
+    this.draggedElementId = 0;
+    this.linkId = 0;
   }
 
   allowDrop(event: any) {
@@ -156,11 +161,8 @@ export class LayoutComponent {
 
 }
 
+// TODO: only 1 link per inlet
 // TODO: add size to plugin
-
 // TODO: new link vs existing link
-
-// TODO: if draw from inlet - unconnect existing link
-
 // TODO: do not hover color of inlet if link was from inlet
 

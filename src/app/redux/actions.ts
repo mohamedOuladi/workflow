@@ -16,22 +16,22 @@ export const movePlugin = (id: number, x: number, y: number): Action => ({
     payload: { id, x, y }
 });
 
-export const startLink = (sourceId: number, x1: number, y1: number): Action => ({
-    type: ActionTypes.START_LINK,
+export const createLink = (sourceId: number, x1: number, y1: number): Action => ({
+    type: ActionTypes.CREATE_LINK,
     payload: { sourceId, x1, y1 }
 });
 
-export const finishLink = (targetId: number, x: number, y: number, id = -1,): Action => ({
-    type: ActionTypes.FINISH_LINK,
+export const connectLink = (id: number, targetId: number, x: number, y: number,): Action => ({
+    type: ActionTypes.CONNECT_LINK,
     payload: { id, targetId, x, y }
 });
 
-export const cancelLink = (id = -1): Action => ({
-    type: ActionTypes.CANCEL_LINK,
+export const destroyLink = (id: number): Action => ({
+    type: ActionTypes.DESTROY_LINK,
     payload: id
 });
 
-export const moveLinkTail = (x: number, y: number, id = -1): Action => ({
+export const moveLinkTail = (id: number, x: number, y: number): Action => ({
     type: ActionTypes.MOVE_LINK_TAIL,
     payload: { id, x, y }
 });
@@ -39,4 +39,9 @@ export const moveLinkTail = (x: number, y: number, id = -1): Action => ({
 export const moveLinkHead = (x: number, y: number, id: number): Action => ({
     type: ActionTypes.MOVE_LINK_HEAD,
     payload: { id, x, y }
+});
+
+export const disconnectLink = (id: number): Action => ({
+    type: ActionTypes.DISCONNECT_LINK,
+    payload: id
 });
