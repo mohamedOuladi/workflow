@@ -3,9 +3,9 @@ import { PLUGINS } from 'src/app/plugins';
 import { PluginAComponent } from '../plugin-a/plugin-a.component';
 
 @Component({
-  selector: 'app-dynamic-node',
-  templateUrl: './dynamic-node.component.html',
-  styleUrls: ['./dynamic-node.component.scss']
+  selector: 'app-node',
+  templateUrl: './node.component.html',
+  styleUrls: ['./node.component.scss']
 })
 export class DynamicNodeComponent implements OnInit, AfterViewInit {
   @ViewChild('outlet', { read: ViewContainerRef, static: false }) outlet!: ViewContainerRef;

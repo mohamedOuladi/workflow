@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DynamicNodeComponent } from './dynamic-node.component';
+import { DynamicNodeComponent } from './node.component';
 
 describe('DynamicNodeComponent', () => {
   let component: DynamicNodeComponent;
