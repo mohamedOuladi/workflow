@@ -167,6 +167,8 @@ export class LayoutComponent {
 
 }
 
+
+// TODO: try convert to SVG
 // TODO: delete node
 // TODO: try different content in nodes
 // TODO: select one
