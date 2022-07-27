@@ -9,6 +9,12 @@ $outlet-size: 20px;
     padding: 10px;
     cursor: grab;
 
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+
     &:active {
         cursor: grabbing;
     }

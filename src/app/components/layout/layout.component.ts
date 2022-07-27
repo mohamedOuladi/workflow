@@ -89,12 +89,20 @@ export class LayoutComponent {
       const width = rect.width;
       const height = rect.height;
 
-      // calculate right outlet coordinates
+      // calculate outlet coordinates
       const outletX = newX + width;
       const outletY = newY + height / 2;
 
+      // calculate inlet coordinates
+      const inletX = newX;
+      const inletY = newY + height / 2;
+
       this.state?.links.filter(link => link.sourceId === this.draggedElementId).forEach(link => {
         this.store.dispatch(moveLinkHead(outletX, outletY, link.id));
+      });
+
+      this.state?.links.filter(link => link.targetId === this.draggedElementId).forEach(link => {
+        this.store.dispatch(moveLinkTail(inletX, inletY, link.id));
       });
     }
 
@@ -149,8 +157,6 @@ export class LayoutComponent {
 }
 
 // TODO: add size to plugin
-
-// TODO: change offset of connections
 
 // TODO: new connection vs existing connection
 
