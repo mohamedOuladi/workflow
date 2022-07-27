@@ -124,12 +124,19 @@ export class LayoutComponent {
 
       if (inlet && element) {
         const targetId = parseInt(element.getAttribute('data-id')!, 10);
-        const outletRect = inlet.getBoundingClientRect();
-        const outletX = outletRect.left + outletRect.width / 2;
-        const outletY = outletRect.top + outletRect.height / 2;
-        const x = outletX - this.containerEl.nativeElement.offsetLeft;
-        const y = outletY - this.containerEl.nativeElement.offsetTop;
-        this.store.dispatch(connectLink(this.linkId, targetId, x, y));
+
+        // check inlet of the target node is already connected
+        const link = this.state?.links.find(link => link.targetId === targetId);
+        if (link) {
+          this.store.dispatch(destroyLink(this.linkId));
+        } else {
+          const outletRect = inlet.getBoundingClientRect();
+          const outletX = outletRect.left + outletRect.width / 2;
+          const outletY = outletRect.top + outletRect.height / 2;
+          const x = outletX - this.containerEl.nativeElement.offsetLeft;
+          const y = outletY - this.containerEl.nativeElement.offsetTop;
+          this.store.dispatch(connectLink(this.linkId, targetId, x, y));
+        }
       } else {
         this.store.dispatch(destroyLink(this.linkId));
       }
@@ -163,5 +170,5 @@ export class LayoutComponent {
 // TODO: only 1 link per inlet
 // TODO: add size to node
 // TODO: new link vs existing link
-// TODO: do not hover color of inlet if link was from inlet
+// TODO: do not hover color of inlet if link was from inlet - pass state into dynamicNode component, and possibly node object
 
