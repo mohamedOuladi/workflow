@@ -53,16 +53,8 @@ export class LayoutComponent {
 
       // get coordinates of the element relative to the document
       const rect = element.getBoundingClientRect();
-      const elementX = rect.left;
-      const elementY = rect.top;
-
-      // get mouse coordinates relative to the document
-      const mouseX = e.x;
-      const mouseY = e.y;
-
-      // calculate the offset between the mouse and the element
-      this.draggedOffsetX = mouseX - elementX;
-      this.draggedOffsetY = mouseY - elementY;
+      this.draggedOffsetX = e.x - rect.left;
+      this.draggedOffsetY = e.y - rect.top;
     }
 
     if (outlet && element) {
