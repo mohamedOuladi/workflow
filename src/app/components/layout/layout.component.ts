@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
-import { loadState, startConnection, movePlugin, cancelConnection, finishConnection, moveConnection } from 'src/app/redux/actions';
+import { loadState, startLink, movePlugin, cancelLink, finishLink, moveLink } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
 
@@ -59,7 +59,7 @@ export class LayoutComponent {
     // drawing a connection from an inlet
     if (inlet && element) {
       // this.isDrawing = true;
-      // this.store.dispatch(startConnection(inlet, outlet));
+      // this.store.dispatch(startLink(inlet, outlet));
     }
 
     if (outlet && element) {
@@ -71,7 +71,7 @@ export class LayoutComponent {
       const rect = outlet.getBoundingClientRect();
       const outletX = rect.left + rect.width / 2;
       const outletY = rect.top + rect.height / 2;
-      this.store.dispatch(startConnection(sourcePluginId, outletX, outletY));
+      this.store.dispatch(startLink(sourcePluginId, outletX, outletY));
     }
   }
 
@@ -86,7 +86,7 @@ export class LayoutComponent {
     }
 
     if (this.isDrawing) {
-      this.store.dispatch(moveConnection(e.clientX, e.clientY));
+      this.store.dispatch(moveLink(e.clientX, e.clientY));
     }
   }
 
@@ -100,10 +100,10 @@ export class LayoutComponent {
         const outletRect = inlet.getBoundingClientRect();
         const outletX = outletRect.left + outletRect.width / 2;
         const outletY = outletRect.top + outletRect.height / 2;
-        this.store.dispatch(finishConnection(targetId, outletX, outletY));
+        this.store.dispatch(finishLink(targetId, outletX, outletY));
       } else {
         // TODO: new connection vs existing connection
-        this.store.dispatch(cancelConnection());
+        this.store.dispatch(cancelLink());
       }
     }
 
@@ -131,7 +131,11 @@ export class LayoutComponent {
 
 }
 
+// TODO: add size to plugin
 
-// TODO: create inlet and outlet in the plugin
+// TODO: change offset of connections
+
+// TODO: if draw from inlet - unconnect existing connection
 
 // TODO: do not hover color of inlet if connection was from inlet
+

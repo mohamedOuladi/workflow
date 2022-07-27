@@ -1,4 +1,4 @@
-import { ConnectionX, PluginX } from "../types";
+import { Link, PluginX } from "../types";
 import { Action, ActionTypes, State } from "./types";
 
 let pluginId = 0;
@@ -29,28 +29,28 @@ export function pluginReducer(plugins: PluginX[] = [], action: Action): PluginX[
     }
 }
 
-export function connectionReducer(connections: ConnectionX[] = [], action: Action): ConnectionX[] {
+export function linkReducer(connections: Link[] = [], action: Action): Link[] {
     switch (action.type) {
         
         case ActionTypes.LOAD_STATE:
-            connectionId = (action.payload.connections as ConnectionX[]).reduce((max, c) => Math.max(max, c.id || 0), 0) + 1;
+            connectionId = (action.payload.connections as Link[]).reduce((max, c) => Math.max(max, c.id || 0), 0) + 1;
             return action.payload.connections;
 
-        case ActionTypes.START_CONNECTION:
+        case ActionTypes.START_LINK:
             const { sourceId, x1, y1 } = action.payload;
             return [...connections, { id: connectionId++, sourceId, x1, y1, x2: x1, y2: y1 }];
 
-        case ActionTypes.FINISH_CONNECTION:
+        case ActionTypes.FINISH_LINK:
             const connection = connections.find(c => c.id === action.payload.id) || connections[connections.length - 1];
             connection.targetId = action.payload.targetId;
             connection.x2 = action.payload.x;
             connection.y2 = action.payload.y;
             return [...connections];
             
-        case ActionTypes.CANCEL_CONNECTION:
+        case ActionTypes.CANCEL_LINK:
             return action.payload === -1 ? connections.slice(0, -1) : connections.filter(c => c.id !== action.payload);
         
-        case ActionTypes.MOVE_CONNECTION:
+        case ActionTypes.MOVE_LINK:
             const { id, x, y } = action.payload;
 
             const connection2 = id > -1 ? connections.find(c => c.id === id) : connections[connections.length - 1];
@@ -68,6 +68,6 @@ export function connectionReducer(connections: ConnectionX[] = [], action: Actio
 export function stateReducer(state: State, action: Action): State {
     return {
         plugins: pluginReducer(state.plugins, action),
-        connections: connectionReducer(state.connections, action)
+        links: linkReducer(state.links, action)
     };
 }

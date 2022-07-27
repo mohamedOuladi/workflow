@@ -1,8 +1,8 @@
-import { ConnectionX, PluginX } from "../types";
+import { Link, PluginX } from "../types";
 
 export interface State {
     plugins: PluginX[];
-    connections: ConnectionX[];
+    links: Link[];
 }
 
 export interface Action {
@@ -15,8 +15,8 @@ export enum ActionTypes {
     ADD_PLUGIN = 'ADD_PLUGIN',
     MOVE_PLUGIN = "MOVE_PLUGIN",
     LOAD_STATE = "LOAD_STATE",
-    START_CONNECTION = "START_CONNECTION",
-    FINISH_CONNECTION = "FINISH_CONNECTION",
-    CANCEL_CONNECTION = "CANCEL_CONNECTION",
-    MOVE_CONNECTION = "MOVE_CONNECTION"
+    START_LINK = "START_LINK",
+    FINISH_LINK = "FINISH_LINK",
+    CANCEL_LINK = "CANCEL_LINK",
+    MOVE_LINK = "MOVE_LINK"
 }

@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'app-connection',
-  templateUrl: './connection.component.html',
-  styleUrls: ['./connection.component.scss'],
+  selector: 'app-link',
+  templateUrl: './link.component.html',
+  styleUrls: ['./link.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ConnectionComponent implements OnInit, AfterViewInit, OnChanges {
+export class LinkComponent implements OnInit, AfterViewInit, OnChanges {
   @Input('data') data!: { x1: number, y1: number, x2: number, y2: number, id: number };
   @ViewChild('host', { read: ElementRef }) host!: ElementRef<HTMLDivElement>;
 

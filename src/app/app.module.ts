@@ -6,8 +6,8 @@ import { LayoutComponent } from './components/layout/layout.component';
 import { PluginLibraryComponent } from './components/plugin-library/plugin-library.component';
 import { PluginAComponent } from './components/plugin-a/plugin-a.component';
 import { DynamicNodeComponent } from './components/dynamic-node/dynamic-node.component';
-import { ConnectionComponent } from './components/connection/connection.component';
 import { PluginBComponent } from './components/plugin-b/plugin-b.component';
+import { LinkComponent } from './components/link/link.component';
 
 @NgModule({
   declarations: [
@@ -16,8 +16,8 @@ import { PluginBComponent } from './components/plugin-b/plugin-b.component';
     PluginLibraryComponent,
     PluginAComponent,
     DynamicNodeComponent,
-    ConnectionComponent,
-    PluginBComponent
+    PluginBComponent,
+    LinkComponent
   ],
   imports: [
     BrowserModule,

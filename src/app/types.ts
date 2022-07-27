@@ -5,7 +5,7 @@ export interface PluginX {
     type: string;
 }
 
-export interface ConnectionX {
+export interface Link {
     sourceId: number;
     targetId?: number;
     id: number;
