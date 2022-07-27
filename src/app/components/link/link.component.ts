@@ -1,5 +1,8 @@
 import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 
+
+const CURVITY = 0.5;
+
 @Component({
   selector: 'app-link',
   templateUrl: './link.component.html',
@@ -32,14 +35,15 @@ export class LinkComponent implements OnInit, AfterViewInit, OnChanges {
     this.renderer.setAttribute(svgElement, 'style', 'position: absolute; top: 0; left: 0; z-index: 0; height: 1; width: 1;');
     this.renderer.appendChild(this.host.nativeElement, svgElement);
 
-    const line = this.renderer.createElement('line', 'svg');
-    this.renderer.setAttribute(line, 'x1', this.x1.toString());
-    this.renderer.setAttribute(line, 'y1', this.y1.toString());
-    this.renderer.setAttribute(line, 'x2', this.x2.toString());
-    this.renderer.setAttribute(line, 'y2', this.y2.toString());
-    this.renderer.setAttribute(line, 'stroke', 'red');
-    this.renderer.addClass(line, 'main-path');
-    this.renderer.appendChild(svgElement, line);
+    const formula = LinkComponent.createCurvature(this.x1, this.y1, this.x2, this.y2);
+    const curve = this.renderer.createElement('path', 'svg');
+
+    this.renderer.setAttribute(curve, 'd', formula);
+    this.renderer.setAttribute(curve, 'stroke', 'red');
+    this.renderer.setAttribute(curve, 'fill', 'none');
+    this.renderer.setAttribute(curve, 'stroke-width', '1');
+    this.renderer.addClass(curve, 'main-path');
+    this.renderer.appendChild(svgElement, curve);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -48,12 +52,16 @@ export class LinkComponent implements OnInit, AfterViewInit, OnChanges {
     this.x2 = changes['data'].currentValue.x2;
     this.y2 = changes['data'].currentValue.y2;
 
-    const line = this.host?.nativeElement.querySelector('line') as SVGLineElement;
-    if (line) {
-      line.setAttribute('x1', this.x1.toString());
-      line.setAttribute('y1', this.y1.toString());
-      line.setAttribute('x2', this.x2.toString());
-      line.setAttribute('y2', this.y2.toString());
+    const curve = this.host?.nativeElement.querySelector('path') as SVGLineElement;
+    if (curve) {
+      const formula = LinkComponent.createCurvature(this.x1, this.y1, this.x2, this.y2);
+      curve.setAttribute('d', formula);
     }
+  }
+
+  static createCurvature(x1: number, y1: number, x2: number, y2: number) {
+    const hx1 = x1 + Math.abs(x2 - x1) * CURVITY;
+    const hx2 = x2 - Math.abs(x2 - x1) * CURVITY;
+    return ' M ' + x1 + ' ' + y1 + ' C ' + hx1 + ' ' + y1 + ' ' + hx2 + ' ' + y2 + ' ' + x2 + '  ' + y2;
   }
 }
