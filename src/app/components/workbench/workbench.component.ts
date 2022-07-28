@@ -28,6 +28,8 @@ export class WorkbenchComponent {
 
   state?: State;
 
+  scale = 1;
+
   constructor(private store: Store) {
     this.store.state$.pipe(filter(x => !!x)).subscribe(state => {
       this.state = state;
@@ -57,18 +59,27 @@ export class WorkbenchComponent {
     const element = (e.target as HTMLElement)!.closest('[data-id]');
     const nodeId = parseInt(element?.getAttribute('data-id')!, 10);
 
-    // dragging a node
+    // dragging node
     if (!outlet && !inlet && element) {
       this.isDragging = true;
       this.draggedElementId = nodeId;
       this.draggedElement = element;
 
-      // get coordinates of the element relative to the document
       const rect = element.getBoundingClientRect();
       this.draggedOffsetX = e.x - rect.left;
       this.draggedOffsetY = e.y - rect.top;
     }
 
+    // creating link
+    if (outlet && element) {
+      this.isDrawing = true;
+      const rect = outlet.getBoundingClientRect();
+      const outletX = (rect.left + rect.width / 2 - this.containerX) / this.scale;
+      const outletY = (rect.top + rect.height / 2 - this.containerY) / this.scale;
+      this.store.dispatch(createLink(nodeId, outletX, outletY));
+    }
+
+    // moving link
     if (inlet && element) {
       const linkId = this.state?.links.find(link => link.targetId === nodeId)?.id;
       if (linkId) {
@@ -77,32 +88,24 @@ export class WorkbenchComponent {
         this.isDrawing = true;
       }
     }
-
-    if (outlet && element) {
-      this.isDrawing = true;
-      const rect = outlet.getBoundingClientRect();
-      const outletX = rect.left + rect.width / 2 - this.containerX;
-      const outletY = rect.top + rect.height / 2 - this.containerY;
-      this.store.dispatch(createLink(nodeId, outletX, outletY));
-    }
   }
 
   mouseMove(e: MouseEvent) {
     if (this.isDragging && this.draggedElementId >= 0) {
-      const newX = e.clientX - this.draggedOffsetX - this.containerX;
-      const newY = e.clientY - this.draggedOffsetY - this.containerY;
+      const newX = (e.clientX - this.draggedOffsetX - this.containerX) / this.scale;
+      const newY = (e.clientY - this.draggedOffsetY - this.containerY) / this.scale;
       this.store.dispatch(moveNode(this.draggedElementId, newX, newY));
 
-      // get size of dragged element
       const { width, height } = this.draggedElement!.getBoundingClientRect();
 
+      // TODO: do not hardcode these coordinates
       // calculate outlet coordinates
-      const outletX = newX + width;
-      const outletY = newY + height / 2;
+      const outletX = newX + width / this.scale;
+      const outletY = (newY + height / 2 / this.scale)
 
       // calculate inlet coordinates
       const inletX = newX;
-      const inletY = newY + height / 2;
+      const inletY = newY + height / 2 / this.scale;
 
       this.state?.links.filter(link => link.sourceId === this.draggedElementId).forEach(link => {
         this.store.dispatch(moveLinkHead(outletX, outletY, link.id));
@@ -114,8 +117,8 @@ export class WorkbenchComponent {
     }
 
     if (this.isDrawing) {
-      const x = e.clientX - this.containerX;
-      const y = e.clientY - this.containerY;
+      const x = (e.clientX - this.containerX) / this.scale;
+      const y = (e.clientY - this.containerY) / this.scale;
       this.store.dispatch(moveLinkTail(this.linkId, x, y));
     }
   }
@@ -140,8 +143,8 @@ export class WorkbenchComponent {
           const outletRect = inlet.getBoundingClientRect();
           const outletX = outletRect.left + outletRect.width / 2;
           const outletY = outletRect.top + outletRect.height / 2;
-          const x = outletX - containerClientX;
-          const y = outletY - containerClientY;
+          const x = (outletX - containerClientX) / this.scale;
+          const y = (outletY - containerClientY) / this.scale;
           this.store.dispatch(connectLink(this.linkId, targetId, x, y));
         }
       } else {
@@ -157,6 +160,13 @@ export class WorkbenchComponent {
 
   allowDrop(event: any) {
     event.preventDefault();
+  }
+  
+  zoomIn() {
+    this.scale += 0.1;
+  }
+  zoomOut() {
+    this.scale -= 0.1;
   }
 
 }

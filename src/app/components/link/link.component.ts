@@ -32,7 +32,7 @@ export class LinkComponent implements OnInit, AfterViewInit, OnChanges {
   ngAfterViewInit(): void {
     const svgElement = this.renderer.createElement('svg', 'svg');
     this.renderer.setAttribute(svgElement, 'xmlns', 'http://www.w3.org/2000/svg');
-    this.renderer.setAttribute(svgElement, 'style', 'position: absolute; top: 0; left: 0; z-index: 0; height: 1; width: 1;');
+    this.renderer.setAttribute(svgElement, 'style', 'position: absolute; top: 0; left: 0; z-index: 0; height: 1px; width: 1px;');
     this.renderer.appendChild(this.host.nativeElement, svgElement);
 
     const formula = LinkComponent.createCurvature(this.x1, this.y1, this.x2, this.y2);
