@@ -23,8 +23,8 @@ export class WorkbenchComponent {
   draggedOffsetX = 0; // offset of currenlty dragged element
   draggedOffsetY = 0; // offset of currenlty dragged element
 
-  containerX = 0;
-  containerY = 0;
+  containerX = 0; // x of html element relative to the document
+  containerY = 0; // y of html element relative to the document
 
   state?: State;
 
