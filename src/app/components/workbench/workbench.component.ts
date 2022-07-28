@@ -23,6 +23,9 @@ export class WorkbenchComponent {
   draggedOffsetX = 0; // offset of currenlty dragged element
   draggedOffsetY = 0; // offset of currenlty dragged element
 
+  containerX = 0;
+  containerY = 0;
+
   state?: State;
 
   constructor(private store: Store) {
@@ -43,10 +46,13 @@ export class WorkbenchComponent {
     }
   }
 
-  mouseDown(e: MouseEvent) {
+  ngAfterViewInit() {
     const containerRect = this.containerEl.nativeElement.getBoundingClientRect();
-    const containerClientX = containerRect.left;
-    const containerClientY = containerRect.top;
+    this.containerX = containerRect.left;
+    this.containerY = containerRect.top;
+  }
+
+  mouseDown(e: MouseEvent) {
     const inlet = (e.target as HTMLElement)!.closest('.inlet');
     const outlet = (e.target as HTMLElement)!.closest('.outlet');
     const element = (e.target as HTMLElement)!.closest('[data-id]');
@@ -76,26 +82,20 @@ export class WorkbenchComponent {
     if (outlet && element) {
       this.isDrawing = true;
       const rect = outlet.getBoundingClientRect();
-      const outletX = rect.left + rect.width / 2 - containerClientX;
-      const outletY = rect.top + rect.height / 2 - containerClientY;
+      const outletX = rect.left + rect.width / 2 - this.containerX;
+      const outletY = rect.top + rect.height / 2 - this.containerY;
       this.store.dispatch(createLink(nodeId, outletX, outletY));
     }
   }
 
   mouseMove(e: MouseEvent) {
-    const containerRect = this.containerEl.nativeElement.getBoundingClientRect();
-    const containerClientX = containerRect.left;
-    const containerClientY = containerRect.top;
-
     if (this.isDragging && this.draggedElementId >= 0) {
-      const newX = e.clientX - this.draggedOffsetX - containerClientX;
-      const newY = e.clientY - this.draggedOffsetY - containerClientY;
+      const newX = e.clientX - this.draggedOffsetX - this.containerX;
+      const newY = e.clientY - this.draggedOffsetY - this.containerY;
       this.store.dispatch(moveNode(this.draggedElementId, newX, newY));
 
       // get size of dragged element
-      const rect = this.draggedElement!.getBoundingClientRect();
-      const width = rect.width;
-      const height = rect.height;
+      const { width, height } = this.draggedElement!.getBoundingClientRect();
 
       // calculate outlet coordinates
       const outletX = newX + width;
@@ -115,8 +115,8 @@ export class WorkbenchComponent {
     }
 
     if (this.isDrawing) {
-      const x = e.clientX - containerClientX;
-      const y = e.clientY - containerClientY;
+      const x = e.clientX - this.containerX;
+      const y = e.clientY - this.containerY;
       this.store.dispatch(moveLinkTail(this.linkId, x, y));
     }
   }
@@ -185,5 +185,3 @@ export class WorkbenchComponent {
 // TODO: move multiple nodes
 
 // TODO: do not hover color of inlet if link was from inlet - pass state into dynamicNode component, and possibly node object
-
-
