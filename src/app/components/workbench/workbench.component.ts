@@ -32,7 +32,6 @@ export class WorkbenchComponent {
     this.store.state$.pipe(filter(x => !!x)).subscribe(state => {
       this.state = state;
     })
-    this.load();
   }
 
   dropped(event: DragEvent) {
@@ -160,18 +159,6 @@ export class WorkbenchComponent {
     event.preventDefault();
   }
 
-  save() {
-    const state = this.store.state;
-    sessionStorage.setItem('state', JSON.stringify(state));
-  }
-
-  load() {
-    const stateStr = sessionStorage.getItem('state');
-    if (stateStr) {
-      const state = JSON.parse(stateStr);
-      this.store.dispatch(loadState(state));
-    }
-  }
 }
 
 // TODO: zoom in and out

@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { filter } from 'rxjs';
+import { loadState } from 'src/app/redux/actions';
+import { Store } from 'src/app/redux/store';
+import { State } from 'src/app/redux/types';
 
 @Component({
   selector: 'app-layout',
@@ -6,5 +10,26 @@ import { Component } from '@angular/core';
   styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent {
+  state?: State;
+
+  constructor(private store: Store) {
+    this.store.state$.pipe(filter(x => !!x)).subscribe(state => {
+      this.state = state;
+    })
+    this.load();
+  }
+
+  save() {
+    const state = this.store.state;
+    sessionStorage.setItem('state', JSON.stringify(state));
+  }
+
+  load() {
+    const stateStr = sessionStorage.getItem('state');
+    if (stateStr) {
+      const state = JSON.parse(stateStr);
+      this.store.dispatch(loadState(state));
+    }
+  }
 }
 
