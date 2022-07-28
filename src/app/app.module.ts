@@ -8,6 +8,7 @@ import { PluginAComponent } from './components/plugin-a/plugin-a.component';
 import { DynamicNodeComponent } from './components/node/node.component';
 import { PluginBComponent } from './components/plugin-b/plugin-b.component';
 import { LinkComponent } from './components/link/link.component';
+import { WorkbenchComponent } from './components/workbench/workbench.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { LinkComponent } from './components/link/link.component';
     PluginAComponent,
     DynamicNodeComponent,
     PluginBComponent,
-    LinkComponent
+    LinkComponent,
+    WorkbenchComponent
   ],
   imports: [
     BrowserModule,

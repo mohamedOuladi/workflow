@@ -1,24 +1,16 @@
-<header>
-    <img src="/assets/logo.png" alt="">
-</header>
-<main>
-    <article class="grid" #containerEl (dragover)="allowDrop($event)" (drop)="dropped($event)"
-        (mousedown)="mouseDown($event)" (mousemove)="mouseMove($event)" (mouseup)="mouseUp($event)">
-        <ng-container *ngFor="let n of state?.nodes">
-            <app-node [data]="{x :n.x, y: n.y, id: n.id!, type: n.type }"></app-node>
-        </ng-container>
-        <ng-container *ngFor="let c of state?.links">
-            <app-link [data]="{ id: c.id, x1: c.x1, x2: c.x2, y1: c.y1, y2: c.y2 }"></app-link>
-        </ng-container>
-    </article>
-    <nav>
-        <app-plugin-library></app-plugin-library>
-    </nav>
-    <aside>
-        <div><button (click)="save()">Save</button></div>
-        <div><button (click)="load()">Load</button></div>
-        <pre><code>{{ state | json }}</code></pre>
-    </aside>
-</main>
-
-<!-- TODO: separate into layout and workspace -->
+<div class="layout">
+    <header>
+        <img src="/assets/logo.png" alt="">
+    </header>
+    <main>
+        <article>
+            <app-workbench></app-workbench>
+        </article>
+        <nav>
+            <app-plugin-library></app-plugin-library>
+        </nav>
+        <aside>
+            Settings:
+        </aside>
+    </main>
+</div>
