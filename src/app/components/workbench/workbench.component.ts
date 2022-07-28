@@ -112,12 +112,12 @@ export class WorkbenchComponent {
       const newY = (e.clientY - this.draggedOffsetY - this.containerY - this.ddy) / this.scale;
       this.store.dispatch(moveNode(this.draggedElementId, newX, newY));
 
-      const node = this.state?.nodes.find(n => n.id === this.draggedElementId)!;
+      // get element size 
+      const rect = this.draggedElement!.getBoundingClientRect();
+      const width = rect.width / this.scale;
+      const height = rect.height / this.scale;
 
-      const width = node.width || 0;
-      const height = node.height || 0;
-
-      const headX = newX + width;
+      const headX = newX + width 
       const headY = newY + height / 2;
 
       const tailX = newX;

@@ -1,7 +1,5 @@
 import { AfterViewInit, Component, ComponentRef, ElementRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { PLUGINS } from 'src/app/plugins';
-import { setNodeSize } from 'src/app/redux/actions';
-import { Store } from 'src/app/redux/store';
 import { PluginAComponent } from '../plugin-a/plugin-a.component';
 
 @Component({
@@ -20,8 +18,6 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit {
   type!: string;
   component!: ComponentRef<PluginAComponent>;
 
-  constructor(private store: Store) { }
-
   ngOnInit(): void {
     this.x = this.data!.x;
     this.y = this.data!.y;
@@ -32,8 +28,6 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     const componentClass = PLUGINS.find(x => x.type === this.type)?.component;
     this.component = this.outlet.createComponent(componentClass!);
-    const { width, height } = this.host.nativeElement.getBoundingClientRect();
-    this.store.dispatch(setNodeSize(this.id, width, height));
   }
 
   ngOnChanges(changes: any): void {

@@ -50,8 +50,3 @@ export const disconnectLink = (id: number): Action => ({
     type: ActionTypes.DISCONNECT_LINK,
     payload: id
 });
-
-export const setNodeSize = (id: number, width: number, height: number): Action => ({
-    type: ActionTypes.SET_NODE_SIZE,
-    payload: { id, width, height }
-});
