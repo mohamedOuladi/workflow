@@ -8,6 +8,7 @@ $outlet-size: 20px;
     height: $height;
     padding: 10px;
     cursor: grab;
+    position: absolute;
 
     user-select: none;
     -moz-user-select: none;

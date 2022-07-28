@@ -1,4 +1,4 @@
-<div #host [attr.value]="id" class="plugin">
+<div #host class="plugin" [attr.value]="id" [style.top]="y+'px'" [style.left]="x+'px'" [attr.data-id]="id">
     <ng-container #outlet></ng-container>
     <div class="inlet"></div>
     <div class="outlet"></div>

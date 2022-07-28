@@ -28,18 +28,12 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     const componentClass = PLUGINS.find(x => x.type === this.type)?.component;
     this.component = this.outlet.createComponent(componentClass!);
-    this.host.nativeElement.style.position = 'absolute';
-    this.host.nativeElement.style.left = this.x + 'px';
-    this.host.nativeElement.style.top = this.y + 'px';
-    this.host.nativeElement.setAttribute('data-id', this.id.toString());
   }
 
   ngOnChanges(changes: any): void {
     if (this.component) {
       this.x = changes.data.currentValue.x || this.x;
       this.y = changes.data.currentValue.y || this.y;
-      this.host.nativeElement.style.left = this.x + 'px';
-      this.host.nativeElement.style.top = this.y + 'px';
     }
   }
 
