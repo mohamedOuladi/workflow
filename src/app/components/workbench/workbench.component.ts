@@ -4,6 +4,8 @@ import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTa
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
 
+const GRID_SIZE = 50;
+
 @Component({
   selector: 'app-workbench',
   templateUrl: './workbench.component.html',
@@ -12,6 +14,7 @@ import { State } from 'src/app/redux/types';
 })
 export class WorkbenchComponent {
   @ViewChild('containerEl', { read: ElementRef }) containerEl!: ElementRef;
+  @ViewChild('grid', { read: ElementRef }) grid!: ElementRef;
 
   isDragging = false;
   isDrawing = false;
@@ -161,12 +164,11 @@ export class WorkbenchComponent {
   allowDrop(event: any) {
     event.preventDefault();
   }
-  
-  zoomIn() {
-    this.scale += 0.1;
-  }
-  zoomOut() {
-    this.scale -= 0.1;
+
+  zoom(delta: number) {
+    this.scale += delta;
+    const size = GRID_SIZE * this.scale + 'px';
+    this.grid.nativeElement.style['background-size'] =  `${size} ${size}` // 50px 50px;
   }
 
 }

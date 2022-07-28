@@ -1,5 +1,5 @@
 
-<div class="grid"></div>
+<div class="grid" #grid></div>
 <div class="bench" #containerEl (dragover)="allowDrop($event)" (drop)="dropped($event)" [style.transform]="'scale('+ scale +')'"
     (mousedown)="mouseDown($event)" (mousemove)="mouseMove($event)" (mouseup)="mouseUp($event)">
     <ng-container *ngFor="let n of state?.nodes">
@@ -11,6 +11,6 @@
 </div>
 
 <div class="zoom">
-    <button (click)="zoomIn()">+</button>
-    <button (click)="zoomOut()">-</button>
+    <button (click)="zoom(0.1)">+</button>
+    <button (click)="zoom(-0.1)">-</button>
 </div>
