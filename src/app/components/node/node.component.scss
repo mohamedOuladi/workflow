@@ -4,8 +4,8 @@ $outlet-size: 20px;
 
 .plugin {
     border: 2px solid gray;
-    width: $width;
-    height: $height;
+    min-width: $width;
+    min-height: $height;
     padding: 10px;
     cursor: grab;
     position: absolute;
