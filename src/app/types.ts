@@ -3,6 +3,8 @@ export interface NodeX {
     y: number;
     id?: number;
     type: string;
+    width?: number;
+    height?: number;
 }
 
 export interface Link {

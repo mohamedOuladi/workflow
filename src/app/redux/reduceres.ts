@@ -26,6 +26,12 @@ export function nodeReducer(nodes: NodeX[] = [], action: Action): NodeX[] {
             nodeId = (action.payload.nodes as NodeX[]).reduce((max, p) => Math.max(max, p.id || 0), 0) + 1;
             return action.payload.nodes;
 
+        case ActionTypes.SET_NODE_SIZE:
+            const node4 = nodes.find(p => p.id === action.payload.id)!;
+            node4.width = action.payload.width;
+            node4.height = action.payload.height;
+            return [...nodes];
+
         default:
             return nodes;
     }
