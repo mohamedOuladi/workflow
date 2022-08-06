@@ -50,3 +50,18 @@ export const disconnectLink = (id: number): Action => ({
     type: ActionTypes.DISCONNECT_LINK,
     payload: id
 });
+
+export const selectNode = (id: number): Action => ({
+    type: ActionTypes.SELECT_NODE,
+    payload: id
+});
+
+export const deselectNode = (id: number): Action => ({
+    type: ActionTypes.DESELECT_NODE,
+    payload: id
+});
+
+export const updateSelection = (ids: number[]): Action => ({
+    type: ActionTypes.UPDATE_SELECTION,
+    payload: ids
+});

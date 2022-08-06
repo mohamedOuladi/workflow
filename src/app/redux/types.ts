@@ -3,6 +3,7 @@ import { Link, NodeX } from "../types";
 export interface State {
     nodes: NodeX[];
     links: Link[];
+    selection: number[];
 }
 
 export interface Action {
@@ -21,4 +22,7 @@ export enum ActionTypes {
     MOVE_LINK_HEAD = "MOVE_LINK_HEAD",
     DISCONNECT_LINK = "DISCONNECT_LINK",
     DELETE_NODE = "DELETE_NODE",
+    SELECT_NODE = "SELECT_NODE",
+    DESELECT_NODE = "DESELECT_NODE",
+    UPDATE_SELECTION = "UPDATE_SELECTION"
 }

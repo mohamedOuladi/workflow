@@ -26,6 +26,28 @@ export function nodeReducer(nodes: NodeX[] = [], action: Action): NodeX[] {
             nodeId = (action.payload.nodes as NodeX[]).reduce((max, p) => Math.max(max, p.id || 0), 0) + 1;
             return action.payload.nodes;
 
+        case ActionTypes.SELECT_NODE:
+            return nodes.map(p => {
+                if (p.id === action.payload) {
+                    p.selected = true;
+                }
+                return p;
+            });
+
+        case ActionTypes.DESELECT_NODE:
+            return nodes.map(p => {
+                if (p.id === action.payload) {
+                    p.selected = false;
+                }
+                return p;
+            });
+
+        case ActionTypes.UPDATE_SELECTION:
+            return nodes.map(p => {
+                p.selected = action.payload.includes(p.id);
+                return p;
+            });                        
+
         default:
             return nodes;
     }
@@ -82,9 +104,19 @@ export function linkReducer(links: Link[] = [], action: Action): Link[] {
     }
 }
 
+export function selectionReducer(selection: number[] = [], action: Action): number[] {
+    switch (action.type) {
+        case ActionTypes.UPDATE_SELECTION:
+            return action.payload;
+        default:
+            return selection;
+    }
+}
+
 export function stateReducer(state: State, action: Action): State {
     return {
         nodes: nodeReducer(state.nodes, action),
-        links: linkReducer(state.links, action)
+        links: linkReducer(state.links, action),
+        selection: selectionReducer(state.selection, action)
     };
 }

@@ -3,6 +3,7 @@ export interface NodeX {
     y: number;
     id?: number;
     type: string;
+    selected?: boolean;
 }
 
 export interface Link {

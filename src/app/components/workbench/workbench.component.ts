@@ -1,8 +1,9 @@
 import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
-import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink } from 'src/app/redux/actions';
+import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, selectNode, updateSelection } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
+import { NodeX } from 'src/app/types';
 
 const GRID_SIZE = 50;
 
@@ -22,10 +23,11 @@ export class WorkbenchComponent {
 
   linkId = 0;
 
-  draggedElement?: Element;
-  draggedElementId = 0;
-  draggedOffsetX = 0; // offset of currenlty dragged element
-  draggedOffsetY = 0; // offset of currenlty dragged element
+  movingX = 0; // offset of currenlty dragged element
+  movingY = 0; // offset of currenlty dragged element
+
+  initialX = 0;
+  initialY = 0;
 
   containerX = 0; // offset x of html element relative to the document
   containerY = 0; // offset y of html element relative to the document
@@ -46,9 +48,10 @@ export class WorkbenchComponent {
     const dataJson = event.dataTransfer!.getData('data');
     if (dataJson) {
       const data = JSON.parse(dataJson);
-      const x = (event.offsetX - data.x - this.ddx) / this.scale;
-      const y = (event.offsetY - data.y - this.ddy) / this.scale;
+      const x = (event.clientX - data.x - this.containerX - this.ddx) / this.scale;
+      const y = (event.clientY - data.y - this.containerY - this.ddy) / this.scale;
       const node = { x, y, type: data.type };
+      this.store.dispatch(updateSelection([]));
       this.store.dispatch(addNode(node));
     }
   }
@@ -64,20 +67,29 @@ export class WorkbenchComponent {
     const outlet = (e.target as HTMLElement)!.closest('.outlet');
     const element = (e.target as HTMLElement)!.closest('[data-id]');
     const nodeId = parseInt(element?.getAttribute('data-id')!, 10);
+    this.initialX = e.clientX;
+    this.initialY = e.clientY;
 
     // dragging node
     if (!outlet && !inlet && element) {
       this.isDragging = true;
-      this.draggedElementId = nodeId;
-      this.draggedElement = element;
-
-      const rect = element.getBoundingClientRect();
-      this.draggedOffsetX = e.x - rect.left;
-      this.draggedOffsetY = e.y - rect.top;
+      let selection = this.state?.selection.slice()!;
+      if (e.metaKey) {
+        if (this.state?.selection.includes(nodeId)) {
+          selection = this.state.selection.filter(x => x !== nodeId);
+        } else {
+          selection.push(nodeId);
+        }
+      } else {
+        if (!selection.includes(nodeId)) {
+          selection = [nodeId];
+        }
+      }
+      this.store.dispatch(updateSelection(selection));
       return;
     }
 
-    // creating link
+    // new link from outlet
     if (outlet && element) {
       this.isDrawing = true;
       const rect = outlet.getBoundingClientRect();
@@ -87,7 +99,7 @@ export class WorkbenchComponent {
       return;
     }
 
-    // moving link
+    // existing link from inlet
     if (inlet && element) {
       const linkId = this.state?.links.find(link => link.targetId === nodeId)?.id;
       if (linkId) {
@@ -98,37 +110,51 @@ export class WorkbenchComponent {
       return;
     }
 
+    this.store.dispatch(updateSelection([]));
+
     // moving container
     this.isMoving = true;
-    this.draggedOffsetX = e.x - this.containerX - this.ddx;
-    this.draggedOffsetY = e.y - this.containerY - this.ddy;
+    this.movingX = e.clientX - this.ddx;
+    this.movingY = e.clientY - this.ddy;
   }
 
   mouseMove(e: MouseEvent) {
 
     // dragging node
-    if (this.isDragging && this.draggedElementId >= 0) {
-      const newX = (e.clientX - this.draggedOffsetX - this.containerX - this.ddx) / this.scale;
-      const newY = (e.clientY - this.draggedOffsetY - this.containerY - this.ddy) / this.scale;
-      this.store.dispatch(moveNode(this.draggedElementId, newX, newY));
+    if (this.isDragging) {
+      const x = e.clientX;
+      const y = e.clientY;
+      const dx = x - this.initialX;
+      const dy = y - this.initialY;
+      this.initialX = x;
+      this.initialY = y;
 
-      // get element size 
-      const rect = this.draggedElement!.getBoundingClientRect();
-      const width = rect.width / this.scale;
-      const height = rect.height / this.scale;
+      this.state?.selection.forEach(id => {
+        const node = this.state?.nodes.find(x => x.id === id)!;
+        const newX = node.x + dx / this.scale;
+        const newY = node.y + dy / this.scale;
 
-      const headX = newX + width 
-      const headY = newY + height / 2;
+        this.store.dispatch(moveNode(id, newX, newY));
 
-      const tailX = newX;
-      const tailY = newY + height / 2;
+        // get element size 
+        const element = document.querySelector(`[data-id="${id}"]`);
+        const rect = element!.getBoundingClientRect();
+        const width = rect.width / this.scale;
+        const height = rect.height / this.scale;
 
-      this.state?.links.filter(link => link.sourceId === this.draggedElementId).forEach(link => {
-        this.store.dispatch(moveLinkHead(headX, headY, link.id));
-      });
+        const headX = newX + width
+        const headY = newY + height / 2;
 
-      this.state?.links.filter(link => link.targetId === this.draggedElementId).forEach(link => {
-        this.store.dispatch(moveLinkTail(link.id, tailX, tailY,));
+        const tailX = newX;
+        const tailY = newY + height / 2;
+
+        this.state?.links.filter(link => link.sourceId === id).forEach(link => {
+          this.store.dispatch(moveLinkHead(headX, headY, link.id));
+        });
+
+        this.state?.links.filter(link => link.targetId === id).forEach(link => {
+          this.store.dispatch(moveLinkTail(link.id, tailX, tailY,));
+        });
       });
       return;
     }
@@ -143,8 +169,8 @@ export class WorkbenchComponent {
 
     // moving container
     if (this.isMoving) {
-      this.ddx = e.clientX - this.containerX - this.draggedOffsetX;
-      this.ddy = e.clientY - this.containerY - this.draggedOffsetY;
+      this.ddx = e.clientX - this.movingX;
+      this.ddy = e.clientY - this.movingY;
       this.grid.nativeElement.style['background-position'] = `${this.ddx}px ${this.ddy}px`;
       return;
     }
@@ -178,7 +204,6 @@ export class WorkbenchComponent {
     this.isDragging = false;
     this.isDrawing = false;
     this.isMoving = false;
-    this.draggedElementId = 0;
     this.linkId = 0;
   }
 
@@ -194,13 +219,16 @@ export class WorkbenchComponent {
 
 }
 
+// TODO: select one
+// TODO: select multiple nodes
+// TODO: move multiple nodes 
+
+
+// TODO: context menu
 
 // TODO: classname from shared constant
 // TODO: delete node
 // TODO: try different content in nodes
-// TODO: select one
-// TODO: select multiple nodes
-// TODO: move multiple nodes
 
 // TODO: zoom using mouse wheel
 

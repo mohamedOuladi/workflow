@@ -16,6 +16,11 @@ $outlet-size: 20px;
     -webkit-user-select: none;
     -o-user-select: none;
 
+    &.selected {
+        border: 2px solid #00bcd4;
+        box-shadow: rgb(255 255 255) 0px 0px 15px;
+    }
+
     &:active {
         cursor: grabbing;
     }
