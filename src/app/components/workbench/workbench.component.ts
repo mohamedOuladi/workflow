@@ -3,7 +3,6 @@ import { filter } from 'rxjs';
 import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, selectNode, updateSelection } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
-import { NodeX } from 'src/app/types';
 
 const GRID_SIZE = 50;
 
@@ -16,18 +15,20 @@ const GRID_SIZE = 50;
 export class WorkbenchComponent {
   @ViewChild('containerEl', { read: ElementRef }) containerEl!: ElementRef;
   @ViewChild('grid', { read: ElementRef }) grid!: ElementRef;
+  @ViewChild('selectzone', { read: ElementRef }) selectZone!: ElementRef;
 
   isDragging = false; // node
   isDrawing = false; // link
   isMoving = false; // container
+  isSelecting = false; // zone selection
 
   linkId = 0;
 
-  movingX = 0; // offset of currenlty dragged element
-  movingY = 0; // offset of currenlty dragged element
+  startX = 0; // offset of currenlty dragged element
+  startY = 0; // offset of currenlty dragged element
 
-  initialX = 0;
-  initialY = 0;
+  tempX = 0;
+  tempY = 0;
 
   containerX = 0; // offset x of html element relative to the document
   containerY = 0; // offset y of html element relative to the document
@@ -67,11 +68,11 @@ export class WorkbenchComponent {
     const outlet = (e.target as HTMLElement)!.closest('.outlet');
     const element = (e.target as HTMLElement)!.closest('[data-id]');
     const nodeId = parseInt(element?.getAttribute('data-id')!, 10);
-    this.initialX = e.clientX;
-    this.initialY = e.clientY;
 
     // dragging node
     if (!outlet && !inlet && element) {
+      this.tempX = e.clientX;
+      this.tempY = e.clientY;
       this.isDragging = true;
       let selection = this.state?.selection.slice()!;
       if (e.metaKey) {
@@ -112,20 +113,27 @@ export class WorkbenchComponent {
 
     this.store.dispatch(updateSelection([]));
 
+    this.startX = e.clientX - this.ddx;
+    this.startY = e.clientY - this.ddy;
+
     // moving container
-    this.isMoving = true;
-    this.movingX = e.clientX - this.ddx;
-    this.movingY = e.clientY - this.ddy;
+    if (e.shiftKey) {
+      this.isMoving = true;
+      return
+    }
+
+    // selecting zone
+    this.isSelecting = true;
   }
 
   mouseMove(e: MouseEvent) {
 
     // dragging node
     if (this.isDragging) {
-      const dx = e.clientX - this.initialX;
-      const dy = e.clientY - this.initialY;
-      this.initialX = e.clientX;
-      this.initialY = e.clientY;
+      const dx = e.clientX - this.tempX;
+      const dy = e.clientY - this.tempY;
+      this.tempX = e.clientX;
+      this.tempY = e.clientY;
 
       this.state?.selection.forEach(id => {
         const node = this.state?.nodes.find(x => x.id === id)!;
@@ -167,10 +175,23 @@ export class WorkbenchComponent {
 
     // moving container
     if (this.isMoving) {
-      this.ddx = e.clientX - this.movingX;
-      this.ddy = e.clientY - this.movingY;
+      this.ddx = e.clientX - this.startX;
+      this.ddy = e.clientY - this.startY;
       this.grid.nativeElement.style['background-position'] = `${this.ddx}px ${this.ddy}px`;
       return;
+    }
+
+    // selecting zone
+    if (this.isSelecting) {
+      const x = Math.min(this.startX, e.clientX) - this.containerX;
+      const y = Math.min(this.startY, e.clientY) - this.containerY;
+      const width = Math.abs(this.startX - e.clientX);
+      const height = Math.abs(this.startY - e.clientY);
+      this.selectZone.nativeElement.style.left = `${x}px`;
+      this.selectZone.nativeElement.style.top = `${y}px`;
+      this.selectZone.nativeElement.style.width = `${width}px`;
+      this.selectZone.nativeElement.style.height = `${height}px`;
+      this.selectZone.nativeElement.style.display = 'block';
     }
   }
 
@@ -199,9 +220,32 @@ export class WorkbenchComponent {
       }
     }
 
+    if (this.isSelecting) {
+      this.selectZone.nativeElement.style.display = 'none';
+      const ax1 = Math.min(this.startX, e.clientX) - this.containerX;
+      const ay1 = Math.min(this.startY, e.clientY) - this.containerY;
+      const ax2 = Math.max(this.startX, e.clientX) - this.containerX;
+      const ay2 = Math.max(this.startY, e.clientY) - this.containerY;
+      
+      const selection = this.state?.nodes.filter(node => {
+        const element = document.querySelector(`[data-id="${node.id}"]`)!;
+        const rect = element.getBoundingClientRect();
+
+        const bx1 = node.x / this.scale;
+        const by1 = node.y / this.scale;
+        const bx2 = (node.x + rect.width) / this.scale;
+        const by2 = (node.y + rect.height) / this.scale;
+
+        // check if node is in selection zone
+        return ax1 <= bx2 && bx1 <= ax2 && ay1 <= by2 && by1 <= ay2;
+      }).map(node => node.id) as number[];
+      this.store.dispatch(updateSelection(selection));
+    }
+
     this.isDragging = false;
     this.isDrawing = false;
     this.isMoving = false;
+    this.isSelecting = false;
     this.linkId = 0;
   }
 
