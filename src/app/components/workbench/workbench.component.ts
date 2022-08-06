@@ -122,12 +122,10 @@ export class WorkbenchComponent {
 
     // dragging node
     if (this.isDragging) {
-      const x = e.clientX;
-      const y = e.clientY;
-      const dx = x - this.initialX;
-      const dy = y - this.initialY;
-      this.initialX = x;
-      this.initialY = y;
+      const dx = e.clientX - this.initialX;
+      const dy = e.clientY - this.initialY;
+      this.initialX = e.clientX;
+      this.initialY = e.clientY;
 
       this.state?.selection.forEach(id => {
         const node = this.state?.nodes.find(x => x.id === id)!;
