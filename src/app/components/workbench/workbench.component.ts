@@ -47,7 +47,7 @@ export class WorkbenchComponent {
 
   @HostListener('wheel', ['$event']) onMouseWheel(event: WheelEvent) {
     event.preventDefault();
-    this.zoom(event.deltaY / 1000);
+    this.zoom(event.deltaY / 1000, event.clientX - this.containerX, event.clientY - this.containerY);
   }
 
   dropped(event: DragEvent) {
@@ -262,22 +262,33 @@ export class WorkbenchComponent {
   }
 
   zoom(delta: number, mx = -1, my = -1) {
-    this.scale += delta;
-    if (this.scale < 0.1) {
-      this.scale = 0.1;
+    if (this.scale + delta < 0.1) {
+      return;
     }
+    this.scale += delta;
+
+
     const size = GRID_SIZE * this.scale + 'px';
     this.grid.nativeElement.style['background-size'] = `${size} ${size}` // 50px 50px;
 
-    // get viewport size
-    const rect = this.containerEl.nativeElement.getBoundingClientRect();
-    const dx = rect.width / 2;
-    const dy = rect.height / 2;
-
     const dir = delta > 0 ? 1 : -1;
 
-    this.ddx = this.ddx - dx * dir * Math.abs(delta);
-    this.ddy = this.ddy - dy * dir * Math.abs(delta);
+    const rect = this.containerEl.nativeElement.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+
+    // if zoom was trigged by button, set to center of container
+    if (mx < 0 && my < 0) {
+      mx = width / 2;
+      my = height / 2;
+    }
+
+    // const rect = this.containerEl.nativeElement.getBoundingClientRect();
+    // const dx = rect.width / 2;
+    // const dy = rect.height / 2;
+
+    this.ddx -= mx * dir * Math.abs(delta)
+    this.ddy -= my * dir * Math.abs(delta);
   }
 
 }
