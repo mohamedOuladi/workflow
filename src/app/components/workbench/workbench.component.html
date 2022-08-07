@@ -1,4 +1,4 @@
-<div class="grid" #grid></div>
+<div class="grid" #grid [hidden]="true"></div>
 <div class="bench" #containerEl (dragover)="allowDrop($event)" (drop)="dropped($event)" (mousedown)="mouseDown($event)"
     (mousemove)="mouseMove($event)" (mouseup)="mouseUp($event)">
     <div class="drawboard" [style.transform]="'scale('+ scale +') translate('+ ddx / scale +'px, '+ ddy  / scale + 'px)'">

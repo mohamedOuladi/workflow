@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, HostListener, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
 import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, selectNode, updateSelection } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
@@ -35,14 +35,19 @@ export class WorkbenchComponent {
 
   state?: State;
 
-  scale = 0.5;
-  ddx = 0; // x of container
-  ddy = 0; // y of container
+  scale = 1;
+  ddx = 0; // x of viewport
+  ddy = 0; // y of viewport
 
   constructor(private store: Store, private renderer: Renderer2) {
     this.store.state$.pipe(filter(x => !!x)).subscribe(state => {
       this.state = state;
     })
+  }
+
+  @HostListener('wheel', ['$event']) onMouseWheel(event: WheelEvent) {
+    event.preventDefault();
+    this.zoom(event.deltaY / 1000);
   }
 
   dropped(event: DragEvent) {
@@ -256,26 +261,31 @@ export class WorkbenchComponent {
     event.preventDefault();
   }
 
-  zoom(delta: number) {
+  zoom(delta: number, mx = -1, my = -1) {
     this.scale += delta;
+    if (this.scale < 0.1) {
+      this.scale = 0.1;
+    }
     const size = GRID_SIZE * this.scale + 'px';
     this.grid.nativeElement.style['background-size'] = `${size} ${size}` // 50px 50px;
+
+    // get viewport size
+    const rect = this.containerEl.nativeElement.getBoundingClientRect();
+    const dx = rect.width / 2;
+    const dy = rect.height / 2;
+
+    const dir = delta > 0 ? 1 : -1;
+
+    this.ddx = this.ddx - dx * dir * Math.abs(delta);
+    this.ddy = this.ddy - dy * dir * Math.abs(delta);
   }
 
 }
 
-// TODO: select one
-// TODO: select multiple nodes
-// TODO: move multiple nodes 
-
-
+// TODO: zoom using mouse wheel
+// TODO: undo using ctrl+z
 // TODO: context menu
-
 // TODO: classname from shared constant
 // TODO: delete node
 // TODO: try different content in nodes
-
-// TODO: zoom using mouse wheel
-
-
 // TODO: do not hover color of inlet if link was from inlet - pass state into dynamicNode component, and possibly node object
