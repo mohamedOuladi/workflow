@@ -16,6 +16,8 @@ export class LayoutComponent {
     this.store.state$.pipe(filter(x => !!x)).subscribe(state => {
       this.state = state;
     });
+
+    this.load();
   }
 
   save() {

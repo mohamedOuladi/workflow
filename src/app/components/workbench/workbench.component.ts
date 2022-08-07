@@ -113,17 +113,18 @@ export class WorkbenchComponent {
 
     this.store.dispatch(updateSelection([]));
 
-    this.startX = e.clientX - this.ddx;
-    this.startY = e.clientY - this.ddy;
-
     // moving container
     if (e.shiftKey) {
       this.isMoving = true;
+      this.startX = e.clientX - this.ddx;
+      this.startY = e.clientY - this.ddy;
       return
     }
 
     // selecting zone
     this.isSelecting = true;
+    this.startX = e.clientX
+    this.startY = e.clientY;
   }
 
   mouseMove(e: MouseEvent) {
@@ -183,9 +184,9 @@ export class WorkbenchComponent {
 
     // selecting zone
     if (this.isSelecting) {
-      const x = Math.min(this.startX, e.clientX) - this.containerX;
-      const y = Math.min(this.startY, e.clientY) - this.containerY;
-      const width = Math.abs(this.startX - e.clientX);
+      const x = Math.min(this.startX, e.clientX) - this.containerX - this.ddx;
+      const y = Math.min(this.startY, e.clientY) - this.containerY - this.ddy;
+      const width = Math.abs(this.startX - e.clientX)
       const height = Math.abs(this.startY - e.clientY);
       this.selectZone.nativeElement.style.left = `${x}px`;
       this.selectZone.nativeElement.style.top = `${y}px`;
@@ -226,7 +227,7 @@ export class WorkbenchComponent {
       const ay1 = Math.min(this.startY, e.clientY) - this.containerY;
       const ax2 = Math.max(this.startX, e.clientX) - this.containerX;
       const ay2 = Math.max(this.startY, e.clientY) - this.containerY;
-      
+
       const selection = this.state?.nodes.filter(node => {
         const element = document.querySelector(`[data-id="${node.id}"]`)!;
         const rect = element.getBoundingClientRect();
@@ -247,6 +248,8 @@ export class WorkbenchComponent {
     this.isMoving = false;
     this.isSelecting = false;
     this.linkId = 0;
+    this.startX = 0;
+    this.startY = 0;
   }
 
   allowDrop(event: any) {
