@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
 import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, selectNode, updateSelection } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
@@ -35,11 +35,11 @@ export class WorkbenchComponent {
 
   state?: State;
 
-  scale = 1;
+  scale = 0.5;
   ddx = 0; // x of container
   ddy = 0; // y of container
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private renderer: Renderer2) {
     this.store.state$.pipe(filter(x => !!x)).subscribe(state => {
       this.state = state;
     })
@@ -223,19 +223,19 @@ export class WorkbenchComponent {
 
     if (this.isSelecting) {
       this.selectZone.nativeElement.style.display = 'none';
-      const ax1 = Math.min(this.startX, e.clientX) - this.containerX - this.ddx;
-      const ay1 = Math.min(this.startY, e.clientY) - this.containerY - this.ddy;
-      const ax2 = Math.max(this.startX, e.clientX) - this.containerX - this.ddx;
-      const ay2 = Math.max(this.startY, e.clientY) - this.containerY - this.ddy;
+      const ax1 = (Math.min(this.startX, e.clientX) - this.containerX - this.ddx) / this.scale;
+      const ay1 = (Math.min(this.startY, e.clientY) - this.containerY - this.ddy) / this.scale;
+      const ax2 = (Math.max(this.startX, e.clientX) - this.containerX - this.ddx) / this.scale;
+      const ay2 = (Math.max(this.startY, e.clientY) - this.containerY - this.ddy) / this.scale;
 
       const selection = this.state?.nodes.filter(node => {
         const element = document.querySelector(`[data-id="${node.id}"]`)!;
         const rect = element.getBoundingClientRect();
 
-        const bx1 = node.x / this.scale;
-        const by1 = node.y / this.scale;
-        const bx2 = (node.x + rect.width) / this.scale;
-        const by2 = (node.y + rect.height) / this.scale;
+        const bx1 = node.x;
+        const by1 = node.y;
+        const bx2 = (node.x + rect.width / this.scale);
+        const by2 = (node.y + rect.height / this.scale);
 
         // check if node is in selection zone
         return ax1 <= bx2 && bx1 <= ax2 && ay1 <= by2 && by1 <= ay2;
