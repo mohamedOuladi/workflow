@@ -223,10 +223,10 @@ export class WorkbenchComponent {
 
     if (this.isSelecting) {
       this.selectZone.nativeElement.style.display = 'none';
-      const ax1 = Math.min(this.startX, e.clientX) - this.containerX;
-      const ay1 = Math.min(this.startY, e.clientY) - this.containerY;
-      const ax2 = Math.max(this.startX, e.clientX) - this.containerX;
-      const ay2 = Math.max(this.startY, e.clientY) - this.containerY;
+      const ax1 = Math.min(this.startX, e.clientX) - this.containerX - this.ddx;
+      const ay1 = Math.min(this.startY, e.clientY) - this.containerY - this.ddy;
+      const ax2 = Math.max(this.startX, e.clientX) - this.containerX - this.ddx;
+      const ay2 = Math.max(this.startY, e.clientY) - this.containerY - this.ddy;
 
       const selection = this.state?.nodes.filter(node => {
         const element = document.querySelector(`[data-id="${node.id}"]`)!;
