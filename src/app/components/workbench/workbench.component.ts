@@ -184,10 +184,10 @@ export class WorkbenchComponent {
 
     // selecting zone
     if (this.isSelecting) {
-      const x = Math.min(this.startX, e.clientX) - this.containerX - this.ddx;
-      const y = Math.min(this.startY, e.clientY) - this.containerY - this.ddy;
-      const width = Math.abs(this.startX - e.clientX)
-      const height = Math.abs(this.startY - e.clientY);
+      const x = (Math.min(this.startX, e.clientX) - this.containerX - this.ddx) / this.scale;
+      const y = (Math.min(this.startY, e.clientY) - this.containerY - this.ddy) / this.scale;
+      const width = Math.abs(this.startX - e.clientX) / this.scale;
+      const height = Math.abs(this.startY - e.clientY) / this.scale;
       this.selectZone.nativeElement.style.left = `${x}px`;
       this.selectZone.nativeElement.style.top = `${y}px`;
       this.selectZone.nativeElement.style.width = `${width}px`;
