@@ -1,9 +1,10 @@
 $width: 200px;
 $height: 60px;
 $outlet-size: 20px;
+$light-color: #D8E2FA;
 
 .plugin {
-    border: 2px solid #D8E2FA;
+    border: 2px solid $light-color;
     min-width: $width;
     min-height: $height;
     padding: 10px;
@@ -11,6 +12,8 @@ $outlet-size: 20px;
     position: absolute;
     background-color: #3E3E3E;
     z-index: 1;
+    border-radius: 10px;
+    color: $light-color;
 
     user-select: none;
     -moz-user-select: none;
@@ -28,7 +31,7 @@ $outlet-size: 20px;
     }
 
     .outlet {
-        border: 2px solid #D8E2FA;
+        border: 2px solid $light-color;
         width: $outlet-size;
         height: $outlet-size;
         position: absolute;
@@ -45,7 +48,7 @@ $outlet-size: 20px;
     }
 
     .inlet {
-        border: 2px solid #D8E2FA;
+        border: 2px solid $light-color;
         width: $outlet-size;
         height: $outlet-size;
         position: absolute;
