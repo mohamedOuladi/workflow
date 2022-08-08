@@ -74,6 +74,11 @@ export class WorkbenchComponent {
       if (event.key === 'v') {
         event.preventDefault();
       }
+
+      if (event.key === 'z') {
+        event.preventDefault();
+      }
+
     }
   }
 
