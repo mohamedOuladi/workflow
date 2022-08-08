@@ -320,11 +320,9 @@ export class WorkbenchComponent {
 
 }
 
-// TODO: undo using ctrl+z
+// TODO: undo using ctrl+z (using immer)
 // TODO: context menu
 // TODO: classname from shared constant
-// TODO: delete node using delete key
-// TODO: try different content in nodes
 // TODO: do not hover color of inlet if link was from inlet - pass state into dynamicNode component, and possibly node object
-// TODO: select all using ctrl+a
 // TODO: copy/paste using ctrl+c/v
+// TODO: non-connectable nodes (e.g. text)

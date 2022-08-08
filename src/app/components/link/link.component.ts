@@ -39,10 +39,9 @@ export class LinkComponent implements OnInit, AfterViewInit, OnChanges {
     const curve = this.renderer.createElement('path', 'svg');
 
     this.renderer.setAttribute(curve, 'd', formula);
-    this.renderer.setAttribute(curve, 'stroke', 'red');
     this.renderer.setAttribute(curve, 'fill', 'none');
-    this.renderer.setAttribute(curve, 'stroke-width', '1');
-    this.renderer.addClass(curve, 'main-path');
+    this.renderer.setAttribute(curve, 'stroke-width', '2');
+    this.renderer.addClass(curve, 'link-path');
     this.renderer.appendChild(svgElement, curve);
   }
 
