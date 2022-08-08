@@ -4,7 +4,7 @@ import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTa
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
 
-const GRID_SIZE = 50;
+const GRID_SIZE = 500;
 
 @Component({
   selector: 'app-workbench',
@@ -47,7 +47,9 @@ export class WorkbenchComponent {
 
   @HostListener('wheel', ['$event']) onMouseWheel(event: WheelEvent) {
     event.preventDefault();
-    this.zoom(event.deltaY / 1000, event.clientX - this.containerX, event.clientY - this.containerY);
+    if (event.deltaY !== 0) {
+      this.zoom(event.deltaY / 1000, event.clientX - this.containerX, event.clientY - this.containerY);
+    }
   }
 
   dropped(event: DragEvent) {
@@ -265,31 +267,26 @@ export class WorkbenchComponent {
     if (this.scale + delta < 0.1) {
       return;
     }
-    this.scale += delta;
 
-
-    const size = GRID_SIZE * this.scale + 'px';
-    this.grid.nativeElement.style['background-size'] = `${size} ${size}` // 50px 50px;
-
-    const dir = delta > 0 ? 1 : -1;
-
-    const rect = this.containerEl.nativeElement.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-
-    // if zoom was trigged by button, set to center of container
+    // if zoom using buttons, shift relative to center
     if (mx < 0 && my < 0) {
+      const { width, height } = this.containerEl.nativeElement.getBoundingClientRect();
       mx = width / 2;
       my = height / 2;
     }
 
-    // const rect = this.containerEl.nativeElement.getBoundingClientRect();
-    // const dx = rect.width / 2;
-    // const dy = rect.height / 2;
+    // zoom and shift relative to mouse position
+    this.ddx += (this.ddx - mx) * delta / this.scale;
+    this.ddy += (this.ddy - my) * delta / this.scale;
 
-    this.ddx -= mx * dir * Math.abs(delta)
-    this.ddy -= my * dir * Math.abs(delta);
+    this.scale += delta;
+
+    const size = GRID_SIZE * this.scale + 'px';
+    this.grid.nativeElement.style['background-size'] = `${size} ${size}` // 50px 50px;
+    this.grid.nativeElement.style['background-position'] = `${this.ddx}px ${this.ddy}px`;
   }
+
+
 
 }
 
@@ -297,6 +294,8 @@ export class WorkbenchComponent {
 // TODO: undo using ctrl+z
 // TODO: context menu
 // TODO: classname from shared constant
-// TODO: delete node
+// TODO: delete node using delete key
 // TODO: try different content in nodes
 // TODO: do not hover color of inlet if link was from inlet - pass state into dynamicNode component, and possibly node object
+// TODO: select all using ctrl+a
+// TODO: copy/paste using ctrl+c/v

@@ -13,7 +13,6 @@ svg {
 }
 
 .drawboard {
-   
     position: absolute;
     top: 0;
     left: 0;
@@ -24,11 +23,12 @@ svg {
     height: 100%;
     background-image: repeating-linear-gradient(#2b2c2c 0 1px, transparent 1px 100%),
         repeating-linear-gradient(90deg, #2b2c2c 0 1px, transparent 1px 100%);
-    background-size: 50px 50px;
+    background-size: 500px 500px;
 }
 
 .zoom {
     position: absolute;
+    display: flex;
     right: 0;
     top: 0;
 }
