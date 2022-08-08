@@ -4,7 +4,7 @@ import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTa
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
 
-const GRID_SIZE = 500;
+const GRID_SIZE = 50;
 
 @Component({
   selector: 'app-workbench',
