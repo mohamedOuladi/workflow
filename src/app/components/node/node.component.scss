@@ -1,16 +1,15 @@
-$width: 200px;
-$height: 60px;
+$width: 250px;
+$height: 50px;
 $outlet-size: 20px;
-$light-color: #D8E2FA;
+$light-color: #d8e2fa;
+$green-color: #02dcc7;
 
 .plugin {
     border: 2px solid $light-color;
     min-width: $width;
-    min-height: $height;
-    padding: 10px;
     cursor: grab;
     position: absolute;
-    background-color: #3E3E3E;
+    background-color: #3e3e3e;
     z-index: 1;
     border-radius: 10px;
     color: $light-color;
@@ -22,44 +21,66 @@ $light-color: #D8E2FA;
     -o-user-select: none;
 
     &.selected {
-        border: 2px solid #02DCC7;
+        border: 2px solid $green-color;
         box-shadow: rgb(255 255 255) 0px 0px 15px;
+
+        .inlet,
+        .outlet {
+            background-color: $green-color;
+            border-color: $green-color;
+        }
     }
 
     &:active {
         cursor: grabbing;
     }
 
+    .node-header {
+        width: 100%;
+        height: $height;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    .node-content {
+        border-top: 2px solid $light-color;
+        width: 100%;
+        padding: 10px;
+    }
+
     .outlet {
-        border: 2px solid $light-color;
-        width: $outlet-size;
+        border: 1px solid $light-color;
+        width: $outlet-size / 2;
         height: $outlet-size;
         position: absolute;
         top: calc(50% - $outlet-size / 2);
-        left: calc(100% - $outlet-size / 2 + 1px);
-        border-radius: 50%;
-        background-color: #fff;
+        left: calc(100% + 1px);
+        border-top-right-radius: $outlet-size;
+        border-bottom-right-radius: $outlet-size;
+        background-color: #000;
         z-index: 2;
 
         &:hover {
-            background-color: orange;
+            background-color: $green-color;
             cursor: crosshair;
         }
     }
 
     .inlet {
-        border: 2px solid $light-color;
-        width: $outlet-size;
+        border: 1px solid $light-color;
+        width: $outlet-size / 2;
         height: $outlet-size;
         position: absolute;
         top: calc(50% - $outlet-size / 2);
-        left: calc(1px - $outlet-size / 2 );
-        border-radius: 50%;
-        background-color: #fff;
+        left: calc(-1px - $outlet-size / 2);
+        border-top-left-radius: $outlet-size;
+        border-bottom-left-radius: $outlet-size;
+        background-color: #000;
         z-index: 2;
 
         &:hover {
-            background-color: orange;
+            background-color: $green-color;
             cursor: crosshair;
         }
     }
