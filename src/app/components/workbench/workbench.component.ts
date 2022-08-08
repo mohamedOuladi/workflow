@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
-import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, selectNode, updateSelection } from 'src/app/redux/actions';
+import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, updateSelection } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
 
@@ -22,7 +22,7 @@ export class WorkbenchComponent {
   isMoving = false; // moving viewport
   isSelecting = false; // selecting area
 
-  linkId = 0; // if of dragged link
+  linkId = 0; // id of dragged link
 
   tempX = 0; // just for temporary use
   tempY = 0; // just for temporary use
@@ -208,6 +208,7 @@ export class WorkbenchComponent {
       const inlet = (e.target as HTMLElement)!.closest('.inlet'); // TODO: classname from shared constant
       const element = (e.target as HTMLElement)!.closest('[data-id]'); // TODO: classname from shared constant
 
+      // connecting link to inlet
       if (inlet && element) {
         const targetId = parseInt(element.getAttribute('data-id')!, 10);
 
@@ -228,6 +229,7 @@ export class WorkbenchComponent {
       }
     }
 
+    // selecting area
     if (this.isSelecting) {
       this.selectArea.nativeElement.style.display = 'none';
       const ax1 = (Math.min(this.startX, e.clientX) - this.containerX - this.ddx) / this.scale;
@@ -263,21 +265,21 @@ export class WorkbenchComponent {
     event.preventDefault();
   }
 
-  zoom(delta: number, mx = -1, my = -1) {
+  zoom(delta: number, mouseX = -1, mouseY = -1) {
     if (this.scale + delta < 0.1) {
       return;
     }
 
     // if zoom using buttons, shift relative to center
-    if (mx < 0 && my < 0) {
+    if (mouseX < 0 && mouseY < 0) {
       const { width, height } = this.containerEl.nativeElement.getBoundingClientRect();
-      mx = width / 2;
-      my = height / 2;
+      mouseX = width / 2;
+      mouseY = height / 2;
     }
 
     // zoom and shift relative to mouse position
-    this.ddx += (this.ddx - mx) * delta / this.scale;
-    this.ddy += (this.ddy - my) * delta / this.scale;
+    this.ddx += (this.ddx - mouseX) * delta / this.scale;
+    this.ddy += (this.ddy - mouseY) * delta / this.scale;
 
     this.scale += delta;
 
@@ -285,8 +287,6 @@ export class WorkbenchComponent {
     this.grid.nativeElement.style['background-size'] = `${size} ${size}` // 50px 50px;
     this.grid.nativeElement.style['background-position'] = `${this.ddx}px ${this.ddy}px`;
   }
-
-
 
 }
 
