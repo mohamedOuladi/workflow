@@ -4,6 +4,8 @@ export interface NodeX {
     id?: number;
     type: string;
     selected?: boolean;
+    name: string;
+    expanded?: boolean;
 }
 
 export interface Link {

@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ComponentRef, ElementRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { PLUGINS } from 'src/app/plugins';
+import { NodeX } from 'src/app/types';
 import { PluginAComponent } from '../plugin-a/plugin-a.component';
 
 @Component({
@@ -11,19 +12,22 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit {
   @ViewChild('outlet', { read: ViewContainerRef, static: false }) outlet!: ViewContainerRef;
   @ViewChild('host', { read: ElementRef }) host!: ElementRef;
 
-  @Input() data?: { x: number, y: number, id: number, type: string, selected?: boolean };
+  @Input() data?: NodeX;
   x!: number;
   y!: number;
   id!: number;
   type!: string;
   selected = false;
+  name = '';
   component!: ComponentRef<PluginAComponent>;
+  expanded = false;
 
   ngOnInit(): void {
     this.x = this.data!.x;
     this.y = this.data!.y;
     this.id = this.data!.id || 0;
     this.type = this.data!.type;
+    this.name = this.data!.name;
     this.selected = this.data!.selected || false;
   }
 
@@ -36,7 +40,9 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit {
     if (this.component) {
       this.x = changes.data.currentValue.x || this.x;
       this.y = changes.data.currentValue.y || this.y;
+      this.name = changes.data.currentValue.name || this.name;
       this.selected = changes.data.currentValue.selected;
+      this.expanded = changes.data.currentValue.expanded;
     }
   }
 

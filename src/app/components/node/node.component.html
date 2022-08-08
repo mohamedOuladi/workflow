@@ -1,6 +1,9 @@
 <div #host class="plugin" [attr.value]="id" [style.top]="y+'px'" [style.left]="x+'px'" [attr.data-id]="id"
     [ngClass]="{selected: selected}">
-    <ng-container #outlet></ng-container>
     <div class="inlet"></div>
     <div class="outlet"></div>
+    <div class="node-header">{{ name }}</div>
+    <div class="node-content" [hidden]="!expanded">
+        <ng-container #outlet></ng-container>
+    </div>
 </div>

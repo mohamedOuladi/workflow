@@ -1,5 +1,6 @@
 import { Component, ElementRef, HostListener, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
+import { PLUGINS } from 'src/app/plugins';
 import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, updateSelection, deleteNodes } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
@@ -60,7 +61,7 @@ export class WorkbenchComponent {
       this.store.dispatch(deleteNodes(this.state!.selection));
       this.store.dispatch(updateSelection([]));
     }
-    
+
     if (event.ctrlKey || event.metaKey) {
       if (event.key === 'a') {
         event.preventDefault();
@@ -75,7 +76,8 @@ export class WorkbenchComponent {
       const data = JSON.parse(dataJson);
       const x = (event.clientX - data.x - this.containerX - this.ddx) / this.scale;
       const y = (event.clientY - data.y - this.containerY - this.ddy) / this.scale;
-      const node = { x, y, type: data.type };
+      const name = PLUGINS.find(x => x.type === data.type)!.name;
+      const node = { x, y, type: data.type, name };
       this.store.dispatch(updateSelection([]));
       this.store.dispatch(addNode(node));
     }
@@ -305,11 +307,19 @@ export class WorkbenchComponent {
     this.grid.nativeElement.style['background-position'] = `${this.ddx}px ${this.ddy}px`;
   }
 
+
 }
 
-// TODO: undo using ctrl+z (using immer)
+// TODO: expand nodes
 // TODO: context menu
+// TODO: simple history
+// TODO: undo using ctrl+z (using immer)
 // TODO: classname from shared constant
 // TODO: do not hover color of inlet if link was from inlet - pass state into dynamicNode component, and possibly node object
 // TODO: copy/paste using ctrl+c/v
 // TODO: non-connectable nodes (e.g. text)
+// TODO: configurable module
+// TODO: reusable module
+
+// TODO after prototype:
+// - resizable nodes (using mouse)
