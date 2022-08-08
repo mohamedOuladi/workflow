@@ -15,20 +15,20 @@ const GRID_SIZE = 500;
 export class WorkbenchComponent {
   @ViewChild('containerEl', { read: ElementRef }) containerEl!: ElementRef;
   @ViewChild('grid', { read: ElementRef }) grid!: ElementRef;
-  @ViewChild('selectzone', { read: ElementRef }) selectZone!: ElementRef;
+  @ViewChild('selectarea', { read: ElementRef }) selectArea!: ElementRef;
 
-  isDragging = false; // node
-  isDrawing = false; // link
-  isMoving = false; // container
-  isSelecting = false; // zone selection
+  isDragging = false; // dragging node
+  isDrawing = false; // dragging ink
+  isMoving = false; // moving viewport
+  isSelecting = false; // selecting area
 
-  linkId = 0;
+  linkId = 0; // if of dragged link
 
-  startX = 0; // offset of currenlty dragged element
-  startY = 0; // offset of currenlty dragged element
+  tempX = 0; // just for temporary use
+  tempY = 0; // just for temporary use
 
-  tempX = 0;
-  tempY = 0;
+  startX = 0; // also for temporary use
+  startY = 0; // also for temporary use
 
   containerX = 0; // offset x of html element relative to the document
   containerY = 0; // offset y of html element relative to the document
@@ -128,7 +128,7 @@ export class WorkbenchComponent {
       return
     }
 
-    // selecting zone
+    // selecting area
     this.isSelecting = true;
     this.startX = e.clientX
     this.startY = e.clientY;
@@ -189,17 +189,17 @@ export class WorkbenchComponent {
       return;
     }
 
-    // selecting zone
+    // selecting area
     if (this.isSelecting) {
       const x = (Math.min(this.startX, e.clientX) - this.containerX - this.ddx) / this.scale;
       const y = (Math.min(this.startY, e.clientY) - this.containerY - this.ddy) / this.scale;
       const width = Math.abs(this.startX - e.clientX) / this.scale;
       const height = Math.abs(this.startY - e.clientY) / this.scale;
-      this.selectZone.nativeElement.style.left = `${x}px`;
-      this.selectZone.nativeElement.style.top = `${y}px`;
-      this.selectZone.nativeElement.style.width = `${width}px`;
-      this.selectZone.nativeElement.style.height = `${height}px`;
-      this.selectZone.nativeElement.style.display = 'block';
+      this.selectArea.nativeElement.style.left = `${x}px`;
+      this.selectArea.nativeElement.style.top = `${y}px`;
+      this.selectArea.nativeElement.style.width = `${width}px`;
+      this.selectArea.nativeElement.style.height = `${height}px`;
+      this.selectArea.nativeElement.style.display = 'block';
     }
   }
 
@@ -229,7 +229,7 @@ export class WorkbenchComponent {
     }
 
     if (this.isSelecting) {
-      this.selectZone.nativeElement.style.display = 'none';
+      this.selectArea.nativeElement.style.display = 'none';
       const ax1 = (Math.min(this.startX, e.clientX) - this.containerX - this.ddx) / this.scale;
       const ay1 = (Math.min(this.startY, e.clientY) - this.containerY - this.ddy) / this.scale;
       const ax2 = (Math.max(this.startX, e.clientX) - this.containerX - this.ddx) / this.scale;
@@ -244,7 +244,7 @@ export class WorkbenchComponent {
         const bx2 = (node.x + rect.width / this.scale);
         const by2 = (node.y + rect.height / this.scale);
 
-        // check if node is in selection zone
+        // check if node is in select area
         return ax1 <= bx2 && bx1 <= ax2 && ay1 <= by2 && by1 <= ay2;
       }).map(node => node.id) as number[];
       this.store.dispatch(updateSelection(selection));
@@ -290,7 +290,6 @@ export class WorkbenchComponent {
 
 }
 
-// TODO: zoom using mouse wheel
 // TODO: undo using ctrl+z
 // TODO: context menu
 // TODO: classname from shared constant
