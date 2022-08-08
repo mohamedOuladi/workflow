@@ -16,9 +16,9 @@ export const moveNode = (id: number, x: number, y: number): Action => ({
     payload: { id, x, y }
 });
 
-export const deleteNode = (id: number): Action => ({
-    type: ActionTypes.DELETE_NODE,
-    payload: id
+export const deleteNodes = (ids: number[]): Action => ({
+    type: ActionTypes.DELETE_NODES,
+    payload: ids
 });
 
 export const createLink = (sourceId: number, x1: number, y1: number): Action => ({
@@ -48,16 +48,6 @@ export const moveLinkHead = (x: number, y: number, id: number): Action => ({
 
 export const disconnectLink = (id: number): Action => ({
     type: ActionTypes.DISCONNECT_LINK,
-    payload: id
-});
-
-export const selectNode = (id: number): Action => ({
-    type: ActionTypes.SELECT_NODE,
-    payload: id
-});
-
-export const deselectNode = (id: number): Action => ({
-    type: ActionTypes.DESELECT_NODE,
     payload: id
 });
 

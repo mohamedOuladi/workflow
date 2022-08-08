@@ -19,28 +19,12 @@ export function nodeReducer(nodes: NodeX[] = [], action: Action): NodeX[] {
             }
             return [...nodes];
 
-        case ActionTypes.DELETE_NODE:
-            return nodes.filter(p => p.id !== action.payload);
+        case ActionTypes.DELETE_NODES:
+            return nodes.filter(p => !action.payload.includes(p.id));
 
         case ActionTypes.LOAD_STATE:
             nodeId = (action.payload.nodes as NodeX[]).reduce((max, p) => Math.max(max, p.id || 0), 0) + 1;
             return action.payload.nodes;
-
-        case ActionTypes.SELECT_NODE:
-            return nodes.map(p => {
-                if (p.id === action.payload) {
-                    p.selected = true;
-                }
-                return p;
-            });
-
-        case ActionTypes.DESELECT_NODE:
-            return nodes.map(p => {
-                if (p.id === action.payload) {
-                    p.selected = false;
-                }
-                return p;
-            });
 
         case ActionTypes.UPDATE_SELECTION:
             return nodes.map(p => {
@@ -96,8 +80,8 @@ export function linkReducer(links: Link[] = [], action: Action): Link[] {
             link4.targetId = undefined;
             return [...links];
 
-        case ActionTypes.DELETE_NODE:
-            return links.filter(c => c.sourceId !== action.payload && c.targetId !== action.payload);
+        case ActionTypes.DELETE_NODES:
+            return links.filter(c => !action.payload.includes(c.sourceId) && !action.payload.includes(c.targetId));
 
         default:
             return links;

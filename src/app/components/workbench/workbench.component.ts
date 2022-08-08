@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
-import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, updateSelection } from 'src/app/redux/actions';
+import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, updateSelection, deleteNodes } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
 
@@ -55,11 +55,24 @@ export class WorkbenchComponent {
 
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Delete' || event.key === 'Backspace') {
+      event.preventDefault();
+      this.store.dispatch(deleteNodes(this.state!.selection));
+      this.store.dispatch(updateSelection([]));
+    }
+
     if (event.ctrlKey || event.metaKey) {
+
       if (event.key === 'a') {
         event.preventDefault();
-        const ids = this.state!.nodes.map(x => x.id!);
-        this.store.dispatch(updateSelection(ids));
+      }
+
+      if (event.key === 'c') {
+        event.preventDefault();
+      }
+
+      if (event.key === 'v') {
+        event.preventDefault();
       }
     }
   }
