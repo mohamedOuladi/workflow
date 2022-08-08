@@ -45,10 +45,22 @@ export class WorkbenchComponent {
     })
   }
 
-  @HostListener('wheel', ['$event']) onMouseWheel(event: WheelEvent) {
+  @HostListener('wheel', ['$event'])
+  onMouseWheel(event: WheelEvent) {
     event.preventDefault();
     if (event.deltaY !== 0) {
       this.zoom(event.deltaY / 1000, event.clientX - this.containerX, event.clientY - this.containerY);
+    }
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    if (event.ctrlKey || event.metaKey) {
+      if (event.key === 'a') {
+        event.preventDefault();
+        const ids = this.state!.nodes.map(x => x.id!);
+        this.store.dispatch(updateSelection(ids));
+      }
     }
   }
 
@@ -82,7 +94,7 @@ export class WorkbenchComponent {
       this.tempY = e.clientY;
       this.isDragging = true;
       let selection = this.state?.selection.slice()!;
-      if (e.metaKey) {
+      if (e.metaKey || e.ctrlKey) {
         if (this.state?.selection.includes(nodeId)) {
           selection = this.state.selection.filter(x => x !== nodeId);
         } else {
