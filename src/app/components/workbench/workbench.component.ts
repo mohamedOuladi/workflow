@@ -60,25 +60,12 @@ export class WorkbenchComponent {
       this.store.dispatch(deleteNodes(this.state!.selection));
       this.store.dispatch(updateSelection([]));
     }
-
+    
     if (event.ctrlKey || event.metaKey) {
-
       if (event.key === 'a') {
         event.preventDefault();
+        this.store.dispatch(updateSelection(this.state!.nodes.map(x => x.id!)));
       }
-
-      if (event.key === 'c') {
-        event.preventDefault();
-      }
-
-      if (event.key === 'v') {
-        event.preventDefault();
-      }
-
-      if (event.key === 'z') {
-        event.preventDefault();
-      }
-
     }
   }
 
