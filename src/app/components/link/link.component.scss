@@ -1,9 +1,13 @@
+$light-color: #d8e2fa;
+
 svg {
     z-index: 0;
     position: absolute;
     overflow: visible !important;
 
-    .link-path {
-        stroke: limegreen;
+    path {
+        fill: none;
+        stroke: $light-color;
+        stroke-width: 2;
     }
 }
