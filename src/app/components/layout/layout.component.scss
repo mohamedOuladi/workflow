@@ -2,6 +2,8 @@ $header-height: 75px;
 $left-menu-width: 300px;
 
 $primary-bg-color: #3e3e3e;
+$primary-bg-color-lighter: #4b4b4b;
+$primary-bg-color-lighest: #555555;
 $black-color: #0a0d0c;
 $primary-text-color: #b5b5b5;
 
@@ -42,4 +44,28 @@ header {
     background-image: url("/assets/logo.png");
     background-repeat: no-repeat;
     background-size: cover;
+    display: flex;
+    align-items: center;
+
+    .header-menu {
+        margin-left: 20px;
+
+        button {
+            background-color: transparent;
+            border: none;
+            color: $primary-text-color;
+            margin-left: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: underline;
+
+            &:hover {
+                background-color: $primary-bg-color-lighter;
+            }
+
+            &:active {
+                background-color: $primary-bg-color-lighest;
+            }
+        }
+    }
 }

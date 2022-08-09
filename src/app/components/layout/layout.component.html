@@ -1,6 +1,11 @@
 <div class="layout">
     <header>
         <img src="/assets/logo.png" alt="">
+        <div class="header-menu">
+            <button (click)="save()">Save</button>
+            <button (click)="load()">Load</button>
+            <button (click)="reset()">Reset</button>
+        </div>
     </header>
     <main>
         <article>
@@ -10,8 +15,7 @@
             <app-plugin-library></app-plugin-library>
         </nav>
         <aside>
-           <button (click)="load()">Load</button>
-           <button (click)="save()">Save</button>
+
         </aside>
     </main>
 </div>

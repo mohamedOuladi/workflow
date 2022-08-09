@@ -1,7 +1,7 @@
 import { NodeX } from '../types';
-import { Action, ActionTypes } from './types';
+import { Action, ActionTypes, State } from './types';
 
-export const loadState = (state: NodeX[]): Action => ({
+export const loadState = (state: State): Action => ({
     type: ActionTypes.LOAD_STATE,
     payload: state
 });
