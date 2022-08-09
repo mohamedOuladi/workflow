@@ -3,6 +3,7 @@ $height: 50px;
 $outlet-size: 20px;
 $light-color: #d8e2fa;
 $green-color: #02dcc7;
+$border-radius: 10px;
 
 .plugin {
     border: 2px solid $light-color;
@@ -11,7 +12,7 @@ $green-color: #02dcc7;
     position: absolute;
     background-color: #3e3e3e;
     z-index: 1;
-    border-radius: 10px;
+    border-radius: $border-radius;
     color: $light-color;
 
     user-select: none;
@@ -38,9 +39,33 @@ $green-color: #02dcc7;
     .node-header {
         width: 100%;
         height: $height;
-        padding: 10px 20px;
         display: flex;
         align-items: center;
+
+        button {
+            background-color: transparent;
+            border: none;
+            color: $light-color;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        .title {
+            padding-left: 10px;
+            flex-grow: 1;
+        }
+
+        .icon {
+            width: 50px;
+            border-top-right-radius: $border-radius;
+            border-bottom-right-radius: $border-radius;
+            background-color: black;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
     }
 
     .node-content {

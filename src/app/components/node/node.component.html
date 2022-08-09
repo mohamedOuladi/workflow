@@ -2,7 +2,15 @@
     [ngClass]="{selected: selected}">
     <div class="inlet"></div>
     <div class="outlet"></div>
-    <div class="node-header">{{ name }}</div>
+    <div class="node-header">
+        <button>
+            <i class="icon-lsi-down-arrow"></i>
+        </button>
+        <div class="title">{{ name }}</div>
+        <div class="icon">
+            <i class="icon-lsi-plugins"></i>
+        </div>
+    </div>
     <div class="node-content" [hidden]="!expanded">
         <ng-container #outlet></ng-container>
     </div>
