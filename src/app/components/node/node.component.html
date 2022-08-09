@@ -1,14 +1,14 @@
 <div #host class="plugin" [attr.value]="id" [style.top]="y+'px'" [style.left]="x+'px'" [attr.data-id]="id"
     [ngClass]="{selected: selected}">
-    <div class="inlet"></div>
-    <div class="outlet"></div>
+    <div class="inlet" [hidden]="!hasInlet"></div>
+    <div class="outlet" [hidden]="!hasOutlet"></div>
     <div class="node-header">
         <button>
             <i class="icon-lsi-down-arrow"></i>
         </button>
         <div class="title">{{ name }}</div>
         <div class="icon">
-            <i class="icon-lsi-plugins"></i>
+            <i [ngClass]="icon"></i>
         </div>
     </div>
     <div class="node-content" [hidden]="!expanded">

@@ -9,6 +9,9 @@ import { DynamicNodeComponent } from './components/node/node.component';
 import { PluginBComponent } from './components/plugin-b/plugin-b.component';
 import { LinkComponent } from './components/link/link.component';
 import { WorkbenchComponent } from './components/workbench/workbench.component';
+import { PluginCComponent } from './components/plugin-c/plugin-c.component';
+import { PluginDComponent } from './components/plugin-d/plugin-d.component';
+import { PluginEComponent } from './components/plugin-e/plugin-e.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,10 @@ import { WorkbenchComponent } from './components/workbench/workbench.component';
     DynamicNodeComponent,
     PluginBComponent,
     LinkComponent,
-    WorkbenchComponent
+    WorkbenchComponent,
+    PluginCComponent,
+    PluginDComponent,
+    PluginEComponent
   ],
   imports: [
     BrowserModule,

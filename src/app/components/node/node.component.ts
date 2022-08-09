@@ -13,14 +13,17 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit {
   @ViewChild('host', { read: ElementRef }) host!: ElementRef;
 
   @Input() data?: NodeX;
+  component!: ComponentRef<PluginAComponent>;
   x!: number;
   y!: number;
   id!: number;
   type!: string;
   selected = false;
-  name = '';
-  component!: ComponentRef<PluginAComponent>;
   expanded = false;
+  name = '';
+  icon = '';
+  hasInlet = false;
+  hasOutlet = false;
 
   ngOnInit(): void {
     this.x = this.data!.x;
@@ -29,6 +32,10 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit {
     this.type = this.data!.type;
     this.name = this.data!.name;
     this.selected = this.data!.selected || false;
+    this.expanded = this.data!.expanded || false;
+    this.icon = PLUGINS.find(x => x.type === this.type)!.icon;
+    this.hasInlet = PLUGINS.find(x => x.type === this.type)!.hasInlet;
+    this.hasOutlet = PLUGINS.find(x => x.type === this.type)!.hasOutlet;
   }
 
   ngAfterViewInit(): void {

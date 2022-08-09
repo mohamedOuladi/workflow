@@ -2,7 +2,7 @@
 <div class="bench" #containerEl (dragover)="allowDrop($event)" (drop)="dropped($event)" (mousedown)="mouseDown($event)"
     (mousemove)="mouseMove($event)" (mouseup)="mouseUp($event)">
     <div class="drawboard"
-        [style.transform]="'scale('+ scale +') translate('+ ddx / scale +'px, '+ ddy  / scale + 'px)'">
+        [style.transform]="'scale('+ scale +') translate('+ dx / scale +'px, '+ dy  / scale + 'px)'">
         <ng-container *ngFor="let n of state?.nodes">
             <app-node
                 [data]="{x :n.x, y: n.y, id: n.id!, type: n.type, selected: n.selected, name: n.name, expanded: n.expanded }">

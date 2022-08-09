@@ -6,6 +6,8 @@ export interface NodeX {
     selected?: boolean;
     name: string;
     expanded?: boolean;
+    hasOutlet?: boolean;
+    hasInlet?: boolean;
 }
 
 export interface Link {

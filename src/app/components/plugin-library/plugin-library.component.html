@@ -1,4 +1,4 @@
 <div *ngFor="let plugin of plugins" class="plugin"  draggable="true" [attr.data-type]="plugin.type" (dragstart)="start($event)">
-    <i class="icon-lsi-plugins"></i>
+    <i [ngClass]="plugin.icon"></i>
     {{ plugin.name }}
 </div>

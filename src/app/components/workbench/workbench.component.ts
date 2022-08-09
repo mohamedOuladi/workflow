@@ -37,8 +37,8 @@ export class WorkbenchComponent {
   state?: State;
 
   scale = 1;
-  ddx = 0; // x of viewport
-  ddy = 0; // y of viewport
+  dx = 0; // x of viewport
+  dy = 0; // y of viewport
 
   constructor(private store: Store, private renderer: Renderer2) {
     this.store.state$.pipe(filter(x => !!x)).subscribe(state => {
@@ -74,8 +74,8 @@ export class WorkbenchComponent {
     const dataJson = event.dataTransfer!.getData('data');
     if (dataJson) {
       const data = JSON.parse(dataJson);
-      const x = (event.clientX - data.x - this.containerX - this.ddx) / this.scale;
-      const y = (event.clientY - data.y - this.containerY - this.ddy) / this.scale;
+      const x = (event.clientX - data.x - this.containerX - this.dx) / this.scale;
+      const y = (event.clientY - data.y - this.containerY - this.dy) / this.scale;
       const name = PLUGINS.find(x => x.type === data.type)!.name;
       const node = { x, y, type: data.type, name };
       this.store.dispatch(updateSelection([]));
@@ -120,8 +120,8 @@ export class WorkbenchComponent {
     if (outlet && element) {
       this.isDrawing = true;
       const rect = outlet.getBoundingClientRect();
-      const outletX = (rect.left + rect.width / 2 - this.containerX - this.ddx) / this.scale;
-      const outletY = (rect.top + rect.height / 2 - this.containerY - this.ddy) / this.scale;
+      const outletX = (rect.left + rect.width / 2 - this.containerX - this.dx) / this.scale;
+      const outletY = (rect.top + rect.height / 2 - this.containerY - this.dy) / this.scale;
       this.store.dispatch(createLink(nodeId, outletX, outletY));
       return;
     }
@@ -142,8 +142,8 @@ export class WorkbenchComponent {
     // moving container
     if (e.shiftKey) {
       this.isMoving = true;
-      this.startX = e.clientX - this.ddx;
-      this.startY = e.clientY - this.ddy;
+      this.startX = e.clientX - this.dx;
+      this.startY = e.clientY - this.dy;
       return
     }
 
@@ -194,24 +194,24 @@ export class WorkbenchComponent {
 
     // drawing link
     if (this.isDrawing) {
-      const x = (e.clientX - this.containerX - this.ddx) / this.scale;
-      const y = (e.clientY - this.containerY - this.ddy) / this.scale;
+      const x = (e.clientX - this.containerX - this.dx) / this.scale;
+      const y = (e.clientY - this.containerY - this.dy) / this.scale;
       this.store.dispatch(moveLinkTail(this.linkId, x, y));
       return;
     }
 
     // moving container
     if (this.isMoving) {
-      this.ddx = e.clientX - this.startX;
-      this.ddy = e.clientY - this.startY;
-      this.grid.nativeElement.style['background-position'] = `${this.ddx}px ${this.ddy}px`;
+      this.dx = e.clientX - this.startX;
+      this.dy = e.clientY - this.startY;
+      this.grid.nativeElement.style['background-position'] = `${this.dx}px ${this.dy}px`;
       return;
     }
 
     // selecting area
     if (this.isSelecting) {
-      const x = (Math.min(this.startX, e.clientX) - this.containerX - this.ddx) / this.scale;
-      const y = (Math.min(this.startY, e.clientY) - this.containerY - this.ddy) / this.scale;
+      const x = (Math.min(this.startX, e.clientX) - this.containerX - this.dx) / this.scale;
+      const y = (Math.min(this.startY, e.clientY) - this.containerY - this.dy) / this.scale;
       const width = Math.abs(this.startX - e.clientX) / this.scale;
       const height = Math.abs(this.startY - e.clientY) / this.scale;
       this.selectArea.nativeElement.style.left = `${x}px`;
@@ -239,8 +239,8 @@ export class WorkbenchComponent {
           const outletRect = inlet.getBoundingClientRect();
           const outletX = outletRect.left + outletRect.width / 2;
           const outletY = outletRect.top + outletRect.height / 2;
-          const x = (outletX - this.containerX - this.ddx) / this.scale;
-          const y = (outletY - this.containerY - this.ddy) / this.scale;
+          const x = (outletX - this.containerX - this.dx) / this.scale;
+          const y = (outletY - this.containerY - this.dy) / this.scale;
           this.store.dispatch(connectLink(this.linkId, targetId, x, y));
         }
       } else {
@@ -251,10 +251,10 @@ export class WorkbenchComponent {
     // selecting area
     if (this.isSelecting) {
       this.selectArea.nativeElement.style.display = 'none';
-      const ax1 = (Math.min(this.startX, e.clientX) - this.containerX - this.ddx) / this.scale;
-      const ay1 = (Math.min(this.startY, e.clientY) - this.containerY - this.ddy) / this.scale;
-      const ax2 = (Math.max(this.startX, e.clientX) - this.containerX - this.ddx) / this.scale;
-      const ay2 = (Math.max(this.startY, e.clientY) - this.containerY - this.ddy) / this.scale;
+      const ax1 = (Math.min(this.startX, e.clientX) - this.containerX - this.dx) / this.scale;
+      const ay1 = (Math.min(this.startY, e.clientY) - this.containerY - this.dy) / this.scale;
+      const ax2 = (Math.max(this.startX, e.clientX) - this.containerX - this.dx) / this.scale;
+      const ay2 = (Math.max(this.startY, e.clientY) - this.containerY - this.dy) / this.scale;
 
       const selection = this.state?.nodes.filter(node => {
         const element = document.querySelector(`[data-id="${node.id}"]`)!;
@@ -297,27 +297,29 @@ export class WorkbenchComponent {
     }
 
     // zoom and shift relative to mouse position
-    this.ddx += (this.ddx - mouseX) * delta / this.scale;
-    this.ddy += (this.ddy - mouseY) * delta / this.scale;
+    this.dx += (this.dx - mouseX) * delta / this.scale;
+    this.dy += (this.dy - mouseY) * delta / this.scale;
 
     this.scale += delta;
 
     const size = GRID_SIZE * this.scale + 'px';
     this.grid.nativeElement.style['background-size'] = `${size} ${size}` // 50px 50px;
-    this.grid.nativeElement.style['background-position'] = `${this.ddx}px ${this.ddy}px`;
+    this.grid.nativeElement.style['background-position'] = `${this.dx}px ${this.dy}px`;
   }
-
 
 }
 
-// TODO: expand nodes
-// TODO: context menu
+// TODO: file menu (open, save, save as)
+
 // TODO: simple history
 // TODO: undo using ctrl+z (using immer)
+
+// TODO: expand nodes
+
+// TODO: context menu
 // TODO: classname from shared constant
 // TODO: do not hover color of inlet if link was from inlet - pass state into dynamicNode component, and possibly node object
 // TODO: copy/paste using ctrl+c/v
-// TODO: non-connectable nodes (e.g. text)
 // TODO: configurable module
 // TODO: reusable module
 
