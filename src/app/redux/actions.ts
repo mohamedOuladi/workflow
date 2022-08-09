@@ -55,3 +55,8 @@ export const updateSelection = (ids: number[]): Action => ({
     type: ActionTypes.UPDATE_SELECTION,
     payload: ids
 });
+
+export const expandNode = (id: number): Action => ({
+    type: ActionTypes.EXPAND_NODE,
+    payload: id
+});
