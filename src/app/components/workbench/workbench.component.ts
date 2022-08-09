@@ -310,8 +310,6 @@ export class WorkbenchComponent {
 
 }
 
-
-// TODO: select new node
 // TODO: simple history
 // TODO: undo using ctrl+z (using immer)
 
