@@ -78,8 +78,9 @@ export class WorkbenchComponent {
       const y = (event.clientY - data.y - this.containerY - this.dy) / this.scale;
       const name = PLUGINS.find(x => x.type === data.type)!.name;
       const node = { x, y, type: data.type, name };
-      this.store.dispatch(updateSelection([]));
       this.store.dispatch(addNode(node));
+      const lastNode = this.state!.nodes[this.state!.nodes.length - 1];
+      this.store.dispatch(updateSelection([lastNode.id!]));
     }
   }
 
@@ -310,9 +311,7 @@ export class WorkbenchComponent {
 }
 
 
-// TODO: file menu (open, save, save as)
-// TODO: style zoom buttons
-
+// TODO: select new node
 // TODO: simple history
 // TODO: undo using ctrl+z (using immer)
 
