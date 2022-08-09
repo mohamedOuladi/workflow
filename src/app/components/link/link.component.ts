@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
-
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 
 const CURVITY = 0.5;
+const ZIGZAG_MIN_END_LENGTH = 25;
 
 @Component({
   selector: 'app-link',
@@ -9,7 +9,7 @@ const CURVITY = 0.5;
   styleUrls: ['./link.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class LinkComponent implements OnInit, AfterViewInit, OnChanges {
+export class LinkComponent implements OnInit, OnChanges, AfterViewInit {
   @Input('data') data!: { x1: number, y1: number, x2: number, y2: number, id: number };
   @ViewChild('host', { read: ElementRef }) host!: ElementRef<HTMLDivElement>;
 
@@ -19,7 +19,7 @@ export class LinkComponent implements OnInit, AfterViewInit, OnChanges {
   x2: number = 0;
   y2: number = 0;
 
-  constructor(private renderer: Renderer2) { }
+  constructor() { }
 
   ngOnInit(): void {
     this.x1 = this.data.x1;
@@ -30,19 +30,7 @@ export class LinkComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngAfterViewInit(): void {
-    const svgElement = this.renderer.createElement('svg', 'svg');
-    this.renderer.setAttribute(svgElement, 'xmlns', 'http://www.w3.org/2000/svg');
-    this.renderer.setAttribute(svgElement, 'style', 'position: absolute; top: 0; left: 0; z-index: 0; height: 1px; width: 1px;');
-    this.renderer.appendChild(this.host.nativeElement, svgElement);
-
-    const formula = LinkComponent.createCurvature(this.x1, this.y1, this.x2, this.y2);
-    const curve = this.renderer.createElement('path', 'svg');
-
-    this.renderer.setAttribute(curve, 'd', formula);
-    this.renderer.setAttribute(curve, 'fill', 'none');
-    this.renderer.setAttribute(curve, 'stroke-width', '2');
-    this.renderer.addClass(curve, 'link-path');
-    this.renderer.appendChild(svgElement, curve);
+    this.updatePath();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -50,11 +38,31 @@ export class LinkComponent implements OnInit, AfterViewInit, OnChanges {
     this.y1 = changes['data'].currentValue.y1;
     this.x2 = changes['data'].currentValue.x2;
     this.y2 = changes['data'].currentValue.y2;
+    this.updatePath();
+  }
 
-    const curve = this.host?.nativeElement.querySelector('path') as SVGLineElement;
-    if (curve) {
-      const formula = LinkComponent.createCurvature(this.x1, this.y1, this.x2, this.y2);
-      curve.setAttribute('d', formula);
+  updatePath() {
+    const path = this.host?.nativeElement.querySelector('path') as SVGLineElement;
+    if (path) {
+      // const formula = LinkComponent.createCurvature(this.x1, this.y1, this.x2, this.y2);
+      const formula = LinkComponent.createZigzag(this.x1, this.y1, this.x2, this.y2);
+      path.setAttribute('d', formula);
+    }
+  }
+
+  static createZigzag(x1: number, y1: number, x2: number, y2: number) {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+
+    if (dx >= ZIGZAG_MIN_END_LENGTH * 2) {
+      const h = dx / 2;
+      const path = `M ${x1},${y1} h ${h} v ${dy} h ${h}`;
+      return path;
+    } else {
+      const l = ZIGZAG_MIN_END_LENGTH;
+      const v = dy / 2;
+      const h = ZIGZAG_MIN_END_LENGTH * 2 - dx;
+      return `M ${x1},${y1} h ${l} v ${v} h -${h} v ${v} h ${l}`;
     }
   }
 
