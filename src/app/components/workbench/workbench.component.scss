@@ -1,3 +1,9 @@
+$primary-bg-color: #3e3e3e;
+$primary-bg-color-lighter: #4b4b4b;
+$primary-bg-color-lighest: #555555;
+
+$light-color: #d8e2fa;
+
 svg {
     z-index: 0;
     position: absolute;
@@ -28,14 +34,43 @@ svg {
 
 .zoom {
     position: absolute;
-    display: flex;
-    right: 0;
-    top: 0;
+    right: 20px;
+    top: 20px;
+
+    button {
+        display: block;
+        margin-left: 1rem;
+        background-color: $primary-bg-color;
+        color: $light-color;
+        border: none;
+        font-size: 1.5rem;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $primary-bg-color-lighter;
+        }
+
+        &:active {
+            background-color: $primary-bg-color-lighest;
+        }
+
+        &:first-child {
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            margin-bottom: 2px;
+        }
+        &:last-child {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+    }
 }
 
 .select-zone {
     position: absolute;
-    border: 1px solid #02DCC7;
+    border: 1px solid #02dcc7;
     background-color: #02dcc62c;
     display: none;
 }

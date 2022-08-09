@@ -309,7 +309,9 @@ export class WorkbenchComponent {
 
 }
 
+
 // TODO: file menu (open, save, save as)
+// TODO: style zoom buttons
 
 // TODO: simple history
 // TODO: undo using ctrl+z (using immer)
