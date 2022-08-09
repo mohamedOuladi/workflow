@@ -76,7 +76,7 @@ $border-radius: 10px;
 
     .outlet {
         border: 1px solid $light-color;
-        width: $outlet-size / 2;
+        width: calc($outlet-size / 2);
         height: $outlet-size;
         position: absolute;
         top: calc(50% - $outlet-size / 2);
@@ -94,7 +94,7 @@ $border-radius: 10px;
 
     .inlet {
         border: 1px solid $light-color;
-        width: $outlet-size / 2;
+        width: calc($outlet-size / 2);
         height: $outlet-size;
         position: absolute;
         top: calc(50% - $outlet-size / 2);
