@@ -315,10 +315,18 @@ export class WorkbenchComponent {
 
 // TODO: expand nodes
 
+// todo: try refactor
+// todo: abstract logic into service
+
 // TODO: context menu
 // TODO: classname from shared constant
 // TODO: do not hover color of inlet if link was from inlet - pass state into dynamicNode component, and possibly node object
 // TODO: copy/paste using ctrl+c/v
+
+// todo: function for outelt position
+// todo: multiple outlets
+// todo: configure link
+
 // TODO: configurable module
 // TODO: reusable module
 
