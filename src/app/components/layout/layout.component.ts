@@ -34,7 +34,7 @@ export class LayoutComponent {
   }
 
   reset() {
-    this.store.dispatch(loadState({"nodes":[],"links":[],"selection":[]}));
+    this.store.dispatch(loadState({"nodes":[],"links":[],"selection":[], "history":[], "historyIndex":-1}));
   }
 }
 

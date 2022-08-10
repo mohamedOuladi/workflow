@@ -5,7 +5,7 @@ import { Action, State } from "./types";
 
 @Injectable({ providedIn: 'root' })
 export class Store {
-    private state$$ = new BehaviorSubject<State>({ nodes: [], links: [], selection: [] });
+    private state$$ = new BehaviorSubject<State>({ nodes: [], links: [], selection: [], history: [], historyIndex: -1 });
     public state$ = this.state$$.asObservable();
 
     public get state() {

@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
 import { PLUGINS } from 'src/app/plugins';
-import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, updateSelection, deleteNodes } from 'src/app/redux/actions';
+import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, updateSelection, deleteNodes, saveHistory } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
 
@@ -34,7 +34,7 @@ export class WorkbenchComponent {
   containerX = 0; // offset x of html element relative to the document
   containerY = 0; // offset y of html element relative to the document
 
-  state?: State;
+  state!: State;
 
   scale = 1;
   dx = 0; // x of viewport
@@ -224,6 +224,8 @@ export class WorkbenchComponent {
   }
 
   mouseUp(e: MouseEvent) {
+
+    // link
     if (this.isDrawing) {
       const inlet = (e.target as HTMLElement)!.closest('.inlet'); // TODO: classname from shared constant
       const element = (e.target as HTMLElement)!.closest('[data-id]'); // TODO: classname from shared constant
@@ -247,6 +249,12 @@ export class WorkbenchComponent {
       } else {
         this.store.dispatch(destroyLink(this.linkId));
       }
+      this.store.dispatch(saveHistory()); // we don't want to save every move, only when it's finished
+    }
+
+    // node
+    if (this.isDragging) {
+      this.store.dispatch(saveHistory()); // we don't want to save every move, only when it's finished
     }
 
     // selecting area
