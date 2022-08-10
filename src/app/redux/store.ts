@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import { stateReducer } from "./reduceres";
+import { stateReducer } from "./reducers/state-reducers";
 import { Action, State } from "./types";
 
 @Injectable({ providedIn: 'root' })

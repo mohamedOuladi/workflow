@@ -1,41 +1,7 @@
-import { Link, NodeX } from "../types";
-import { Action, ActionTypes, State } from "./types";
+import { Link } from "../../types";
+import { Action, ActionTypes } from "../types";
 
-let nodeId = 1; // latest node id
 let linkId = 1; // latest link id
-
-export function nodeReducer(nodes: NodeX[] = [], action: Action): NodeX[] {
-    switch (action.type) {
-
-        case ActionTypes.ADD_NODE:
-            const newNode = { ...action.payload, id: nodeId++ };
-            return [...nodes, newNode];
-
-        case ActionTypes.MOVE_NODE:
-            const node = nodes.find(p => p.id === action.payload.id);
-            if (node) {
-                node.x = action.payload.x;
-                node.y = action.payload.y;
-            }
-            return [...nodes];
-
-        case ActionTypes.DELETE_NODES:
-            return nodes.filter(p => !action.payload.includes(p.id));
-
-        case ActionTypes.LOAD_STATE:
-            nodeId = (action.payload.nodes as NodeX[]).reduce((max, p) => Math.max(max, p.id || 0), 0) + 1;
-            return action.payload.nodes;
-
-        case ActionTypes.UPDATE_SELECTION:
-            return nodes.map(p => {
-                p.selected = action.payload.includes(p.id);
-                return p;
-            });                        
-
-        default:
-            return nodes;
-    }
-}
 
 export function linkReducer(links: Link[] = [], action: Action): Link[] {
     switch (action.type) {
@@ -86,21 +52,4 @@ export function linkReducer(links: Link[] = [], action: Action): Link[] {
         default:
             return links;
     }
-}
-
-export function selectionReducer(selection: number[] = [], action: Action): number[] {
-    switch (action.type) {
-        case ActionTypes.UPDATE_SELECTION:
-            return action.payload;
-        default:
-            return selection;
-    }
-}
-
-export function stateReducer(state: State, action: Action): State {
-    return {
-        nodes: nodeReducer(state.nodes, action),
-        links: linkReducer(state.links, action),
-        selection: selectionReducer(state.selection, action)
-    };
 }
