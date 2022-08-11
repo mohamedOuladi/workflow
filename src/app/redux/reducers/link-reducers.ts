@@ -11,18 +11,17 @@ export function linkReducer(links: Link[] = [], action: Action): Link[] {
             return action.payload.links;
 
         case ActionTypes.CREATE_LINK:
-            const node = action.payload as NodeX;
-            const x1 = node.x + node.width!;
-            const y1 = node.y + 27; // TODO: temp. replace with formula
-            return [...links, { id: linkId++, sourceId: node.id!, x1, y1, x2: x1, y2: y1 }];
-
-        case ActionTypes.CONNECT_LINK:
-            const { id, targetNode } = action.payload as { id: number, targetNode: NodeX };
-            const link = links.find(c => c.id === action.payload.id) || links[links.length - 1];
-            link.targetId = targetNode.id;
-            link.x2 = targetNode.x;
-            link.y2 =  targetNode.y + 27;
-            return [...links];
+            const { source, target } = action.payload as { source: NodeX, target: NodeX };
+            const link1: Link = {
+                id: linkId++,
+                sourceId: source.id!,
+                targetId: target.id!,
+                x1: source.x + source.width!,
+                y1: source.y + 27,
+                x2: target.x,
+                y2: target.y + 27
+            };
+            return [...links, link1];
 
         case ActionTypes.DESTROY_LINK:
             return action.payload === 0 ? links.slice(0, -1) : links.filter(c => c.id !== action.payload);
@@ -39,12 +38,18 @@ export function linkReducer(links: Link[] = [], action: Action): Link[] {
                     l.y2 += dy;
                 }
                 return l;
-            })
+            });
 
-        case ActionTypes.DISCONNECT_LINK:
-            const link4 = links.find(c => c.id === action.payload)!;
-            link4.targetId = undefined;
-            return [...links];
+        case ActionTypes.UPDATE_LINK_TARGET:
+            const { id, node } = action.payload as { id: number, node: NodeX };
+            return links.map(l => {
+                if (l.id === action.payload.id) {
+                    l.targetId = node.id;
+                    l.x2 = node.x;
+                    l.y2 = node.y + 27;
+                }
+                return l;
+            });
 
         case ActionTypes.DELETE_NODES:
             return links.filter(c => !action.payload.includes(c.sourceId) && !action.payload.includes(c.targetId));

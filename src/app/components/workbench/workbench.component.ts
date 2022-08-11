@@ -1,10 +1,10 @@
 import { Component, ElementRef, HostListener, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
 import { PLUGINS } from 'src/app/plugins';
-import { addNode, disconnectLink, createLink, destroyLink, connectLink, updateSelection, deleteNodes, moveNodesBy } from 'src/app/redux/actions';
+import { addNode, createLink, destroyLink, updateSelection, deleteNodes, moveNodesBy, updateLinkTarget } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
-import { NodeX } from 'src/app/types';
+import { Link, NodeX } from 'src/app/types';
 
 const GRID_SIZE = 50;
 
@@ -25,6 +25,7 @@ export class WorkbenchComponent {
   isSelecting = false; // selecting area
 
   linkId = 0; // id of dragged link
+  draggedLink?: Link;
 
   tempX = 0; // just for temporary use
   tempY = 0; // just for temporary use
@@ -122,7 +123,16 @@ export class WorkbenchComponent {
     if (outlet && element) {
       this.isDrawingLink = true;
       const node = this.state.nodes.find(x => x.id === nodeId)!;
-      this.store.dispatch(createLink(node));
+      this.draggedLink = {
+        id: -1,
+        sourceId: nodeId,
+        x1: node.x + node.width!,
+        y1: node.y + 27,
+        x2: (e.clientX - this.containerX - this.dx) / this.scale,
+        y2: (e.clientY - this.containerY - this.dy) / this.scale,
+      }
+      this.linkId = this.draggedLink.id;
+      this.state.links.push(this.draggedLink);
       return;
     }
 
@@ -131,7 +141,6 @@ export class WorkbenchComponent {
       const linkId = this.state?.links.find(link => link.targetId === nodeId)?.id;
       if (linkId) {
         this.linkId = linkId;
-        this.store.dispatch(disconnectLink(linkId));
         this.isDrawingLink = true;
       }
       return;
@@ -224,18 +233,24 @@ export class WorkbenchComponent {
       // connecting link to inlet
       if (inlet && element) {
         const targetId = parseInt(element.getAttribute('data-id')!, 10);
-
-        // check inlet of the target node is already connected
-        const link = this.state?.links.find(link => link.targetId === targetId);
-        if (link) {
-          this.store.dispatch(destroyLink(this.linkId));
-        } else {
-          const node = this.state.nodes.find(x => x.id === targetId)!;
-          this.store.dispatch(connectLink(this.linkId, node));
+        const existingLink = this.state?.links.find(link => link.targetId === targetId);
+        const target = this.state.nodes.find(x => x.id === targetId)!;
+        if (!existingLink) {
+          if (this.linkId === -1) {
+            const source = this.state.nodes.find(x => x.id === this.draggedLink!.sourceId)!;
+            this.store.dispatch(createLink(source, target));
+          } else {
+            this.store.dispatch(updateLinkTarget(this.linkId, target));
+          }
         }
       } else {
-        this.store.dispatch(destroyLink(this.linkId));
+        if (this.linkId !== -1) {
+          this.store.dispatch(destroyLink(this.linkId));
+        }
       }
+      this.state.links = this.state.links.filter(x => x.id !== -1);
+
+
     }
 
     // node
