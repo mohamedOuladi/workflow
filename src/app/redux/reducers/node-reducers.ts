@@ -18,6 +18,16 @@ export function nodeReducer(nodes: NodeX[] = [], action: Action): NodeX[] {
             }
             return [...nodes];
 
+        case ActionTypes.MOVE_NODES_BY:
+            const { dx, dy, ids } = action.payload;
+            return nodes.map(node => {
+                if (ids.includes(node.id)) {
+                    node.x += dx;
+                    node.y += dy;
+                }
+                return node;
+            }).filter(node => node.x >= 0 && node.y >= 0);
+
         case ActionTypes.DELETE_NODES:
             return nodes.filter(p => !action.payload.includes(p.id));
 
@@ -29,7 +39,7 @@ export function nodeReducer(nodes: NodeX[] = [], action: Action): NodeX[] {
             return nodes.map(p => {
                 p.selected = action.payload.includes(p.id);
                 return p;
-            });                        
+            });
 
         default:
             return nodes;

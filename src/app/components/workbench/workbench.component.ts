@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
 import { PLUGINS } from 'src/app/plugins';
-import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, updateSelection, deleteNodes } from 'src/app/redux/actions';
+import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, updateSelection, deleteNodes, moveNodesBy } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
 
@@ -19,7 +19,7 @@ export class WorkbenchComponent {
   @ViewChild('selectarea', { read: ElementRef }) selectArea!: ElementRef;
 
   isDragging = false; // dragging node
-  isDrawing = false; // dragging ink
+  isDrawingLink = false; // dragging ink
   isMoving = false; // moving viewport
   isSelecting = false; // selecting area
 
@@ -102,7 +102,7 @@ export class WorkbenchComponent {
       this.tempY = e.clientY;
       this.isDragging = true;
       let selection = this.state?.selection.slice()!;
-      if (e.metaKey || e.ctrlKey) {
+      if (e.shiftKey) {
         if (this.state?.selection.includes(nodeId)) {
           selection = this.state.selection.filter(x => x !== nodeId);
         } else {
@@ -119,7 +119,7 @@ export class WorkbenchComponent {
 
     // new link from outlet
     if (outlet && element) {
-      this.isDrawing = true;
+      this.isDrawingLink = true;
       const rect = outlet.getBoundingClientRect();
       const outletX = (rect.left + rect.width / 2 - this.containerX - this.dx) / this.scale;
       const outletY = (rect.top + rect.height / 2 - this.containerY - this.dy) / this.scale;
@@ -133,7 +133,7 @@ export class WorkbenchComponent {
       if (linkId) {
         this.linkId = linkId;
         this.store.dispatch(disconnectLink(linkId));
-        this.isDrawing = true;
+        this.isDrawingLink = true;
       }
       return;
     }
@@ -141,7 +141,9 @@ export class WorkbenchComponent {
     this.store.dispatch(updateSelection([]));
 
     // moving container
-    if (e.shiftKey) {
+    if (e.metaKey || e.ctrlKey) {
+      e.preventDefault();
+      e.stopPropagation();
       this.isMoving = true;
       this.startX = e.clientX - this.dx;
       this.startY = e.clientY - this.dy;
@@ -156,13 +158,14 @@ export class WorkbenchComponent {
 
   mouseMove(e: MouseEvent) {
 
-    // dragging node
     if (this.isDragging) {
       const dx = e.clientX - this.tempX;
       const dy = e.clientY - this.tempY;
       this.tempX = e.clientX;
       this.tempY = e.clientY;
+      this.store.dispatch(moveNodesBy(this.state?.selection!, dx, dy));
 
+      return;
       this.state?.selection.forEach(id => {
         const node = this.state?.nodes.find(x => x.id === id)!;
         const newX = node.x + dx / this.scale;
@@ -190,11 +193,12 @@ export class WorkbenchComponent {
           this.store.dispatch(moveLinkTail(link.id, tailX, tailY,));
         });
       });
+
       return;
     }
 
     // drawing link
-    if (this.isDrawing) {
+    if (this.isDrawingLink) {
       const x = (e.clientX - this.containerX - this.dx) / this.scale;
       const y = (e.clientY - this.containerY - this.dy) / this.scale;
       this.store.dispatch(moveLinkTail(this.linkId, x, y));
@@ -226,7 +230,7 @@ export class WorkbenchComponent {
   mouseUp(e: MouseEvent) {
 
     // link
-    if (this.isDrawing) {
+    if (this.isDrawingLink) {
       const inlet = (e.target as HTMLElement)!.closest('.inlet'); // TODO: classname from shared constant
       const element = (e.target as HTMLElement)!.closest('[data-id]'); // TODO: classname from shared constant
 
@@ -275,7 +279,7 @@ export class WorkbenchComponent {
     }
 
     this.isDragging = false;
-    this.isDrawing = false;
+    this.isDrawingLink = false;
     this.isMoving = false;
     this.isSelecting = false;
     this.linkId = 0;
