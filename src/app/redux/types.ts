@@ -4,8 +4,6 @@ export interface State {
     nodes: NodeX[];
     links: Link[];
     selection: number[];
-    history: any[];
-    historyIndex: number;
 }
 
 export interface Action {
@@ -26,5 +24,4 @@ export enum ActionTypes {
     DELETE_NODES = "DELETE_NODES",
     UPDATE_SELECTION = "UPDATE_SELECTION",
     EXPAND_NODE = "EXPAND_NODE",
-    SAVE_HISTORY = "SAVE_HISTORY"
 }

@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
 import { PLUGINS } from 'src/app/plugins';
-import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, updateSelection, deleteNodes, saveHistory } from 'src/app/redux/actions';
+import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, updateSelection, deleteNodes } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
 
@@ -249,12 +249,6 @@ export class WorkbenchComponent {
       } else {
         this.store.dispatch(destroyLink(this.linkId));
       }
-      this.store.dispatch(saveHistory()); // we don't want to save every move, only when it's finished
-    }
-
-    // node
-    if (this.isDragging) {
-      this.store.dispatch(saveHistory()); // we don't want to save every move, only when it's finished
     }
 
     // selecting area
@@ -317,6 +311,10 @@ export class WorkbenchComponent {
   }
 
 }
+
+//rebuild move logic
+  // node size
+  // link outlet formula
 
 // TODO: simple history
 // TODO: undo using ctrl+z (using immer)

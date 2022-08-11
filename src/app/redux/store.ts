@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { ImmutableBehaviorSubject } from "immutable-rxjs";
 import { stateReducer } from "./reducers/state-reducers";
 import { Action, State } from "./types";
 
 @Injectable({ providedIn: 'root' })
 export class Store {
-    private state$$ = new BehaviorSubject<State>({ nodes: [], links: [], selection: [], history: [], historyIndex: -1 });
+    private state$$ = new ImmutableBehaviorSubject<State>({ nodes: [], links: [], selection: [] });
     public state$ = this.state$$.asObservable();
 
     public get state() {

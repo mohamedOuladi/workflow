@@ -12,5 +12,4 @@ export const loadState = (state: State): Action => ({ type: ActionTypes.LOAD_STA
 export const moveLinkHead = (x: number, y: number, id: number): Action => ({ type: ActionTypes.MOVE_LINK_HEAD, payload: { id, x, y } });
 export const moveLinkTail = (id: number, x: number, y: number): Action => ({ type: ActionTypes.MOVE_LINK_TAIL, payload: { id, x, y } });
 export const moveNode = (id: number, x: number, y: number): Action => ({ type: ActionTypes.MOVE_NODE, payload: { id, x, y } });
-export const saveHistory = (): Action => ({ type: ActionTypes.SAVE_HISTORY });
 export const updateSelection = (ids: number[]): Action => ({ type: ActionTypes.UPDATE_SELECTION, payload: ids });
