@@ -230,7 +230,6 @@ export class WorkbenchComponent {
       const inlet = (e.target as HTMLElement)!.closest('.inlet'); // TODO: classname from shared constant
       const element = (e.target as HTMLElement)!.closest('[data-id]'); // TODO: classname from shared constant
 
-      // connecting link to inlet
       if (inlet && element) {
         const targetId = parseInt(element.getAttribute('data-id')!, 10);
         const existingLink = this.state?.links.find(link => link.targetId === targetId);
@@ -249,15 +248,15 @@ export class WorkbenchComponent {
         }
       }
       this.state.links = this.state.links.filter(x => x.id !== -1);
-
-
     }
 
     // node
     if (this.isDragging) {
       const dx = e.clientX - this.startX;
       const dy = e.clientY - this.startY;
-      this.store.dispatch(moveNodesBy(dx / this.scale, dy / this.scale, this.state!.selection));
+      if (dx && dy) {
+        this.store.dispatch(moveNodesBy(dx / this.scale, dy / this.scale, this.state!.selection));
+      }
     }
 
     // selecting area
