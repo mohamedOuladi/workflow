@@ -12,6 +12,7 @@ export const PLUGINS = [
         component: PluginAComponent,
         hasInlet: true,
         hasOutlet: true,
+        width: 250
     },
     {
         name: 'Plugin B',
@@ -20,6 +21,7 @@ export const PLUGINS = [
         component: PluginBComponent,
         hasInlet: true,
         hasOutlet: true,
+        width: 250
     },
     {
         name: 'No Inlet',
@@ -28,6 +30,7 @@ export const PLUGINS = [
         component: PluginCComponent,
         hasInlet: false,
         hasOutlet: true,
+        width: 250
     },
     {
         name: 'No Outlet',
@@ -36,6 +39,7 @@ export const PLUGINS = [
         component: PluginDComponent,
         hasInlet: true,
         hasOutlet: false,
+        width: 250
     },
     {
         name: 'Unconnectable',
@@ -44,6 +48,7 @@ export const PLUGINS = [
         component: PluginEComponent,
         hasInlet: false,
         hasOutlet: false,
+        width: 250
     },
 
 ];

@@ -1,9 +1,10 @@
 import { Component, ElementRef, HostListener, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
 import { PLUGINS } from 'src/app/plugins';
-import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, updateSelection, deleteNodes, moveNodesBy } from 'src/app/redux/actions';
+import { addNode, disconnectLink, createLink, moveLinkHead, moveLinkTail, destroyLink, connectLink, updateSelection, deleteNodes, updateNodesPosition } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
+import { NodeX } from 'src/app/types';
 
 const GRID_SIZE = 50;
 
@@ -76,11 +77,9 @@ export class WorkbenchComponent {
       const data = JSON.parse(dataJson);
       const x = (event.clientX - data.x - this.containerX - this.dx) / this.scale;
       const y = (event.clientY - data.y - this.containerY - this.dy) / this.scale;
-      const name = PLUGINS.find(x => x.type === data.type)!.name;
-      const node = { x, y, type: data.type, name };
+      const plugin = PLUGINS.find(x => x.type === data.type)!;
+      const node: NodeX = { x, y, type: data.type, name: plugin.name, width: plugin.width, selected: true, expanded: false, hasOutlet: plugin.hasOutlet, hasInlet: plugin.hasInlet };
       this.store.dispatch(addNode(node));
-      const lastNode = this.state!.nodes[this.state!.nodes.length - 1];
-      this.store.dispatch(updateSelection([lastNode.id!]));
     }
   }
 
@@ -163,38 +162,38 @@ export class WorkbenchComponent {
       const dy = e.clientY - this.tempY;
       this.tempX = e.clientX;
       this.tempY = e.clientY;
-      this.store.dispatch(moveNodesBy(this.state?.selection!, dx, dy));
-
-      return;
-      this.state?.selection.forEach(id => {
-        const node = this.state?.nodes.find(x => x.id === id)!;
-        const newX = node.x + dx / this.scale;
-        const newY = node.y + dy / this.scale;
-
-        this.store.dispatch(moveNode(id, newX, newY));
-
-        // get element size 
-        const element = document.querySelector(`[data-id="${id}"]`);
-        const rect = element!.getBoundingClientRect();
-        const width = rect.width / this.scale;
-        const height = rect.height / this.scale;
-
-        const headX = newX + width
-        const headY = newY + height / 2;
-
-        const tailX = newX;
-        const tailY = newY + height / 2;
-
-        this.state?.links.filter(link => link.sourceId === id).forEach(link => {
-          this.store.dispatch(moveLinkHead(headX, headY, link.id));
-        });
-
-        this.state?.links.filter(link => link.targetId === id).forEach(link => {
-          this.store.dispatch(moveLinkTail(link.id, tailX, tailY,));
-        });
+      this.state!.nodes.slice().filter(x => this.state!.selection.includes(x.id!)).forEach(x => {
+        x.x += dx / this.scale;
+        x.y += dy / this.scale;
       });
-
       return;
+      // this.state?.selection.forEach(id => {
+      //   const node = this.state?.nodes.find(x => x.id === id)!;
+      //   const newX = node.x + dx / this.scale;
+      //   const newY = node.y + dy / this.scale;
+
+      //   this.store.dispatch(moveNode(id, newX, newY));
+
+      //   // get element size 
+      //   const element = document.querySelector(`[data-id="${id}"]`);
+      //   const rect = element!.getBoundingClientRect();
+      //   const width = rect.width / this.scale;
+      //   const height = rect.height / this.scale;
+
+      //   const headX = newX + width
+      //   const headY = newY + height / 2;
+
+      //   const tailX = newX;
+      //   const tailY = newY + height / 2;
+
+      //   this.state?.links.filter(link => link.sourceId === id).forEach(link => {
+      //     this.store.dispatch(moveLinkHead(headX, headY, link.id));
+      //   });
+
+      //   this.state?.links.filter(link => link.targetId === id).forEach(link => {
+      //     this.store.dispatch(moveLinkTail(link.id, tailX, tailY,));
+      //   });
+      // });
     }
 
     // drawing link
@@ -253,6 +252,12 @@ export class WorkbenchComponent {
       } else {
         this.store.dispatch(destroyLink(this.linkId));
       }
+    }
+
+    // node
+    if (this.isDragging) {
+      const nodes = this.state?.nodes.filter(x => this.state?.selection.includes(x.id!));
+      this.store.dispatch(updateNodesPosition(nodes));
     }
 
     // selecting area
@@ -316,9 +321,8 @@ export class WorkbenchComponent {
 
 }
 
-//rebuild move logic
-  // node size
-  // link outlet formula
+// rebuild link move logic
+// link outlet formula
 
 // TODO: simple history
 // TODO: undo using ctrl+z (using immer)

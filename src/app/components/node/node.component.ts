@@ -10,7 +10,6 @@ import { PluginAComponent } from '../plugin-a/plugin-a.component';
 })
 export class DynamicNodeComponent implements OnInit, AfterViewInit {
   @ViewChild('outlet', { read: ViewContainerRef, static: false }) outlet!: ViewContainerRef;
-  @ViewChild('host', { read: ElementRef }) host!: ElementRef;
 
   @Input() data?: NodeX;
   component!: ComponentRef<PluginAComponent>;
@@ -24,6 +23,7 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit {
   icon = '';
   hasInlet = false;
   hasOutlet = false;
+  width = 250;
 
   ngOnInit(): void {
     this.x = this.data!.x;
@@ -36,6 +36,7 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit {
     this.icon = PLUGINS.find(x => x.type === this.type)!.icon;
     this.hasInlet = PLUGINS.find(x => x.type === this.type)!.hasInlet;
     this.hasOutlet = PLUGINS.find(x => x.type === this.type)!.hasOutlet;
+    this.width = PLUGINS.find(x => x.type === this.type)!.width;
   }
 
   ngAfterViewInit(): void {

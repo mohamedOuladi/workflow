@@ -11,10 +11,8 @@ export interface Action {
     payload?: any;
 }
 
-
 export enum ActionTypes {
     ADD_NODE = 'ADD_NODE',
-    MOVE_NODE = "MOVE_NODE",
     LOAD_STATE = "LOAD_STATE",
     CREATE_LINK = "CREATE_LINK",
     CONNECT_LINK = "CONNECT_LINK",
@@ -25,5 +23,5 @@ export enum ActionTypes {
     DELETE_NODES = "DELETE_NODES",
     UPDATE_SELECTION = "UPDATE_SELECTION",
     EXPAND_NODE = "EXPAND_NODE",
-    MOVE_NODES_BY = "MOVE_NODES_BY"
+    UPDATE_NODES_POSITION = "UPDATE_NODES_POSITION"
 }
