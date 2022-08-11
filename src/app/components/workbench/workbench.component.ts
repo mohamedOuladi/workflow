@@ -330,11 +330,11 @@ export class WorkbenchComponent {
 
 }
 
-// TODO: expand nodes
 
 // todo: try refactor to service
 // try to refactor to component only
 
+// TODO: expand nodes
 // TODO: context menu
 // TODO: classname from shared constant
 // TODO: do not hover color of inlet if link was from inlet - pass state into dynamicNode component, and possibly node object
