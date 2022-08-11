@@ -24,22 +24,19 @@ export function linkReducer(links: Link[] = [], action: Action): Link[] {
         case ActionTypes.DESTROY_LINK:
             return action.payload === 0 ? links.slice(0, -1) : links.filter(c => c.id !== action.payload);
 
-        case ActionTypes.MOVE_LINK_TAIL:
-            const { id, x, y } = action.payload;
-
-            const link2 = id ? links.find(c => c.id === id) : links[links.length - 1];
-            if (link2) {
-                link2.x2 = x;
-                link2.y2 = y;
-            }
-            return [...links];
-
-        case ActionTypes.MOVE_LINK_HEAD:
-            const { id: id2, x: x2, y: y2 } = action.payload;
-            const link3 = links.find(c => c.id === id2)!;
-            link3.x1 = x2;
-            link3.y1 = y2;
-            return [...links];
+        case ActionTypes.MOVE_NODES_BY:
+            const { dx, dy, ids } = action.payload as { dx: number, dy: number, ids: number[] };
+            return links.map(l => {
+                if (ids.includes(l.sourceId)) {
+                    l.x1 += dx;
+                    l.y1 += dy;
+                }
+                if (ids.includes(l.targetId!)) {
+                    l.x2 += dx;
+                    l.y2 += dy;
+                }
+                return l;
+            })
 
         case ActionTypes.DISCONNECT_LINK:
             const link4 = links.find(c => c.id === action.payload)!;

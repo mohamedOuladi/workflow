@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
 import { PLUGINS } from 'src/app/plugins';
-import { addNode, disconnectLink, createLink, moveLinkHead, moveLinkTail, destroyLink, connectLink, updateSelection, deleteNodes, updateNodesPosition } from 'src/app/redux/actions';
+import { addNode, disconnectLink, createLink, destroyLink, connectLink, updateSelection, deleteNodes, moveNodesBy } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
 import { NodeX } from 'src/app/types';
@@ -97,6 +97,8 @@ export class WorkbenchComponent {
 
     // dragging node
     if (!outlet && !inlet && element) {
+      this.startX = e.clientX;
+      this.startY = e.clientY;
       this.tempX = e.clientX;
       this.tempY = e.clientY;
       this.isDragging = true;
@@ -151,56 +153,44 @@ export class WorkbenchComponent {
 
     // selecting area
     this.isSelecting = true;
-    this.startX = e.clientX
+    this.startX = e.clientX;
     this.startY = e.clientY;
   }
 
   mouseMove(e: MouseEvent) {
 
+    // dragging node
     if (this.isDragging) {
       const dx = e.clientX - this.tempX;
       const dy = e.clientY - this.tempY;
       this.tempX = e.clientX;
       this.tempY = e.clientY;
-      this.state!.nodes.slice().filter(x => this.state!.selection.includes(x.id!)).forEach(x => {
-        x.x += dx / this.scale;
-        x.y += dy / this.scale;
+
+      this.state.selection.forEach(id => {
+        const node = this.state.nodes.find(x => x.id === id)!;
+        node.x += dx / this.scale;
+        node.y += dy / this.scale;
+        this.state.links.forEach(link => {
+          if (link.sourceId === id) {
+            link.x1 += dx / this.scale;
+            link.y1 += dy / this.scale;
+          }
+          if (link.targetId === id) {
+            link.x2 += dx / this.scale;
+            link.y2 += dy / this.scale;
+          }
+        });
       });
       return;
-      // this.state?.selection.forEach(id => {
-      //   const node = this.state?.nodes.find(x => x.id === id)!;
-      //   const newX = node.x + dx / this.scale;
-      //   const newY = node.y + dy / this.scale;
-
-      //   this.store.dispatch(moveNode(id, newX, newY));
-
-      //   // get element size 
-      //   const element = document.querySelector(`[data-id="${id}"]`);
-      //   const rect = element!.getBoundingClientRect();
-      //   const width = rect.width / this.scale;
-      //   const height = rect.height / this.scale;
-
-      //   const headX = newX + width
-      //   const headY = newY + height / 2;
-
-      //   const tailX = newX;
-      //   const tailY = newY + height / 2;
-
-      //   this.state?.links.filter(link => link.sourceId === id).forEach(link => {
-      //     this.store.dispatch(moveLinkHead(headX, headY, link.id));
-      //   });
-
-      //   this.state?.links.filter(link => link.targetId === id).forEach(link => {
-      //     this.store.dispatch(moveLinkTail(link.id, tailX, tailY,));
-      //   });
-      // });
     }
 
     // drawing link
     if (this.isDrawingLink) {
-      const x = (e.clientX - this.containerX - this.dx) / this.scale;
-      const y = (e.clientY - this.containerY - this.dy) / this.scale;
-      this.store.dispatch(moveLinkTail(this.linkId, x, y));
+      const dx = (e.clientX - this.containerX - this.dx) / this.scale;
+      const dy = (e.clientY - this.containerY - this.dy) / this.scale;
+      const link = this.state?.links.find(x => x.id === this.linkId) || this.state?.links[this.state.links.length - 1];
+      link.x2 = dx;
+      link.y2 = dy;
       return;
     }
 
@@ -256,8 +246,9 @@ export class WorkbenchComponent {
 
     // node
     if (this.isDragging) {
-      const nodes = this.state?.nodes.filter(x => this.state?.selection.includes(x.id!));
-      this.store.dispatch(updateNodesPosition(nodes));
+      const dx = e.clientX - this.startX;
+      const dy = e.clientY - this.startY;
+      this.store.dispatch(moveNodesBy(dx / this.scale, dy / this.scale, this.state!.selection));
     }
 
     // selecting area
@@ -321,7 +312,6 @@ export class WorkbenchComponent {
 
 }
 
-// rebuild link move logic
 // link outlet formula
 
 // TODO: simple history

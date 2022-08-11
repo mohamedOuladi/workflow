@@ -23,15 +23,15 @@ export function nodeReducer(nodes: NodeX[] = [], action: Action): NodeX[] {
                 return p;
             });
 
-        case ActionTypes.UPDATE_NODES_POSITION:
+        case ActionTypes.MOVE_NODES_BY:
+            const { dx, dy, ids } = action.payload as { dx: number, dy: number, ids: number[] };
             return nodes.map(p => {
-                const node = action.payload.find((q:NodeX) => q.id === p.id);
-                if (node) {
-                    p.x = node.x;
-                    p.y = node.y;
+                if (ids.includes(p.id!)) {
+                    p.x += dx;
+                    p.y += dy;
                 }
                 return p;
-            }).filter(p => p.x !== undefined && p.y !== undefined);
+            });
 
         default:
             return nodes;

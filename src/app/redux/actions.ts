@@ -9,7 +9,5 @@ export const destroyLink = (id: number): Action => ({ type: ActionTypes.DESTROY_
 export const disconnectLink = (id: number): Action => ({ type: ActionTypes.DISCONNECT_LINK, payload: id });
 export const expandNode = (id: number): Action => ({ type: ActionTypes.EXPAND_NODE, payload: id });
 export const loadState = (state: State): Action => ({ type: ActionTypes.LOAD_STATE, payload: state });
-export const moveLinkHead = (x: number, y: number, id: number): Action => ({ type: ActionTypes.MOVE_LINK_HEAD, payload: { id, x, y } });
-export const moveLinkTail = (id: number, x: number, y: number): Action => ({ type: ActionTypes.MOVE_LINK_TAIL, payload: { id, x, y } });
-export const updateNodesPosition = (nodes: NodeX[]): Action => ({ type: ActionTypes.UPDATE_NODES_POSITION, payload: nodes });
+export const moveNodesBy = (dx: number, dy: number, ids: number[]): Action => ({ type: ActionTypes.MOVE_NODES_BY, payload: { dx, dy, ids } });
 export const updateSelection = (ids: number[]): Action => ({ type: ActionTypes.UPDATE_SELECTION, payload: ids });
