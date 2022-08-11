@@ -121,10 +121,8 @@ export class WorkbenchComponent {
     // new link from outlet
     if (outlet && element) {
       this.isDrawingLink = true;
-      const rect = outlet.getBoundingClientRect();
-      const outletX = (rect.left + rect.width / 2 - this.containerX - this.dx) / this.scale;
-      const outletY = (rect.top + rect.height / 2 - this.containerY - this.dy) / this.scale;
-      this.store.dispatch(createLink(nodeId, outletX, outletY));
+      const node = this.state.nodes.find(x => x.id === nodeId)!;
+      this.store.dispatch(createLink(node));
       return;
     }
 
@@ -232,12 +230,8 @@ export class WorkbenchComponent {
         if (link) {
           this.store.dispatch(destroyLink(this.linkId));
         } else {
-          const outletRect = inlet.getBoundingClientRect();
-          const outletX = outletRect.left + outletRect.width / 2;
-          const outletY = outletRect.top + outletRect.height / 2;
-          const x = (outletX - this.containerX - this.dx) / this.scale;
-          const y = (outletY - this.containerY - this.dy) / this.scale;
-          this.store.dispatch(connectLink(this.linkId, targetId, x, y));
+          const node = this.state.nodes.find(x => x.id === targetId)!;
+          this.store.dispatch(connectLink(this.linkId, node));
         }
       } else {
         this.store.dispatch(destroyLink(this.linkId));
@@ -311,8 +305,6 @@ export class WorkbenchComponent {
   }
 
 }
-
-// link outlet formula
 
 // TODO: simple history
 // TODO: undo using ctrl+z (using immer)

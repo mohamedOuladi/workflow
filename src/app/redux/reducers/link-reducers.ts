@@ -1,4 +1,4 @@
-import { Link } from "../../types";
+import { Link, NodeX } from "../../types";
 import { Action, ActionTypes } from "../types";
 
 let linkId = 1; // latest link id
@@ -11,14 +11,17 @@ export function linkReducer(links: Link[] = [], action: Action): Link[] {
             return action.payload.links;
 
         case ActionTypes.CREATE_LINK:
-            const { sourceId, x1, y1 } = action.payload;
-            return [...links, { id: linkId++, sourceId, x1, y1, x2: x1, y2: y1 }];
+            const node = action.payload as NodeX;
+            const x1 = node.x + node.width!;
+            const y1 = node.y + 27; // TODO: temp. replace with formula
+            return [...links, { id: linkId++, sourceId: node.id!, x1, y1, x2: x1, y2: y1 }];
 
         case ActionTypes.CONNECT_LINK:
+            const { id, targetNode } = action.payload as { id: number, targetNode: NodeX };
             const link = links.find(c => c.id === action.payload.id) || links[links.length - 1];
-            link.targetId = action.payload.targetId;
-            link.x2 = action.payload.x;
-            link.y2 = action.payload.y;
+            link.targetId = targetNode.id;
+            link.x2 = targetNode.x;
+            link.y2 =  targetNode.y + 27;
             return [...links];
 
         case ActionTypes.DESTROY_LINK:
