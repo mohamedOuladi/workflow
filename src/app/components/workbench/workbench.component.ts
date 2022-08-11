@@ -69,6 +69,16 @@ export class WorkbenchComponent {
         event.preventDefault();
         this.store.dispatch(updateSelection(this.state!.nodes.map(x => x.id!)));
       }
+
+      if (event.key === 'z') {
+        event.preventDefault();
+
+        if (event.shiftKey) {
+          this.store.redo();
+        } else {
+          this.store.undo();
+        }
+      }
     }
   }
 
@@ -320,13 +330,10 @@ export class WorkbenchComponent {
 
 }
 
-// TODO: simple history
-// TODO: undo using ctrl+z (using immer)
-
 // TODO: expand nodes
 
-// todo: try refactor
-// todo: abstract logic into service
+// todo: try refactor to service
+// try to refactor to component only
 
 // TODO: context menu
 // TODO: classname from shared constant
