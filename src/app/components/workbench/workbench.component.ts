@@ -330,6 +330,7 @@ export class WorkbenchComponent {
 
 }
 
+// remove select from history and state
 
 // todo: try refactor to service
 // try to refactor to component only
