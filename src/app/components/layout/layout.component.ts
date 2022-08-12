@@ -12,7 +12,7 @@ import { State } from 'src/app/redux/types';
 export class LayoutComponent {
   state?: State;
 
-  constructor(private store: Store) {
+  constructor(public store: Store) {
     this.store.state$.pipe(filter(x => !!x)).subscribe(state => {
       this.state = state;
     });
