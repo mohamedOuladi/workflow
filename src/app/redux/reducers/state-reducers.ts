@@ -8,7 +8,5 @@ export function stateReducer(state: State, action: Action): State {
         nodes: nodeReducer(state.nodes, action),
         links: linkReducer(state.links, action),
         selection: selectionReducer(state.selection, action),
-        history: state.history,
-        historyIndex: state.historyIndex,
     };
 }

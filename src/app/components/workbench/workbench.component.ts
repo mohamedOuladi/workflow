@@ -1,9 +1,10 @@
 import { Component, ElementRef, HostListener, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
 import { PLUGINS } from 'src/app/plugins';
-import { addNode, disconnectLink, createLink, moveNode, moveLinkHead, moveLinkTail, destroyLink, connectLink, updateSelection, deleteNodes, saveHistory } from 'src/app/redux/actions';
+import { addNode, createLink, destroyLink, updateSelection, deleteNodes, moveNodesBy, updateLinkTarget } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
+import { Link, NodeX } from 'src/app/types';
 
 const GRID_SIZE = 50;
 
@@ -19,11 +20,12 @@ export class WorkbenchComponent {
   @ViewChild('selectarea', { read: ElementRef }) selectArea!: ElementRef;
 
   isDragging = false; // dragging node
-  isDrawing = false; // dragging ink
+  isDrawingLink = false; // dragging ink
   isMoving = false; // moving viewport
   isSelecting = false; // selecting area
 
   linkId = 0; // id of dragged link
+  draggedLink?: Link;
 
   tempX = 0; // just for temporary use
   tempY = 0; // just for temporary use
@@ -67,6 +69,16 @@ export class WorkbenchComponent {
         event.preventDefault();
         this.store.dispatch(updateSelection(this.state!.nodes.map(x => x.id!)));
       }
+
+      if (event.key === 'z') {
+        event.preventDefault();
+
+        if (event.shiftKey) {
+          this.store.redo();
+        } else {
+          this.store.undo();
+        }
+      }
     }
   }
 
@@ -76,11 +88,9 @@ export class WorkbenchComponent {
       const data = JSON.parse(dataJson);
       const x = (event.clientX - data.x - this.containerX - this.dx) / this.scale;
       const y = (event.clientY - data.y - this.containerY - this.dy) / this.scale;
-      const name = PLUGINS.find(x => x.type === data.type)!.name;
-      const node = { x, y, type: data.type, name };
+      const plugin = PLUGINS.find(x => x.type === data.type)!;
+      const node: NodeX = { x, y, type: data.type, name: plugin.name, width: plugin.width, selected: true, expanded: false, hasOutlet: plugin.hasOutlet, hasInlet: plugin.hasInlet };
       this.store.dispatch(addNode(node));
-      const lastNode = this.state!.nodes[this.state!.nodes.length - 1];
-      this.store.dispatch(updateSelection([lastNode.id!]));
     }
   }
 
@@ -98,11 +108,13 @@ export class WorkbenchComponent {
 
     // dragging node
     if (!outlet && !inlet && element) {
+      this.startX = e.clientX;
+      this.startY = e.clientY;
       this.tempX = e.clientX;
       this.tempY = e.clientY;
       this.isDragging = true;
       let selection = this.state?.selection.slice()!;
-      if (e.metaKey || e.ctrlKey) {
+      if (e.shiftKey) {
         if (this.state?.selection.includes(nodeId)) {
           selection = this.state.selection.filter(x => x !== nodeId);
         } else {
@@ -119,11 +131,18 @@ export class WorkbenchComponent {
 
     // new link from outlet
     if (outlet && element) {
-      this.isDrawing = true;
-      const rect = outlet.getBoundingClientRect();
-      const outletX = (rect.left + rect.width / 2 - this.containerX - this.dx) / this.scale;
-      const outletY = (rect.top + rect.height / 2 - this.containerY - this.dy) / this.scale;
-      this.store.dispatch(createLink(nodeId, outletX, outletY));
+      this.isDrawingLink = true;
+      const node = this.state.nodes.find(x => x.id === nodeId)!;
+      this.draggedLink = {
+        id: -1,
+        sourceId: nodeId,
+        x1: node.x + node.width!,
+        y1: node.y + 27,
+        x2: (e.clientX - this.containerX - this.dx) / this.scale,
+        y2: (e.clientY - this.containerY - this.dy) / this.scale,
+      }
+      this.linkId = this.draggedLink.id;
+      this.state.links.push(this.draggedLink);
       return;
     }
 
@@ -132,8 +151,7 @@ export class WorkbenchComponent {
       const linkId = this.state?.links.find(link => link.targetId === nodeId)?.id;
       if (linkId) {
         this.linkId = linkId;
-        this.store.dispatch(disconnectLink(linkId));
-        this.isDrawing = true;
+        this.isDrawingLink = true;
       }
       return;
     }
@@ -141,7 +159,9 @@ export class WorkbenchComponent {
     this.store.dispatch(updateSelection([]));
 
     // moving container
-    if (e.shiftKey) {
+    if (e.metaKey || e.ctrlKey) {
+      e.preventDefault();
+      e.stopPropagation();
       this.isMoving = true;
       this.startX = e.clientX - this.dx;
       this.startY = e.clientY - this.dy;
@@ -150,7 +170,7 @@ export class WorkbenchComponent {
 
     // selecting area
     this.isSelecting = true;
-    this.startX = e.clientX
+    this.startX = e.clientX;
     this.startY = e.clientY;
   }
 
@@ -163,41 +183,31 @@ export class WorkbenchComponent {
       this.tempX = e.clientX;
       this.tempY = e.clientY;
 
-      this.state?.selection.forEach(id => {
-        const node = this.state?.nodes.find(x => x.id === id)!;
-        const newX = node.x + dx / this.scale;
-        const newY = node.y + dy / this.scale;
-
-        this.store.dispatch(moveNode(id, newX, newY));
-
-        // get element size 
-        const element = document.querySelector(`[data-id="${id}"]`);
-        const rect = element!.getBoundingClientRect();
-        const width = rect.width / this.scale;
-        const height = rect.height / this.scale;
-
-        const headX = newX + width
-        const headY = newY + height / 2;
-
-        const tailX = newX;
-        const tailY = newY + height / 2;
-
-        this.state?.links.filter(link => link.sourceId === id).forEach(link => {
-          this.store.dispatch(moveLinkHead(headX, headY, link.id));
-        });
-
-        this.state?.links.filter(link => link.targetId === id).forEach(link => {
-          this.store.dispatch(moveLinkTail(link.id, tailX, tailY,));
+      this.state.selection.forEach(id => {
+        const node = this.state.nodes.find(x => x.id === id)!;
+        node.x += dx / this.scale;
+        node.y += dy / this.scale;
+        this.state.links.forEach(link => {
+          if (link.sourceId === id) {
+            link.x1 += dx / this.scale;
+            link.y1 += dy / this.scale;
+          }
+          if (link.targetId === id) {
+            link.x2 += dx / this.scale;
+            link.y2 += dy / this.scale;
+          }
         });
       });
       return;
     }
 
     // drawing link
-    if (this.isDrawing) {
-      const x = (e.clientX - this.containerX - this.dx) / this.scale;
-      const y = (e.clientY - this.containerY - this.dy) / this.scale;
-      this.store.dispatch(moveLinkTail(this.linkId, x, y));
+    if (this.isDrawingLink) {
+      const dx = (e.clientX - this.containerX - this.dx) / this.scale;
+      const dy = (e.clientY - this.containerY - this.dy) / this.scale;
+      const link = this.state?.links.find(x => x.id === this.linkId) || this.state?.links[this.state.links.length - 1];
+      link.x2 = dx;
+      link.y2 = dy;
       return;
     }
 
@@ -226,35 +236,37 @@ export class WorkbenchComponent {
   mouseUp(e: MouseEvent) {
 
     // link
-    if (this.isDrawing) {
+    if (this.isDrawingLink) {
       const inlet = (e.target as HTMLElement)!.closest('.inlet'); // TODO: classname from shared constant
       const element = (e.target as HTMLElement)!.closest('[data-id]'); // TODO: classname from shared constant
 
-      // connecting link to inlet
       if (inlet && element) {
         const targetId = parseInt(element.getAttribute('data-id')!, 10);
-
-        // check inlet of the target node is already connected
-        const link = this.state?.links.find(link => link.targetId === targetId);
-        if (link) {
-          this.store.dispatch(destroyLink(this.linkId));
-        } else {
-          const outletRect = inlet.getBoundingClientRect();
-          const outletX = outletRect.left + outletRect.width / 2;
-          const outletY = outletRect.top + outletRect.height / 2;
-          const x = (outletX - this.containerX - this.dx) / this.scale;
-          const y = (outletY - this.containerY - this.dy) / this.scale;
-          this.store.dispatch(connectLink(this.linkId, targetId, x, y));
+        const existingLink = this.state?.links.find(link => link.targetId === targetId);
+        const target = this.state.nodes.find(x => x.id === targetId)!;
+        if (!existingLink) {
+          if (this.linkId === -1) {
+            const source = this.state.nodes.find(x => x.id === this.draggedLink!.sourceId)!;
+            this.store.dispatch(createLink(source, target));
+          } else {
+            this.store.dispatch(updateLinkTarget(this.linkId, target));
+          }
         }
       } else {
-        this.store.dispatch(destroyLink(this.linkId));
+        if (this.linkId !== -1) {
+          this.store.dispatch(destroyLink(this.linkId));
+        }
       }
-      this.store.dispatch(saveHistory()); // we don't want to save every move, only when it's finished
+      this.state.links = this.state.links.filter(x => x.id !== -1);
     }
 
     // node
     if (this.isDragging) {
-      this.store.dispatch(saveHistory()); // we don't want to save every move, only when it's finished
+      const dx = e.clientX - this.startX;
+      const dy = e.clientY - this.startY;
+      if (dx && dy) {
+        this.store.dispatch(moveNodesBy(dx / this.scale, dy / this.scale, this.state!.selection));
+      }
     }
 
     // selecting area
@@ -281,7 +293,7 @@ export class WorkbenchComponent {
     }
 
     this.isDragging = false;
-    this.isDrawing = false;
+    this.isDrawingLink = false;
     this.isMoving = false;
     this.isSelecting = false;
     this.linkId = 0;
@@ -318,13 +330,10 @@ export class WorkbenchComponent {
 
 }
 
-// TODO: simple history
-// TODO: undo using ctrl+z (using immer)
-
 // TODO: expand nodes
 
-// todo: try refactor
-// todo: abstract logic into service
+// todo: try refactor to service
+// try to refactor to component only
 
 // TODO: context menu
 // TODO: classname from shared constant

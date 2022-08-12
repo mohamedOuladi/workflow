@@ -8,6 +8,7 @@ export interface NodeX {
     expanded?: boolean;
     hasOutlet?: boolean;
     hasInlet?: boolean;
+    width?: number;
 }
 
 export interface Link {
