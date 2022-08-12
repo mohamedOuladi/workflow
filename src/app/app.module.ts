@@ -12,6 +12,13 @@ import { WorkbenchComponent } from './components/workbench/workbench.component';
 import { PluginCComponent } from './components/plugin-c/plugin-c.component';
 import { PluginDComponent } from './components/plugin-d/plugin-d.component';
 import { PluginEComponent } from './components/plugin-e/plugin-e.component';
+import { MatExpansionModule} from '@angular/material/expansion';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import {A11yModule} from '@angular/cdk/a11y';
+import {CdkAccordionModule} from '@angular/cdk/accordion';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RightPanelComponent } from './components/right-panel/right-panel.component';
+
 
 @NgModule({
   declarations: [
@@ -25,11 +32,17 @@ import { PluginEComponent } from './components/plugin-e/plugin-e.component';
     WorkbenchComponent,
     PluginCComponent,
     PluginDComponent,
-    PluginEComponent
+    PluginEComponent,
+    RightPanelComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
+    A11yModule,
+    CdkAccordionModule,
+    MatExpansionModule,
+    MatToolbarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
