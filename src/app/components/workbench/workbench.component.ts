@@ -1,9 +1,10 @@
-import { Component, ElementRef, HostListener, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
 import { PLUGINS } from 'src/app/plugins';
 import { addNode, createLink, destroyLink, updateSelection, deleteNodes, moveNodesBy, updateLinkTarget } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
+import { Config, CONST } from 'src/app/services/constants.service';
 import { Link, NodeX } from 'src/app/types';
 
 const GRID_SIZE = 50;
@@ -42,7 +43,7 @@ export class WorkbenchComponent {
   dx = 0; // x of viewport
   dy = 0; // y of viewport
 
-  constructor(private store: Store, private renderer: Renderer2) {
+  constructor(private store: Store, @Inject(CONST) private constants: Config) {
     this.store.state$.pipe(filter(x => !!x)).subscribe(state => {
       this.state = state;
     })
@@ -137,7 +138,7 @@ export class WorkbenchComponent {
         id: -1,
         sourceId: nodeId,
         x1: node.x + node.width!,
-        y1: node.y + 27,
+        y1: node.y + this.constants.linkYOffset,
         x2: (e.clientX - this.containerX - this.dx) / this.scale,
         y2: (e.clientY - this.containerY - this.dy) / this.scale,
       }
