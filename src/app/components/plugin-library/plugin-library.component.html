@@ -1,4 +1,21 @@
-<div *ngFor="let plugin of plugins" class="plugin"  draggable="true" [attr.data-type]="plugin.type" (dragstart)="start($event)">
-    <i [ngClass]="plugin.icon"></i>
-    {{ plugin.name }}
+<div class="tree">
+    <ng-container *ngTemplateOutlet="tree;context:{nodes:allNodes}">
+    </ng-container>
 </div>
+
+<ng-template #tree let-nodes="nodes">
+    <div *ngFor="let node of nodes">
+        <!-- <div class="chevron" *ngIf="!node.expanded" (click)="expand(node)"><i class="nxe-angle-right"
+                    aria-hidden="true"></i></div>
+            <div class="chevron" *ngIf="node.expanded" (click)="collapse(node)"><i class="nxe-angle-down"
+                    aria-hidden="true"></i></div> -->
+        <div class="plugin" [attr.draggable]="!!node.type" [attr.data-type]="node.type" (dragstart)="start($event)">
+            <i [ngClass]="node.icon"></i> {{node.name}}
+        </div>
+
+        <div class="children">
+            <ng-container *ngTemplateOutlet="tree;context:{nodes:node.children}">
+            </ng-container>
+        </div>
+    </div>
+</ng-template>
