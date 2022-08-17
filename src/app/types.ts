@@ -20,3 +20,9 @@ export interface Link {
     x2: number;
     y2: number;
 }
+
+export interface State {
+    nodes: NodeX[];
+    links: Link[];
+    selection: number[];
+}
