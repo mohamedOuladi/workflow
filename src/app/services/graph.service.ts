@@ -20,24 +20,6 @@ export class GraphService {
         future: [] as State[]
     }
 
-    public undo() {
-        const oldState = this.history.past.pop();
-        if (oldState) {
-            this.inState = oldState;
-            this.emit();
-            this.history.future.push(this.state$$.getValue());
-        }
-    }
-
-    public redo() {
-        const newState = this.history.future.pop();
-        if (newState) {
-            this.inState = newState;
-            this.emit();
-            this.history.past.push(this.state$$.getValue());
-        }
-    }
-
     public addNode(node: NodeX) {
         const newNode = { ...node, id: this.nodeId++ };
         this.inState.nodes.push(newNode);
@@ -113,8 +95,36 @@ export class GraphService {
         this.emit();
     }
 
+
+    public undo() {
+        const oldState = this.history.past.pop();
+        if (oldState) {
+            this.inState = oldState;
+            this.state$$.next(this.inState);
+            this.history.future.push(this.state$$.getValue());
+        }
+    }
+
+    public redo() {
+        const newState = this.history.future.pop();
+        if (newState) {
+            this.inState = newState;
+            this.state$$.next(this.inState);
+            this.history.past.push(this.state$$.getValue());
+        }
+    }
+
     private emit() {
-        this.state$$.next(this.inState);
+        const oldState = this.state$$.getValue();
+        const newState = this.inState;
+
+        // very simple implementation of state diff check
+        // TODO: implement a more sophisticated state diff check
+        if (JSON.stringify(oldState) !== JSON.stringify(newState)) {
+            this.state$$.next(this.inState);
+            this.history.past.push(oldState);
+            this.history.future = [];
+        }
     }
 
 }
