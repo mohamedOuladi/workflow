@@ -1,11 +1,9 @@
 import { Component, ElementRef, HostListener, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
 import { PLUGINS } from 'src/app/plugins';
-import { addNode, createLink, destroyLink, updateSelection, deleteNodes, moveNodesBy, updateLinkTarget } from 'src/app/redux/actions';
-import { Store } from 'src/app/redux/store';
-import { State } from 'src/app/redux/types';
 import { Config, CONST } from 'src/app/services/constants.service';
-import { Link, NodeX } from 'src/app/types';
+import { GraphService } from 'src/app/services/graph.service';
+import { Link, NodeX, State } from 'src/app/types';
 
 const GRID_SIZE = 50;
 
@@ -43,8 +41,8 @@ export class WorkbenchComponent {
   dx = 0; // x of viewport
   dy = 0; // y of viewport
 
-  constructor(private store: Store, @Inject(CONST) private constants: Config) {
-    this.store.state$.pipe(filter(x => !!x)).subscribe(state => {
+  constructor(@Inject(CONST) private constants: Config, private graph: GraphService) {
+    this.graph.state$.pipe(filter(x => !!x)).subscribe(state => {
       this.state = state;
     })
   }
@@ -61,23 +59,23 @@ export class WorkbenchComponent {
   onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Delete' || event.key === 'Backspace') {
       event.preventDefault();
-      this.store.dispatch(deleteNodes(this.state!.selection));
-      this.store.dispatch(updateSelection([]));
+      this.graph.deleteNodes(this.state!.selection);
+      this.graph.updateSelection([]);
     }
 
     if (event.ctrlKey || event.metaKey) {
       if (event.key === 'a') {
         event.preventDefault();
-        this.store.dispatch(updateSelection(this.state!.nodes.map(x => x.id!)));
+        this.graph.updateSelection(this.state!.nodes.map(x => x.id!));
       }
 
       if (event.key === 'z') {
         event.preventDefault();
 
         if (event.shiftKey) {
-          this.store.redo();
+          this.graph.redo();
         } else {
-          this.store.undo();
+          this.graph.undo();
         }
       }
     }
@@ -91,7 +89,7 @@ export class WorkbenchComponent {
       const y = (event.clientY - data.y - this.containerY - this.dy) / this.scale;
       const plugin = PLUGINS.find(x => x.type === data.type)!;
       const node: NodeX = { x, y, type: data.type, name: plugin.name, width: plugin.width, selected: true, expanded: false, hasOutlet: plugin.hasOutlet, hasInlet: plugin.hasInlet };
-      this.store.dispatch(addNode(node));
+      this.graph.addNode(node);
     }
   }
 
@@ -126,7 +124,7 @@ export class WorkbenchComponent {
           selection = [nodeId];
         }
       }
-      this.store.dispatch(updateSelection(selection));
+      this.graph.updateSelection(selection);
       return;
     }
 
@@ -157,7 +155,7 @@ export class WorkbenchComponent {
       return;
     }
 
-    this.store.dispatch(updateSelection([]));
+    this.graph.updateSelection([]);
 
     // moving container
     if (e.metaKey || e.ctrlKey) {
@@ -248,14 +246,14 @@ export class WorkbenchComponent {
         if (!existingLink) {
           if (this.linkId === -1) {
             const source = this.state.nodes.find(x => x.id === this.draggedLink!.sourceId)!;
-            this.store.dispatch(createLink(source, target));
+            this.graph.createLink(source, target);
           } else {
-            this.store.dispatch(updateLinkTarget(this.linkId, target));
+            this.graph.updateLinkTarget(this.linkId, target);
           }
         }
       } else {
         if (this.linkId !== -1) {
-          this.store.dispatch(destroyLink(this.linkId));
+          this.graph.destroyLink(this.linkId);
         }
       }
       this.state.links = this.state.links.filter(x => x.id !== -1);
@@ -266,7 +264,7 @@ export class WorkbenchComponent {
       const dx = e.clientX - this.startX;
       const dy = e.clientY - this.startY;
       if (dx && dy) {
-        this.store.dispatch(moveNodesBy(dx / this.scale, dy / this.scale, this.state!.selection));
+        this.graph.moveNodesBy(dx / this.scale, dy / this.scale, this.state!.selection);
       }
     }
 
@@ -290,7 +288,7 @@ export class WorkbenchComponent {
         // check if node is in select area
         return ax1 <= bx2 && bx1 <= ax2 && ay1 <= by2 && by1 <= ay2;
       }).map(node => node.id) as number[];
-      this.store.dispatch(updateSelection(selection));
+      this.graph.updateSelection(selection);
     }
 
     this.isDragging = false;
