@@ -328,11 +328,6 @@ export class WorkbenchComponent {
   }
 
 }
-
-
-// todo: try refactor to service
-// try to refactor to component only
-
 // TODO: expand nodes
 // TODO: context menu
 // TODO: classname from shared constant
