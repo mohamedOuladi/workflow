@@ -20,8 +20,7 @@ export class LayoutComponent {
   }
 
   save() {
-    const state = this.graph.state;
-    sessionStorage.setItem('state', JSON.stringify(state));
+    sessionStorage.setItem('state', JSON.stringify(this.state));
   }
 
   load() {
@@ -33,7 +32,7 @@ export class LayoutComponent {
   }
 
   reset() {
-    this.graph.loadState({"nodes":[],"links":[],"selection":[]});
+    this.graph.loadState({ "nodes": [], "links": [], "selection": [] });
   }
 
   undo() {
