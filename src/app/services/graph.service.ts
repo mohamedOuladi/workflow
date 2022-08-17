@@ -117,12 +117,10 @@ export class GraphService {
     }
 
     private emit() {
-        const oldState = this.state$$.getValue();
-        const newState = this.inState;
-
         // very simple implementation of state diff check
         // TODO: implement a more sophisticated state diff check
-        if (JSON.stringify(oldState) !== JSON.stringify(newState)) {
+        const oldState = this.state$$.getValue();
+        if (JSON.stringify(oldState) !== JSON.stringify(this.inState)) {
             this.state$$.next(this.inState);
             this.history.past.push(oldState);
             this.history.future = [];
