@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { filter } from 'rxjs';
-import { loadState } from 'src/app/redux/actions';
-import { Store } from 'src/app/redux/store';
-import { State } from 'src/app/redux/types';
+import { GraphService } from 'src/app/services/graph.service';
+import { State } from 'src/app/types';
 
 @Component({
   selector: 'app-layout',
@@ -12,8 +11,8 @@ import { State } from 'src/app/redux/types';
 export class LayoutComponent {
   state?: State;
 
-  constructor(public store: Store) {
-    this.store.state$.pipe(filter(x => !!x)).subscribe(state => {
+  constructor(private graph: GraphService) {
+    this.graph.state$.pipe(filter(x => !!x)).subscribe(state => {
       this.state = state;
     });
 
@@ -21,7 +20,7 @@ export class LayoutComponent {
   }
 
   save() {
-    const state = this.store.state;
+    const state = this.graph.state;
     sessionStorage.setItem('state', JSON.stringify(state));
   }
 
@@ -29,20 +28,20 @@ export class LayoutComponent {
     const stateStr = sessionStorage.getItem('state');
     if (stateStr) {
       const state = JSON.parse(stateStr);
-      this.store.dispatch(loadState(state));
+      this.graph.loadState(state);
     }
   }
 
   reset() {
-    this.store.dispatch(loadState({"nodes":[],"links":[],"selection":[]}));
+    this.graph.loadState({"nodes":[],"links":[],"selection":[]});
   }
 
   undo() {
-    this.store.undo();
+    this.graph.undo();
   }
 
   redo() {
-    this.store.redo();
+    this.graph.redo();
   }
 }
 
