@@ -1,6 +1,7 @@
-import { Injectable } from "@angular/core";
-import { ImmutableBehaviorSubject } from "immutable-rxjs/dist/src/immutable-behavior-subject";
+import { Inject, Injectable } from "@angular/core";
+import { ImmutableBehaviorSubject } from "immutable-rxjs";
 import { NodeX, State } from "../types";
+import { CONST, Config } from "./constants.service";
 
 @Injectable({
     providedIn: "root"
@@ -20,16 +21,18 @@ export class GraphService {
         future: [] as State[]
     }
 
+    constructor(@Inject(CONST) private constants: Config) { }
+
     public addNode(node: NodeX) {
         const newNode = { ...node, id: this.nodeId++ };
         this.inState.nodes.push(newNode);
-        this.state$$.next(this.inState);
+        this.emit();
     }
 
     public deleteNodes(ids: number[]) {
         this.inState.nodes = this.inState.nodes.filter(p => !ids.includes(p.id!));
         this.inState.links = this.inState.links.filter(c => !ids.includes(c.sourceId) && !ids.includes(c.targetId!));
-        this.state$$.next(this.inState);
+        this.emit();
     }
 
     public loadState(state: State) {
@@ -73,9 +76,9 @@ export class GraphService {
             sourceId: source.id!,
             targetId: target.id!,
             x1: source.x + source.width!,
-            y1: source.y + 27,
+            y1: source.y + this.constants.linkYOffset,
             x2: target.x,
-            y2: target.y + 27
+            y2: target.y + this.constants.linkYOffset
         });
         this.emit();
     }
@@ -90,11 +93,10 @@ export class GraphService {
         if (link) {
             link.targetId = node.id;
             link.x2 = node.x;
-            link.y2 = node.y + 27;
+            link.y2 = node.y + this.constants.linkYOffset;
         }
         this.emit();
     }
-
 
     public undo() {
         const oldState = this.history.past.pop();
@@ -126,5 +128,4 @@ export class GraphService {
             this.history.future = [];
         }
     }
-
 }
