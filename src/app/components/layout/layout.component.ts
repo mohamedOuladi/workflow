@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { filter } from 'rxjs';
-import { loadState } from 'src/app/redux/actions';
+import { loadState, updateSelection } from 'src/app/redux/actions';
 import { Store } from 'src/app/redux/store';
 import { State } from 'src/app/redux/types';
+import { NodeX } from 'src/app/types';
 
 @Component({
   selector: 'app-layout',
@@ -43,6 +44,11 @@ export class LayoutComponent {
 
   redo() {
     this.store.redo();
+  }
+
+  onNodesChange(nodes: NodeX[]) {
+    const selection = nodes.filter(node => node.selected === true).map(node => node.id) as number[];
+    this.store.dispatch(updateSelection(selection));
   }
 }
 
