@@ -18,7 +18,7 @@
             <app-plugin-library></app-plugin-library>
         </nav>
         <aside>
-            <app-right-panel [nodes]="store.state.nodes" (nodesChange)="onNodesChange($event)"></app-right-panel>
+            <app-right-panel [nodes]="state!.nodes" (nodesChange)="onNodesChange($event)"></app-right-panel>
         </aside>
     </main>
 </div>
