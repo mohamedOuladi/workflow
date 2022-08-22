@@ -13,9 +13,13 @@
     <article>
       <app-workbench></app-workbench>
     </article>
-    <nav>
+    <nav [ngClass]="{collapsed: collapsed}">
       <app-plugin-library></app-plugin-library>
     </nav>
+    <div class="collapser" (click)="toggle()" [ngClass]="{collapsed: collapsed}">
+      <i class="icon-lsi-left-arrow" [hidden]="collapsed"></i>
+      <i class="icon-lsi-right-arrow" [hidden]="!collapsed"></i>
+    </div>
     <aside>
       <app-right-panel></app-right-panel>
     </aside>
