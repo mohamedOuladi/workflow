@@ -76,9 +76,9 @@ export class GraphService {
             sourceId: source.id!,
             targetId: target.id!,
             x1: source.x + source.width!,
-            y1: source.y + this.constants.linkYOffset,
+            y1: source.y + this.constants.linkTopOffset,
             x2: target.x,
-            y2: target.y + this.constants.linkYOffset
+            y2: target.y + this.constants.linkTopOffset
         });
         this.emit();
     }
@@ -93,7 +93,7 @@ export class GraphService {
         if (link) {
             link.targetId = node.id;
             link.x2 = node.x;
-            link.y2 = node.y + this.constants.linkYOffset;
+            link.y2 = node.y + this.constants.linkTopOffset;
         }
         this.emit();
     }
