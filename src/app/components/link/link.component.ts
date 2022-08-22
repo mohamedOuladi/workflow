@@ -10,7 +10,7 @@ const ZIGZAG_MIN_END_LENGTH = 25;
   encapsulation: ViewEncapsulation.None
 })
 export class LinkComponent implements OnInit, OnChanges, AfterViewInit {
-  @Input('data') data!: { x1: number, y1: number, x2: number, y2: number, id: number };
+  @Input() data!: { x1: number, y1: number, x2: number, y2: number, id: number };
   @ViewChild('host', { read: ElementRef }) host!: ElementRef<HTMLDivElement>;
 
   id: number = -1;
