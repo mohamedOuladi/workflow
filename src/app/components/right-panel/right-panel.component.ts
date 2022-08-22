@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NodeX } from 'src/app/types';
 
 @Component({
@@ -7,22 +7,29 @@ import { NodeX } from 'src/app/types';
   styleUrls: ['./right-panel.component.scss']
 })
 export class RightPanelComponent implements OnInit {
-  panelOpenState = false;
-  @Input() nodes: NodeX[] = []; 
+  @Input() nodes: NodeX[] = [];
+  @Output() nodesChange = new EventEmitter<NodeX[]>();
+  visibleNodesMap = new Map();
 
   constructor() { }
 
   ngOnInit(): void {
+    this.setMap();
   }
 
-  openPanel(node: NodeX) {
-    this.panelOpenState = true;
-    node.selected = true;
+  togglePanel(node: NodeX) {
+    this.visibleNodesMap.set(node.id, !this.visibleNodesMap.get(node.id));
+    if(this.visibleNodesMap.get(node.id)) {
+      node.selected = true;
+    } else {
+      node.selected = false;
+    }
+    this.nodesChange.emit(this.nodes);
   }
 
-  closePanel(node: NodeX) {
-    this.panelOpenState = false;
-    node.selected = false;
+  setMap() {
+    for(var n in this.nodes){
+      this.visibleNodesMap.set(this.nodes[n].id, false);
+    }
   }
-
 }
