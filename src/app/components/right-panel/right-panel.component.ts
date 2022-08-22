@@ -14,22 +14,15 @@ export class RightPanelComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.setMap();
+    for (var n in this.nodes) {
+      this.visibleNodesMap.set(this.nodes[n].id, false);
+    }
   }
 
   togglePanel(node: NodeX) {
     this.visibleNodesMap.set(node.id, !this.visibleNodesMap.get(node.id));
-    if(this.visibleNodesMap.get(node.id)) {
-      node.selected = true;
-    } else {
-      node.selected = false;
-    }
+    node.selected = !!this.visibleNodesMap.get(node.id);
     this.nodesChange.emit(this.nodes);
   }
 
-  setMap() {
-    for(var n in this.nodes){
-      this.visibleNodesMap.set(this.nodes[n].id, false);
-    }
-  }
 }
