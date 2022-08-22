@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { filter } from 'rxjs';
-import { GraphService } from 'src/app/services/graph.service';
+import { NodeX } from 'src/app/types';
 import { State } from 'src/app/types';
+import { GraphService } from 'src/app/services/graph.service';
 
 @Component({
   selector: 'app-layout',
@@ -41,6 +42,11 @@ export class LayoutComponent {
 
   redo() {
     this.graph.redo();
+  }
+
+  onNodesChange(nodes: NodeX[]) {
+    const selection = nodes.filter(node => node.selected).map(node => node.id) as number[];
+    this.graph.updateSelection(selection);
   }
 }
 
