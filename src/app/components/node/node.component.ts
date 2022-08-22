@@ -59,5 +59,6 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit, OnChanges {
 
   expand(): void {
     this.graph.expand(this.id);
+    console.log('expand', this.id);
   }
 }

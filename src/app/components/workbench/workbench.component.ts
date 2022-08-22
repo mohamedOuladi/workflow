@@ -94,7 +94,7 @@ export class WorkbenchComponent implements AfterViewInit {
         type: data.type,
         name: plugin.name,
         width: plugin.width,
-        selected: true,
+        selected: false,
         expanded: false,
         hasOutlet: plugin.hasOutlet,
         hasInlet: plugin.hasInlet,
@@ -113,7 +113,13 @@ export class WorkbenchComponent implements AfterViewInit {
     const inlet = (e.target as HTMLElement)!.closest('.inlet');
     const outlet = (e.target as HTMLElement)!.closest('.outlet');
     const element = (e.target as HTMLElement)!.closest('[data-id]');
+    const expander = (e.target as HTMLElement)!.closest('.expander');
     const nodeId = parseInt(element?.getAttribute('data-id')!, 10);
+
+    // click on expand button
+    if (expander) {
+      return
+    }
 
     // dragging node
     if (!outlet && !inlet && element) {
