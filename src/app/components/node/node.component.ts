@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, ComponentRef, ElementRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { PLUGINS } from 'src/app/plugins';
+import { GraphService } from 'src/app/services/graph.service';
 import { NodeX } from 'src/app/types';
 import { PluginAComponent } from '../plugin-a/plugin-a.component';
 
@@ -24,6 +25,8 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit {
   hasInlet = false;
   hasOutlet = false;
   width = 250;
+
+  constructor(private graph: GraphService) { }
 
   ngOnInit(): void {
     this.x = this.data!.x;
@@ -52,6 +55,10 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit {
       this.selected = changes.data.currentValue.selected;
       this.expanded = changes.data.currentValue.expanded;
     }
+  }
+
+  expand(): void {
+    this.graph.expand(this.id);
   }
 
 }

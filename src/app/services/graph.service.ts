@@ -98,6 +98,14 @@ export class GraphService {
         this.emit();
     }
 
+    public expand(id: number) {
+        const node = this.inState.nodes.find(c => c.id === id);
+        if (node) {
+            node.expanded = !node.expanded;
+            this.emit();
+        }
+    }
+
     public undo() {
         const oldState = this.history.past.pop();
         if (oldState) {
