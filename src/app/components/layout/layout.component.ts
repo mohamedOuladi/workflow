@@ -44,9 +44,5 @@ export class LayoutComponent {
     this.graph.redo();
   }
 
-  onNodesChange(nodes: NodeX[]) {
-    const selection = nodes.filter(node => node.selected).map(node => node.id) as number[];
-    this.graph.updateSelection(selection);
-  }
 }
 
