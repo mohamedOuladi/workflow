@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ComponentRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentRef, Input, OnChanges, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { PLUGINS } from 'src/app/plugins';
 import { GraphService } from 'src/app/services/graph.service';
 import { NodeX } from 'src/app/types';
@@ -9,7 +9,7 @@ import { PluginAComponent } from '../plugin-a/plugin-a.component';
   templateUrl: './node.component.html',
   styleUrls: ['./node.component.scss']
 })
-export class DynamicNodeComponent implements OnInit, AfterViewInit {
+export class DynamicNodeComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('outlet', { read: ViewContainerRef, static: false }) outlet!: ViewContainerRef;
 
   @Input() data?: NodeX;

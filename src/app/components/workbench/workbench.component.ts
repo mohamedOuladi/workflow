@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
 import { PLUGINS } from 'src/app/plugins';
 import { Config, CONST } from 'src/app/services/constants.service';
@@ -13,7 +13,7 @@ const GRID_SIZE = 50;
   styleUrls: ['./workbench.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class WorkbenchComponent {
+export class WorkbenchComponent implements AfterViewInit {
   @ViewChild('containerEl', { read: ElementRef }) containerEl!: ElementRef;
   @ViewChild('grid', { read: ElementRef }) grid!: ElementRef;
   @ViewChild('selectarea', { read: ElementRef }) selectArea!: ElementRef;
