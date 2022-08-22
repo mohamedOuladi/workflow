@@ -136,7 +136,7 @@ export class WorkbenchComponent {
         id: -1,
         sourceId: nodeId,
         x1: node.x + node.width!,
-        y1: node.y + this.constants.linkYOffset,
+        y1: node.y + this.constants.linkTopOffset,
         x2: (e.clientX - this.containerX - this.dx) / this.scale,
         y2: (e.clientY - this.containerY - this.dy) / this.scale,
       }
@@ -328,6 +328,7 @@ export class WorkbenchComponent {
   }
 
 }
+
 // TODO: expand nodes
 // TODO: context menu
 // TODO: classname from shared constant
@@ -344,4 +345,3 @@ export class WorkbenchComponent {
 // TODO after prototype:
 // remove select from history and state?
 // resizable nodes (using mouse)
-
