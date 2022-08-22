@@ -1,18 +1,25 @@
-<div class="plugin" [attr.value]="id" [style.top]="y+'px'" [style.left]="x+'px'" [attr.data-id]="id" [style.width]="width+'px'"
-    [ngClass]="{selected: selected}">
-    <div class="inlet" [hidden]="!hasInlet"></div>
-    <div class="outlet" [hidden]="!hasOutlet"></div>
-    <div class="node-header">
-        <button class="expander" (click)="expand()">
-            <i class="icon-lsi-down-arrow" [hidden]="expanded"></i>
-            <i class="icon-lsi-right-arrow" [hidden]="!expanded"></i>
-        </button>
-        <div class="title">{{ name }}</div>
-        <div class="icon">
-            <i [ngClass]="icon"></i>
-        </div>
+<div
+  class="plugin"
+  [attr.value]="id"
+  [style.top]="y + 'px'"
+  [style.left]="x + 'px'"
+  [attr.data-id]="id"
+  [style.width]="width + 'px'"
+  [ngClass]="{ selected: selected }"
+>
+  <div class="inlet" [hidden]="!hasInlet"></div>
+  <div class="outlet" [hidden]="!hasOutlet"></div>
+  <div class="node-header">
+    <button class="expander" (click)="expand()">
+      <i class="icon-lsi-down-arrow" [hidden]="expanded"></i>
+      <i class="icon-lsi-right-arrow" [hidden]="!expanded"></i>
+    </button>
+    <div class="title">{{ name }}</div>
+    <div class="icon">
+      <i [ngClass]="icon"></i>
     </div>
-    <div class="node-content" [hidden]="!expanded">
-        <ng-container #outlet></ng-container>
-    </div>
+  </div>
+  <div class="node-content" [hidden]="!expanded">
+    <ng-container #outlet></ng-container>
+  </div>
 </div>

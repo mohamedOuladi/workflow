@@ -7,7 +7,7 @@ import { PluginAComponent } from '../plugin-a/plugin-a.component';
 @Component({
   selector: 'app-node',
   templateUrl: './node.component.html',
-  styleUrls: ['./node.component.scss']
+  styleUrls: ['./node.component.scss'],
 })
 export class DynamicNodeComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('outlet', { read: ViewContainerRef, static: false }) outlet!: ViewContainerRef;
@@ -26,7 +26,7 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit, OnChanges {
   hasOutlet = false;
   width = 250;
 
-  constructor(private graph: GraphService) { }
+  constructor(private graph: GraphService) {}
 
   ngOnInit(): void {
     this.x = this.data!.x;
@@ -36,14 +36,14 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit, OnChanges {
     this.name = this.data!.name;
     this.selected = this.data!.selected || false;
     this.expanded = this.data!.expanded || false;
-    this.icon = PLUGINS.find(x => x.type === this.type)!.icon;
-    this.hasInlet = PLUGINS.find(x => x.type === this.type)!.hasInlet;
-    this.hasOutlet = PLUGINS.find(x => x.type === this.type)!.hasOutlet;
-    this.width = PLUGINS.find(x => x.type === this.type)!.width;
+    this.icon = PLUGINS.find((x) => x.type === this.type)!.icon;
+    this.hasInlet = PLUGINS.find((x) => x.type === this.type)!.hasInlet;
+    this.hasOutlet = PLUGINS.find((x) => x.type === this.type)!.hasOutlet;
+    this.width = PLUGINS.find((x) => x.type === this.type)!.width;
   }
 
   ngAfterViewInit(): void {
-    const componentClass = PLUGINS.find(x => x.type === this.type)?.component;
+    const componentClass = PLUGINS.find((x) => x.type === this.type)?.component;
     this.component = this.outlet.createComponent(componentClass!);
   }
 
@@ -60,5 +60,4 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit, OnChanges {
   expand(): void {
     this.graph.expand(this.id);
   }
-
 }

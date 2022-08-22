@@ -13,7 +13,7 @@ export class LayoutComponent {
   state?: State;
 
   constructor(private graph: GraphService) {
-    this.graph.state$.pipe(filter(x => !!x)).subscribe(state => {
+    this.graph.state$.pipe(filter((x) => !!x)).subscribe((state) => {
       this.state = state;
     });
 
@@ -33,7 +33,7 @@ export class LayoutComponent {
   }
 
   reset() {
-    this.graph.loadState({ "nodes": [], "links": [], "selection": [] });
+    this.graph.loadState({ nodes: [], links: [], selection: [] });
   }
 
   undo() {
@@ -43,6 +43,4 @@ export class LayoutComponent {
   redo() {
     this.graph.redo();
   }
-
 }
-

@@ -6,7 +6,7 @@ import { NodeX, State } from 'src/app/types';
 @Component({
   selector: 'app-right-panel',
   templateUrl: './right-panel.component.html',
-  styleUrls: ['./right-panel.component.scss']
+  styleUrls: ['./right-panel.component.scss'],
 })
 export class RightPanelComponent {
   visibleNodesMap = new Map<number, boolean>();
@@ -14,7 +14,7 @@ export class RightPanelComponent {
   state?: State;
 
   constructor(private graph: GraphService) {
-    this.graph.state$.pipe(filter(x => !!x)).subscribe(state => {
+    this.graph.state$.pipe(filter((x) => !!x)).subscribe((state) => {
       this.state = state;
     });
 
@@ -26,9 +26,7 @@ export class RightPanelComponent {
   togglePanel(node: NodeX) {
     this.visibleNodesMap.set(node.id!, !this.visibleNodesMap.get(node.id!));
     node.selected = !!this.visibleNodesMap.get(node.id!);
-    const selection = this.state!.nodes.filter(node => node.selected).map(node => node.id) as number[];
+    const selection = this.state!.nodes.filter((node) => node.selected).map((node) => node.id) as number[];
     this.graph.updateSelection(selection);
   }
-
-
 }

@@ -1,13 +1,13 @@
-import { InjectionToken } from "@angular/core";
+import { InjectionToken } from '@angular/core';
 
 export interface Config {
-    linkTopOffset: number;
+  linkTopOffset: number;
 }
 export const CONST = new InjectionToken<Config>('CONST', {
-    providedIn: 'root',
-    factory: (): Config => {
-        return {
-            linkTopOffset: 27
-        }
-    }
+  providedIn: 'root',
+  factory: (): Config => {
+    return {
+      linkTopOffset: 27,
+    };
+  },
 });

@@ -1,13 +1,13 @@
 $light-color: #d8e2fa;
 
 svg {
-    z-index: 0;
-    position: absolute;
-    overflow: visible !important;
+  z-index: 0;
+  position: absolute;
+  overflow: visible !important;
 
-    path {
-        fill: none;
-        stroke: $light-color;
-        stroke-width: 2;
-    }
+  path {
+    fill: none;
+    stroke: $light-color;
+    stroke-width: 2;
+  }
 }
