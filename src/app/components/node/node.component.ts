@@ -50,5 +50,4 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit, OnChanges {
     this.selected = changes.data.currentValue.selected;
     this.expanded = changes.data.currentValue.expanded;
   }
-
 }

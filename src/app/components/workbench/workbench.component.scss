@@ -4,6 +4,12 @@ $primary-bg-color-lighest: #555555;
 
 $light-color: #d8e2fa;
 
+.workbench {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 svg {
   z-index: 0;
   position: absolute;

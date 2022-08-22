@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { filter } from 'rxjs';
-import { NodeX } from 'src/app/types';
 import { State } from 'src/app/types';
 import { GraphService } from 'src/app/services/graph.service';
 
