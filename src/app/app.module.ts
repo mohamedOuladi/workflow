@@ -14,6 +14,7 @@ import { PluginDComponent } from './components/plugin-d/plugin-d.component';
 import { PluginEComponent } from './components/plugin-e/plugin-e.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RightPanelComponent } from './components/right-panel/right-panel.component';
+import { TopControlsComponent } from './components/top-controls/top-controls.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { RightPanelComponent } from './components/right-panel/right-panel.compon
     PluginDComponent,
     PluginEComponent,
     RightPanelComponent,
+    TopControlsComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule],
   providers: [],

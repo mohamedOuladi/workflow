@@ -112,7 +112,7 @@ export class WorkbenchComponent {
     // click on expand button
     if (expander) {
       this.graph.expand(nodeId);
-      return
+      return;
     }
 
     // dragging node
