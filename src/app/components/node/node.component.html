@@ -3,8 +3,9 @@
     <div class="inlet" [hidden]="!hasInlet"></div>
     <div class="outlet" [hidden]="!hasOutlet"></div>
     <div class="node-header">
-        <button>
-            <i class="icon-lsi-down-arrow"></i>
+        <button class="expander" (click)="expand()">
+            <i class="icon-lsi-down-arrow" [hidden]="expanded"></i>
+            <i class="icon-lsi-right-arrow" [hidden]="!expanded"></i>
         </button>
         <div class="title">{{ name }}</div>
         <div class="icon">
