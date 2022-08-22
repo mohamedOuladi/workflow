@@ -1,10 +1,11 @@
-@use '/src/sass/vars' as vars;
+@use "/src/sass/vars" as vars;
 
 $width: 250px;
 $height: 50px;
 $outlet-size: 20px;
 $light-color: #d8e2fa;
 $green-color: #02dcc7;
+$gold-color: #fec966;
 $border-radius: 10px;
 
 .plugin {
@@ -23,13 +24,12 @@ $border-radius: 10px;
   -o-user-select: none;
 
   &.selected {
-    border: 2px solid $green-color;
-    box-shadow: rgb(255 255 255) 0px 0px 15px;
+    border: 2px solid $gold-color;
 
     .inlet,
     .outlet {
       background-color: $green-color;
-      border-color: $green-color;
+      border-color: gold-color;
     }
   }
 
