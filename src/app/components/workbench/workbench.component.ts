@@ -118,6 +118,7 @@ export class WorkbenchComponent implements AfterViewInit {
 
     // click on expand button
     if (expander) {
+      this.graph.expand(nodeId);
       return
     }
 
