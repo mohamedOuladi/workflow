@@ -1,3 +1,5 @@
+@use '/src/sass/vars' as vars;
+
 $width: 250px;
 $height: 50px;
 $outlet-size: 20px;
@@ -78,7 +80,7 @@ $border-radius: 10px;
         width: calc($outlet-size / 2);
         height: $outlet-size;
         position: absolute;
-        top: calc(50% - $outlet-size / 2);
+        top: calc(vars.$link-top-offset - $outlet-size / 2);
         left: calc(100% + 1px);
         border-top-right-radius: $outlet-size;
         border-bottom-right-radius: $outlet-size;
@@ -96,7 +98,7 @@ $border-radius: 10px;
         width: calc($outlet-size / 2);
         height: $outlet-size;
         position: absolute;
-        top: calc(50% - $outlet-size / 2);
+        top: calc(vars.$link-top-offset - $outlet-size / 2);
         left: calc(-1px - $outlet-size / 2);
         border-top-left-radius: $outlet-size;
         border-bottom-left-radius: $outlet-size;
