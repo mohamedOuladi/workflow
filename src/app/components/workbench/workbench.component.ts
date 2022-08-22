@@ -345,7 +345,6 @@ export class WorkbenchComponent implements AfterViewInit {
   }
 }
 
-// TODO: expand nodes
 // TODO: context menu
 // TODO: classname from shared constant
 // TODO: do not hover color of inlet if link was from inlet - pass state into dynamicNode component, and possibly node object
