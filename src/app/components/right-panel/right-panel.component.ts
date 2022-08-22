@@ -18,7 +18,6 @@ export class RightPanelComponent {
       this.state = state;
     });
 
-    //
     // for (var n in this.state!.nodes) {
     //   this.visibleNodesMap.set(this.state!.nodes[n].id, false);
     // }
