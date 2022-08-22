@@ -1,24 +1,23 @@
 <div class="layout">
-    <header>
-        <img src="/assets/logo.png" alt="">
-        <div class="header-menu">
-            <button (click)="save()">Save</button>
-            <button (click)="load()">Load</button>
-            <button (click)="reset()">Reset</button>
-            <button (click)="undo()">Undo</button>
-            <button (click)="redo()">Redo</button>
-
-        </div>
-    </header>
-    <main>
-        <article>
-            <app-workbench></app-workbench>
-        </article>
-        <nav>
-            <app-plugin-library></app-plugin-library>
-        </nav>
-        <aside>
-            <app-right-panel></app-right-panel>
-        </aside>
-    </main>
+  <header>
+    <img src="/assets/logo.png" alt="" />
+    <div class="header-menu">
+      <button (click)="save()">Save</button>
+      <button (click)="load()">Load</button>
+      <button (click)="reset()">Reset</button>
+      <button (click)="undo()">Undo</button>
+      <button (click)="redo()">Redo</button>
+    </div>
+  </header>
+  <main>
+    <article>
+      <app-workbench></app-workbench>
+    </article>
+    <nav>
+      <app-plugin-library></app-plugin-library>
+    </nav>
+    <aside>
+      <app-right-panel></app-right-panel>
+    </aside>
+  </main>
 </div>

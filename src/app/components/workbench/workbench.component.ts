@@ -11,7 +11,7 @@ const GRID_SIZE = 50;
   selector: 'app-workbench',
   templateUrl: './workbench.component.html',
   styleUrls: ['./workbench.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class WorkbenchComponent implements AfterViewInit {
   @ViewChild('containerEl', { read: ElementRef }) containerEl!: ElementRef;
@@ -42,9 +42,9 @@ export class WorkbenchComponent implements AfterViewInit {
   dy = 0; // y of viewport
 
   constructor(@Inject(CONST) private constants: Config, private graph: GraphService) {
-    this.graph.state$.pipe(filter(x => !!x)).subscribe(state => {
+    this.graph.state$.pipe(filter((x) => !!x)).subscribe((state) => {
       this.state = state;
-    })
+    });
   }
 
   @HostListener('wheel', ['$event'])
@@ -66,7 +66,7 @@ export class WorkbenchComponent implements AfterViewInit {
     if (event.ctrlKey || event.metaKey) {
       if (event.key === 'a') {
         event.preventDefault();
-        this.graph.updateSelection(this.state!.nodes.map(x => x.id!));
+        this.graph.updateSelection(this.state!.nodes.map((x) => x.id!));
       }
 
       if (event.key === 'z') {
@@ -87,8 +87,18 @@ export class WorkbenchComponent implements AfterViewInit {
       const data = JSON.parse(dataJson);
       const x = (event.clientX - data.x - this.containerX - this.dx) / this.scale;
       const y = (event.clientY - data.y - this.containerY - this.dy) / this.scale;
-      const plugin = PLUGINS.find(x => x.type === data.type)!;
-      const node: NodeX = { x, y, type: data.type, name: plugin.name, width: plugin.width, selected: true, expanded: false, hasOutlet: plugin.hasOutlet, hasInlet: plugin.hasInlet };
+      const plugin = PLUGINS.find((x) => x.type === data.type)!;
+      const node: NodeX = {
+        x,
+        y,
+        type: data.type,
+        name: plugin.name,
+        width: plugin.width,
+        selected: true,
+        expanded: false,
+        hasOutlet: plugin.hasOutlet,
+        hasInlet: plugin.hasInlet,
+      };
       this.graph.addNode(node);
     }
   }
@@ -115,7 +125,7 @@ export class WorkbenchComponent implements AfterViewInit {
       let selection = this.state?.selection.slice()!;
       if (e.shiftKey) {
         if (this.state?.selection.includes(nodeId)) {
-          selection = this.state.selection.filter(x => x !== nodeId);
+          selection = this.state.selection.filter((x) => x !== nodeId);
         } else {
           selection.push(nodeId);
         }
@@ -131,7 +141,7 @@ export class WorkbenchComponent implements AfterViewInit {
     // new link from outlet
     if (outlet && element) {
       this.isDrawingLink = true;
-      const node = this.state.nodes.find(x => x.id === nodeId)!;
+      const node = this.state.nodes.find((x) => x.id === nodeId)!;
       this.draggedLink = {
         id: -1,
         sourceId: nodeId,
@@ -139,7 +149,7 @@ export class WorkbenchComponent implements AfterViewInit {
         y1: node.y + this.constants.linkTopOffset,
         x2: (e.clientX - this.containerX - this.dx) / this.scale,
         y2: (e.clientY - this.containerY - this.dy) / this.scale,
-      }
+      };
       this.linkId = this.draggedLink.id;
       this.state.links.push(this.draggedLink);
       return;
@@ -147,7 +157,7 @@ export class WorkbenchComponent implements AfterViewInit {
 
     // existing link from inlet
     if (inlet && element) {
-      const linkId = this.state?.links.find(link => link.targetId === nodeId)?.id;
+      const linkId = this.state?.links.find((link) => link.targetId === nodeId)?.id;
       if (linkId) {
         this.linkId = linkId;
         this.isDrawingLink = true;
@@ -164,7 +174,7 @@ export class WorkbenchComponent implements AfterViewInit {
       this.isMoving = true;
       this.startX = e.clientX - this.dx;
       this.startY = e.clientY - this.dy;
-      return
+      return;
     }
 
     // selecting area
@@ -174,7 +184,6 @@ export class WorkbenchComponent implements AfterViewInit {
   }
 
   mouseMove(e: MouseEvent) {
-
     // dragging node
     if (this.isDragging) {
       const dx = e.clientX - this.tempX;
@@ -182,11 +191,11 @@ export class WorkbenchComponent implements AfterViewInit {
       this.tempX = e.clientX;
       this.tempY = e.clientY;
 
-      this.state.selection.forEach(id => {
-        const node = this.state.nodes.find(x => x.id === id)!;
+      this.state.selection.forEach((id) => {
+        const node = this.state.nodes.find((x) => x.id === id)!;
         node.x += dx / this.scale;
         node.y += dy / this.scale;
-        this.state.links.forEach(link => {
+        this.state.links.forEach((link) => {
           if (link.sourceId === id) {
             link.x1 += dx / this.scale;
             link.y1 += dy / this.scale;
@@ -204,7 +213,7 @@ export class WorkbenchComponent implements AfterViewInit {
     if (this.isDrawingLink) {
       const dx = (e.clientX - this.containerX - this.dx) / this.scale;
       const dy = (e.clientY - this.containerY - this.dy) / this.scale;
-      const link = this.state?.links.find(x => x.id === this.linkId) || this.state?.links[this.state.links.length - 1];
+      const link = this.state?.links.find((x) => x.id === this.linkId) || this.state?.links[this.state.links.length - 1];
       link.x2 = dx;
       link.y2 = dy;
       return;
@@ -233,7 +242,6 @@ export class WorkbenchComponent implements AfterViewInit {
   }
 
   mouseUp(e: MouseEvent) {
-
     // link
     if (this.isDrawingLink) {
       const inlet = (e.target as HTMLElement)!.closest('.inlet'); // TODO: classname from shared constant
@@ -241,11 +249,11 @@ export class WorkbenchComponent implements AfterViewInit {
 
       if (inlet && element) {
         const targetId = parseInt(element.getAttribute('data-id')!, 10);
-        const existingLink = this.state?.links.find(link => link.targetId === targetId);
-        const target = this.state.nodes.find(x => x.id === targetId)!;
+        const existingLink = this.state?.links.find((link) => link.targetId === targetId);
+        const target = this.state.nodes.find((x) => x.id === targetId)!;
         if (!existingLink) {
           if (this.linkId === -1) {
-            const source = this.state.nodes.find(x => x.id === this.draggedLink!.sourceId)!;
+            const source = this.state.nodes.find((x) => x.id === this.draggedLink!.sourceId)!;
             this.graph.createLink(source, target);
           } else {
             this.graph.updateLinkTarget(this.linkId, target);
@@ -256,7 +264,7 @@ export class WorkbenchComponent implements AfterViewInit {
           this.graph.destroyLink(this.linkId);
         }
       }
-      this.state.links = this.state.links.filter(x => x.id !== -1);
+      this.state.links = this.state.links.filter((x) => x.id !== -1);
     }
 
     // node
@@ -276,18 +284,20 @@ export class WorkbenchComponent implements AfterViewInit {
       const ax2 = (Math.max(this.startX, e.clientX) - this.containerX - this.dx) / this.scale;
       const ay2 = (Math.max(this.startY, e.clientY) - this.containerY - this.dy) / this.scale;
 
-      const selection = this.state?.nodes.filter(node => {
-        const element = document.querySelector(`[data-id="${node.id}"]`)!;
-        const rect = element.getBoundingClientRect();
+      const selection = this.state?.nodes
+        .filter((node) => {
+          const element = document.querySelector(`[data-id="${node.id}"]`)!;
+          const rect = element.getBoundingClientRect();
 
-        const bx1 = node.x;
-        const by1 = node.y;
-        const bx2 = (node.x + rect.width / this.scale);
-        const by2 = (node.y + rect.height / this.scale);
+          const bx1 = node.x;
+          const by1 = node.y;
+          const bx2 = node.x + rect.width / this.scale;
+          const by2 = node.y + rect.height / this.scale;
 
-        // check if node is in select area
-        return ax1 <= bx2 && bx1 <= ax2 && ay1 <= by2 && by1 <= ay2;
-      }).map(node => node.id) as number[];
+          // check if node is in select area
+          return ax1 <= bx2 && bx1 <= ax2 && ay1 <= by2 && by1 <= ay2;
+        })
+        .map((node) => node.id) as number[];
       this.graph.updateSelection(selection);
     }
 
@@ -317,16 +327,15 @@ export class WorkbenchComponent implements AfterViewInit {
     }
 
     // zoom and shift relative to mouse position
-    this.dx += (this.dx - mouseX) * delta / this.scale;
-    this.dy += (this.dy - mouseY) * delta / this.scale;
+    this.dx += ((this.dx - mouseX) * delta) / this.scale;
+    this.dy += ((this.dy - mouseY) * delta) / this.scale;
 
     this.scale += delta;
 
     const size = GRID_SIZE * this.scale + 'px';
-    this.grid.nativeElement.style['background-size'] = `${size} ${size}` // 50px 50px;
+    this.grid.nativeElement.style['background-size'] = `${size} ${size}`; // 50px 50px;
     this.grid.nativeElement.style['background-position'] = `${this.dx}px ${this.dy}px`;
   }
-
 }
 
 // TODO: expand nodes

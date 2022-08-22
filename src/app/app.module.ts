@@ -15,7 +15,6 @@ import { PluginEComponent } from './components/plugin-e/plugin-e.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RightPanelComponent } from './components/right-panel/right-panel.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,14 +28,10 @@ import { RightPanelComponent } from './components/right-panel/right-panel.compon
     PluginCComponent,
     PluginDComponent,
     PluginEComponent,
-    RightPanelComponent
+    RightPanelComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-  ],
+  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

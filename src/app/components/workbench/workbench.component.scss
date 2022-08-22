@@ -5,72 +5,72 @@ $primary-bg-color-lighest: #555555;
 $light-color: #d8e2fa;
 
 svg {
-    z-index: 0;
-    position: absolute;
-    overflow: visible !important;
+  z-index: 0;
+  position: absolute;
+  overflow: visible !important;
 }
 
 .bench {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .drawboard {
-    position: absolute;
-    top: 0;
-    left: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .grid {
-    width: 100%;
-    height: 100%;
-    background-image: repeating-linear-gradient(#2b2c2c 0 1px, transparent 1px 100%),
-        repeating-linear-gradient(90deg, #2b2c2c 0 1px, transparent 1px 100%);
-    background-size: 50px 50px;
+  width: 100%;
+  height: 100%;
+  background-image: repeating-linear-gradient(#2b2c2c 0 1px, transparent 1px 100%),
+    repeating-linear-gradient(90deg, #2b2c2c 0 1px, transparent 1px 100%);
+  background-size: 50px 50px;
 }
 
 .zoom {
-    position: absolute;
-    right: 20px;
-    top: 20px;
+  position: absolute;
+  right: 20px;
+  top: 20px;
 
-    button {
-        display: block;
-        margin-left: 1rem;
-        background-color: $primary-bg-color;
-        color: $light-color;
-        border: none;
-        font-size: 1.5rem;
-        width: 40px;
-        height: 40px;
-        cursor: pointer;
+  button {
+    display: block;
+    margin-left: 1rem;
+    background-color: $primary-bg-color;
+    color: $light-color;
+    border: none;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
 
-        &:hover {
-            background-color: $primary-bg-color-lighter;
-        }
-
-        &:active {
-            background-color: $primary-bg-color-lighest;
-        }
-
-        &:first-child {
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
-            margin-bottom: 2px;
-        }
-        &:last-child {
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-        }
+    &:hover {
+      background-color: $primary-bg-color-lighter;
     }
+
+    &:active {
+      background-color: $primary-bg-color-lighest;
+    }
+
+    &:first-child {
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      margin-bottom: 2px;
+    }
+    &:last-child {
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+  }
 }
 
 .select-zone {
-    position: absolute;
-    border: 1px solid #02dcc7;
-    background-color: #02dcc62c;
-    display: none;
+  position: absolute;
+  border: 1px solid #02dcc7;
+  background-color: #02dcc62c;
+  display: none;
 }

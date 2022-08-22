@@ -8,64 +8,64 @@ $black-color: #0a0d0c;
 $primary-text-color: #b5b5b5;
 
 .layout {
-    height: 100vh;
-    width: 100vw;
+  height: 100vh;
+  width: 100vw;
 }
 
 main {
-    display: flex;
-    height: calc(100vh - $header-height);
-    background-color: $black-color;
-    color: $primary-text-color;
-    position: static;
+  display: flex;
+  height: calc(100vh - $header-height);
+  background-color: $black-color;
+  color: $primary-text-color;
+  position: static;
 }
 
 main > article {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
 }
 
 main > nav,
 main > aside {
-    flex: 0 0 $left-menu-width;
-    background: $primary-bg-color;
+  flex: 0 0 $left-menu-width;
+  background: $primary-bg-color;
 }
 
 main > nav {
-    order: -1;
+  order: -1;
 }
 
 header {
-    background: $primary-bg-color;
-    height: $header-height;
-    border-bottom: 1px solid $black-color;
-    padding: 0;
-    background-image: url("/assets/logo.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    display: flex;
-    align-items: center;
+  background: $primary-bg-color;
+  height: $header-height;
+  border-bottom: 1px solid $black-color;
+  padding: 0;
+  background-image: url('/assets/logo.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
 
-    .header-menu {
-        margin-left: 20px;
+  .header-menu {
+    margin-left: 20px;
 
-        button {
-            background-color: transparent;
-            border: none;
-            color: $primary-text-color;
-            margin-left: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            text-decoration: underline;
+    button {
+      background-color: transparent;
+      border: none;
+      color: $primary-text-color;
+      margin-left: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      text-decoration: underline;
 
-            &:hover {
-                background-color: $primary-bg-color-lighter;
-            }
+      &:hover {
+        background-color: $primary-bg-color-lighter;
+      }
 
-            &:active {
-                background-color: $primary-bg-color-lighest;
-            }
-        }
+      &:active {
+        background-color: $primary-bg-color-lighest;
+      }
     }
+  }
 }

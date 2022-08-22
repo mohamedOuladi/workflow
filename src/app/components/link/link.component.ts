@@ -7,10 +7,10 @@ const ZIGZAG_MIN_END_LENGTH = 25;
   selector: 'app-link',
   templateUrl: './link.component.html',
   styleUrls: ['./link.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class LinkComponent implements OnInit, OnChanges, AfterViewInit {
-  @Input() data!: { x1: number, y1: number, x2: number, y2: number, id: number };
+  @Input() data!: { x1: number; y1: number; x2: number; y2: number; id: number };
   @ViewChild('host', { read: ElementRef }) host!: ElementRef<HTMLDivElement>;
 
   id: number = -1;
@@ -19,7 +19,7 @@ export class LinkComponent implements OnInit, OnChanges, AfterViewInit {
   x2: number = 0;
   y2: number = 0;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.x1 = this.data.x1;
