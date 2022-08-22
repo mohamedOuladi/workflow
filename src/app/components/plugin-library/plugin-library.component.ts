@@ -13,29 +13,37 @@ export class PluginLibraryComponent {
     {
       name: 'Catalog',
       icon: 'icon-lsi-catalog',
+      expanded: false,
     },
     {
       name: 'Macros',
       icon: 'icon-lsi-code',
+      expanded: false,
     },
     {
       name: 'Plugins',
       icon: 'icon-lsi-plugins',
+      expanded: true,
       children: [
         {
           name: 'Example',
           icon: 'icon-lsi-folder',
+          expandedIcon: 'icon-lsi-openfolder',
+          expanded: true,
           children: [...PLUGINS],
         },
         {
           name: 'Node 3.3',
           icon: 'icon-lsi-folder',
+          expandedIcon: 'icon-lsi-openfolder',
+          expanded: false,
         },
       ],
     },
     {
       name: 'Workflow',
       icon: 'icon-lsi-workflow',
+      expanded: false,
     },
   ];
 
