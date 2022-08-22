@@ -11,6 +11,7 @@ import { GraphService } from 'src/app/services/graph.service';
 })
 export class LayoutComponent {
   state?: State;
+  collapsed = false;
 
   constructor(private graph: GraphService) {
     this.graph.state$.pipe(filter((x) => !!x)).subscribe((state) => {
@@ -42,5 +43,9 @@ export class LayoutComponent {
 
   redo() {
     this.graph.redo();
+  }
+
+  toggle() {
+    this.collapsed = !this.collapsed;
   }
 }

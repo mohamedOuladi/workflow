@@ -4,8 +4,11 @@
 
 <ng-template #tree let-nodes="nodes">
   <div *ngFor="let node of nodes">
-    <div class="plugin" [attr.draggable]="!!node.type" [attr.data-type]="node.type" (dragstart)="start($event)">
-      <i (click)="node.expanded = !node.expanded" [ngClass]="node.expanded ? node.expandedIcon || node.icon : node.icon"></i> {{ node.name }}
+    
+    <div class="plugin" [attr.draggable]="!!node.type" [attr.data-type]="node.type" (dragstart)="start($event)"
+      [ngClass]="{draggable: !!node.type}">
+      <i class="expand" (click)="node.expanded = !node.expanded"
+        [ngClass]="node.expanded ? node.expandedIcon || node.icon : node.icon"></i> {{ node.name }}
     </div>
 
     <div class="children" *ngIf="node.expanded">

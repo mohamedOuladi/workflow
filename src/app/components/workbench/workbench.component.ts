@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
 import { PLUGINS } from 'src/app/plugins';
 import { Config, CONST } from 'src/app/services/constants.service';
@@ -13,7 +13,7 @@ const GRID_SIZE = 50;
   styleUrls: ['./workbench.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class WorkbenchComponent implements AfterViewInit {
+export class WorkbenchComponent {
   @ViewChild('containerEl', { read: ElementRef }) containerEl!: ElementRef;
   @ViewChild('grid', { read: ElementRef }) grid!: ElementRef;
   @ViewChild('selectarea', { read: ElementRef }) selectArea!: ElementRef;
@@ -32,9 +32,6 @@ export class WorkbenchComponent implements AfterViewInit {
   startX = 0; // also for temporary use
   startY = 0; // also for temporary use
 
-  containerX = 0; // offset x of html element relative to the document
-  containerY = 0; // offset y of html element relative to the document
-
   state!: State;
 
   scale = 1;
@@ -49,9 +46,10 @@ export class WorkbenchComponent implements AfterViewInit {
 
   @HostListener('wheel', ['$event'])
   onMouseWheel(event: WheelEvent) {
+    const { containerX, containerY } = this.getContainerPosition();
     event.preventDefault();
     if (event.deltaY !== 0) {
-      this.zoom(event.deltaY / 1000, event.clientX - this.containerX, event.clientY - this.containerY);
+      this.zoom(event.deltaY / 1000, event.clientX - containerX, event.clientY - containerY);
     }
   }
 
@@ -85,8 +83,9 @@ export class WorkbenchComponent implements AfterViewInit {
     const dataJson = event.dataTransfer!.getData('data');
     if (dataJson) {
       const data = JSON.parse(dataJson);
-      const x = (event.clientX - data.x - this.containerX - this.dx) / this.scale;
-      const y = (event.clientY - data.y - this.containerY - this.dy) / this.scale;
+      const { containerX, containerY } = this.getContainerPosition();
+      const x = (event.clientX - data.x - containerX - this.dx) / this.scale;
+      const y = (event.clientY - data.y - containerY - this.dy) / this.scale;
       const plugin = PLUGINS.find((x) => x.type === data.type)!;
       const node: NodeX = {
         x,
@@ -101,12 +100,6 @@ export class WorkbenchComponent implements AfterViewInit {
       };
       this.graph.addNode(node);
     }
-  }
-
-  ngAfterViewInit() {
-    const containerRect = this.containerEl.nativeElement.getBoundingClientRect();
-    this.containerX = containerRect.left;
-    this.containerY = containerRect.top;
   }
 
   mouseDown(e: MouseEvent) {
@@ -149,13 +142,14 @@ export class WorkbenchComponent implements AfterViewInit {
     if (outlet && element) {
       this.isDrawingLink = true;
       const node = this.state.nodes.find((x) => x.id === nodeId)!;
+      const { containerX, containerY } = this.getContainerPosition();
       this.draggedLink = {
         id: -1,
         sourceId: nodeId,
         x1: node.x + node.width!,
         y1: node.y + this.constants.linkTopOffset,
-        x2: (e.clientX - this.containerX - this.dx) / this.scale,
-        y2: (e.clientY - this.containerY - this.dy) / this.scale,
+        x2: (e.clientX - containerX - this.dx) / this.scale,
+        y2: (e.clientY - containerY - this.dy) / this.scale,
       };
       this.linkId = this.draggedLink.id;
       this.state.links.push(this.draggedLink);
@@ -191,6 +185,8 @@ export class WorkbenchComponent implements AfterViewInit {
   }
 
   mouseMove(e: MouseEvent) {
+    const { containerX, containerY } = this.getContainerPosition();
+
     // dragging node
     if (this.isDragging) {
       const dx = e.clientX - this.tempX;
@@ -218,8 +214,8 @@ export class WorkbenchComponent implements AfterViewInit {
 
     // drawing link
     if (this.isDrawingLink) {
-      const dx = (e.clientX - this.containerX - this.dx) / this.scale;
-      const dy = (e.clientY - this.containerY - this.dy) / this.scale;
+      const dx = (e.clientX - containerX - this.dx) / this.scale;
+      const dy = (e.clientY - containerY - this.dy) / this.scale;
       const link = this.state?.links.find((x) => x.id === this.linkId) || this.state?.links[this.state.links.length - 1];
       link.x2 = dx;
       link.y2 = dy;
@@ -236,8 +232,8 @@ export class WorkbenchComponent implements AfterViewInit {
 
     // selecting area
     if (this.isSelecting) {
-      const x = (Math.min(this.startX, e.clientX) - this.containerX - this.dx) / this.scale;
-      const y = (Math.min(this.startY, e.clientY) - this.containerY - this.dy) / this.scale;
+      const x = (Math.min(this.startX, e.clientX) - containerX - this.dx) / this.scale;
+      const y = (Math.min(this.startY, e.clientY) - containerY - this.dy) / this.scale;
       const width = Math.abs(this.startX - e.clientX) / this.scale;
       const height = Math.abs(this.startY - e.clientY) / this.scale;
       this.selectArea.nativeElement.style.left = `${x}px`;
@@ -286,10 +282,11 @@ export class WorkbenchComponent implements AfterViewInit {
     // selecting area
     if (this.isSelecting) {
       this.selectArea.nativeElement.style.display = 'none';
-      const ax1 = (Math.min(this.startX, e.clientX) - this.containerX - this.dx) / this.scale;
-      const ay1 = (Math.min(this.startY, e.clientY) - this.containerY - this.dy) / this.scale;
-      const ax2 = (Math.max(this.startX, e.clientX) - this.containerX - this.dx) / this.scale;
-      const ay2 = (Math.max(this.startY, e.clientY) - this.containerY - this.dy) / this.scale;
+      const { containerX, containerY } = this.getContainerPosition();
+      const ax1 = (Math.min(this.startX, e.clientX) - containerX - this.dx) / this.scale;
+      const ay1 = (Math.min(this.startY, e.clientY) - containerY - this.dy) / this.scale;
+      const ax2 = (Math.max(this.startX, e.clientX) - containerX - this.dx) / this.scale;
+      const ay2 = (Math.max(this.startY, e.clientY) - containerY - this.dy) / this.scale;
 
       const selection = this.state?.nodes
         .filter((node) => {
@@ -343,12 +340,19 @@ export class WorkbenchComponent implements AfterViewInit {
     this.grid.nativeElement.style['background-size'] = `${size} ${size}`; // 50px 50px;
     this.grid.nativeElement.style['background-position'] = `${this.dx}px ${this.dy}px`;
   }
+
+  private getContainerPosition() {
+    const containerRect = this.containerEl.nativeElement.getBoundingClientRect();
+    const containerX = containerRect.left;
+    const containerY = containerRect.top;
+    return { containerX, containerY };
+  }
 }
 
+// TODO: copy/paste using ctrl+c/v
 // TODO: context menu
 // TODO: classname from shared constant
 // TODO: do not hover color of inlet if link was from inlet - pass state into dynamicNode component, and possibly node object
-// TODO: copy/paste using ctrl+c/v
 
 // todo: function for outelt position
 // todo: multiple outlets

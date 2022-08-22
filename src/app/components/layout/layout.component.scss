@@ -1,11 +1,10 @@
 $header-height: 75px;
-$left-menu-width: 300px;
-
 $primary-bg-color: #3e3e3e;
 $primary-bg-color-lighter: #4b4b4b;
 $primary-bg-color-lighest: #555555;
 $black-color: #0a0d0c;
 $primary-text-color: #b5b5b5;
+$nav-width: 250px;
 
 .layout {
   height: 100vh;
@@ -28,12 +27,45 @@ main > article {
 
 main > nav,
 main > aside {
-  flex: 0 0 $left-menu-width;
+  flex: 0 0 1;
   background: $primary-bg-color;
 }
 
 main > nav {
   order: -1;
+  display: flex;
+  width: $nav-width;
+  overflow-x: hidden;
+  -webkit-transition: all 300ms ease-in-out;
+  -moz-transition: all 300ms ease-in-out;
+  -ms-transition: all 300ms ease-in-out;
+  -o-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
+
+  &.collapsed {
+    width: 0;
+  }
+}
+
+.collapser {
+  background: $primary-bg-color;
+  order: -1;
+  height: 100%;
+  border-left: 1px solid $black-color;
+  width: 15px;
+  display: flex;
+  align-items: center;
+  cursor: w-resize;
+
+  &.collapsed {
+    cursor: e-resize;
+  }
+
+  i {
+    font-size: 0.5rem;
+    color: $primary-text-color;
+    padding-right: 0.25rem;
+  }
 }
 
 header {
@@ -41,7 +73,7 @@ header {
   height: $header-height;
   border-bottom: 1px solid $black-color;
   padding: 0;
-  background-image: url('/assets/logo.png');
+  background-image: url("/assets/logo.png");
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
