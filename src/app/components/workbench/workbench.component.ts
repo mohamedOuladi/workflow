@@ -348,19 +348,3 @@ export class WorkbenchComponent {
     return { containerX, containerY };
   }
 }
-
-// TODO: copy/paste using ctrl+c/v
-// TODO: context menu
-// TODO: classname from shared constant
-// TODO: do not hover color of inlet if link was from inlet - pass state into dynamicNode component, and possibly node object
-
-// todo: function for outelt position
-// todo: multiple outlets
-// todo: configure link
-
-// TODO: configurable module
-// TODO: reusable module
-
-// TODO after prototype:
-// remove select from history and state?
-// resizable nodes (using mouse)
