@@ -47,11 +47,6 @@ export class PluginLibraryComponent {
     },
   ];
 
-  expand(a?: any) {}
-  collapse(a?: any) {}
-  open(a?: any) {}
-  getName(a?: any) {}
-
   start(e: DragEvent) {
     const x = e.offsetX;
     const y = e.offsetY;
