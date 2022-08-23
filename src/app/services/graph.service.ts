@@ -21,7 +21,7 @@ export class GraphService {
     future: [] as State[],
   };
 
-  constructor(@Inject(CONST) private constants: Config) {}
+  constructor(@Inject(CONST) private constants: Config) { }
 
   public addNode(node: NodeX) {
     const newNode = { ...node, id: this.nodeId++ };
@@ -108,6 +108,20 @@ export class GraphService {
       node.expanded = !node.expanded;
       this.emit();
     }
+  }
+
+  public duplicateNodes() {
+    const ids = this.inState.selection;
+    const nodes = this.inState.nodes.filter((p) => ids.includes(p.id!));
+    const newNodes = nodes.map((p) => ({ ...p, id: this.nodeId++ }));
+    this.inState.selection = newNodes.map((p) => p.id!);
+    newNodes.forEach((p) => {
+      p.x += this.constants.duplicateOffset;
+      p.y += this.constants.duplicateOffset;
+    });
+    this.inState.nodes.forEach((p) => (p.selected = this.inState.selection.includes(p.id!)));
+    this.inState.nodes = [...this.inState.nodes, ...newNodes];
+    this.emit();
   }
 
   public undo() {

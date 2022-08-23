@@ -13,4 +13,8 @@ export class TopControlsComponent {
   remove() {
     this.graphService.deleteNodes();
   }
+
+  copy() {
+    this.graphService.duplicateNodes();
+  }
 }

@@ -55,6 +55,11 @@ export class WorkbenchComponent {
 
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'd') {
+      event.preventDefault();
+      this.graph.duplicateNodes();
+    }
+
     if (event.key === 'Delete' || event.key === 'Backspace') {
       event.preventDefault();
       this.graph.deleteNodes();
