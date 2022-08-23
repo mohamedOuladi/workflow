@@ -3,7 +3,7 @@
     <h3>Selection Details</h3>
   </div>
   <div *ngFor="let node of state!.nodes">
-    <button class="accordion" [ngClass]="visibleNodesMap.get(node.id!) || node.selected ? 'active' : 'accordion'"
+    <button class="accordion" [ngClass]="node.selected  ? (visibleNodesMap.get(node.id!) ? 'active icon-lsi-up-arrow' : 'active icon-lsi-down-arrow') : 'accordion icon-lsi-down-arrow'"
       (click)="togglePanel(node)">
       {{ node.name }}
     </button>
