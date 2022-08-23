@@ -124,6 +124,16 @@ export class GraphService {
     this.emit();
   }
 
+  public updateNodesSettings(nodes: NodeX[]) {
+    nodes.forEach((p) => {
+      const node = this.inState.nodes.find((c) => c.id === p.id);
+      if (node) {
+        node.settings = p.settings;
+      }
+    });
+    this.emit();
+  }
+
   public undo() {
     const oldState = this.history.past.pop();
     if (oldState) {

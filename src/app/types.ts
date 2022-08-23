@@ -9,6 +9,7 @@ export interface NodeX {
   hasOutlet?: boolean;
   hasInlet?: boolean;
   width?: number;
+  settings?: any;
 }
 
 export interface Link {

@@ -1,10 +1,10 @@
 @use '/src/sass/vars' as vars;
+@use '/src/sass/colors' as colors;
 
 $width: 250px;
 $height: 50px;
 $outlet-size: 20px;
 $light-color: #d8e2fa;
-$green-color: #02dcc7;
 $gold-color: #fec966;
 $border-radius: 10px;
 
@@ -28,7 +28,7 @@ $border-radius: 10px;
 
     .inlet,
     .outlet {
-      background-color: $green-color;
+      background-color: colors.$green;
       border-color: gold-color;
     }
   }
@@ -88,7 +88,7 @@ $border-radius: 10px;
     z-index: 2;
 
     &:hover {
-      background-color: $green-color;
+      background-color: colors.$green;
       cursor: crosshair;
     }
   }
@@ -106,7 +106,7 @@ $border-radius: 10px;
     z-index: 2;
 
     &:hover {
-      background-color: $green-color;
+      background-color: colors.$green;
       cursor: crosshair;
     }
   }

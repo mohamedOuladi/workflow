@@ -1,50 +1,41 @@
+@use "/src/sass/colors" as colors;
+
 .right-panel {
   width: 300px;
+  color: colors.$lightgray;
+
   .panel-header {
-    background: #101010;
+    background: colors.$black;
     padding: 5px;
   }
 
-  .accordion {
-    background-color: #36454f;
-    color: #b5b5b5;
-    cursor: pointer;
-    padding: 12px;
-    width: 100%;
+  .button {
+    background-color: colors.$darkgray;
     border: none;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    color: colors.$primary;
+    cursor: pointer;
+    padding: 0.5rem;
+    width: 100%;
     text-align: left;
     outline: none;
-    font-size: 15px;
+    font-size: 1rem;
     transition: 0.4s;
+
+    &:hover {
+      background-color: lighten($color: colors.$darkgray, $amount: 20);
+      color: lighten($color:  colors.$primary, $amount: 30)
+    }
   }
 
-  .active {
-    border: 2px solid #fec966;
+  .selected {
+    border: 1px solid #fec966;
     background-color: #433115;
   }
 
-  .accordion:hover {
-    background-color: #ccc;
-    color: #101010;
-  }
-
-  .accordion:after {
-    content: "\002B";
-    color: #777;
-    font-weight: bold;
-    float: right;
-    margin-left: 5px;
-  }
-
-  .active:after {
-    content: "\2212";
-  }
-
-  .panel {
-    padding: 0 18px;
-    background-color: white;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
+  .node-settings {
+    width: 100%;
+    padding: 1rem;
   }
 }
