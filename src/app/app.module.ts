@@ -15,6 +15,7 @@ import { PluginEComponent } from './components/plugin-e/plugin-e.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RightPanelComponent } from './components/right-panel/right-panel.component';
 import { TopControlsComponent } from './components/top-controls/top-controls.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -32,8 +33,9 @@ import { TopControlsComponent } from './components/top-controls/top-controls.com
     RightPanelComponent,
     TopControlsComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule],
+  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule,
+    ReactiveFormsModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
