@@ -1,11 +1,14 @@
-<div class="panel-header">
-  <h3>Selection Details</h3>
-</div>
-<div *ngFor="let node of state!.nodes">
-  <button class="accordion" [ngClass]="visibleNodesMap.get(node.id!) || node.selected ? 'active' : 'accordion'" (click)="togglePanel(node)">
-    {{ node.name }}
-  </button>
-  <div [hidden]="!visibleNodesMap.get(node.id!)">
-    <p>plugin params</p>
+<div class="right-panel">
+  <div class="panel-header">
+    <h3>Selection Details</h3>
+  </div>
+  <div *ngFor="let node of state!.nodes">
+    <button class="accordion" [ngClass]="visibleNodesMap.get(node.id!) || node.selected ? 'active' : 'accordion'"
+      (click)="togglePanel(node)">
+      {{ node.name }}
+    </button>
+    <div [hidden]="!visibleNodesMap.get(node.id!)">
+      <p>plugin params</p>
+    </div>
   </div>
 </div>
