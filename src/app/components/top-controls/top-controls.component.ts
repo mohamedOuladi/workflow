@@ -1,12 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { GraphService } from 'src/app/services/graph.service';
 
 @Component({
   selector: 'app-top-controls',
   templateUrl: './top-controls.component.html',
   styleUrls: ['./top-controls.component.scss'],
 })
-export class TopControlsComponent implements OnInit {
-  constructor() {}
+export class TopControlsComponent {
 
-  ngOnInit(): void {}
+  constructor(private graphService: GraphService) { }
+
+  remove() {
+    this.graphService.deleteNodes();
+  }
 }
