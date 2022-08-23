@@ -4,8 +4,8 @@
 }
 
 .accordion {
-  background-color: #eee;
-  color: #444;
+  background-color: #36454F;
+  color: #b5b5b5;
   cursor: pointer;
   padding: 12px;
   width: 100%;
@@ -16,9 +16,14 @@
   transition: 0.4s;
 }
 
-.active,
+.active {
+  border: 2px solid #fec966;
+  background-color: #433115;
+}
+
 .accordion:hover {
   background-color: #ccc;
+  color: #101010;
 }
 
 .accordion:after {
