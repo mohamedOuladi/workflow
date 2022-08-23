@@ -29,7 +29,11 @@ export class GraphService {
     this.emit();
   }
 
-  public deleteNodes(ids: number[]) {
+  /**
+   * Delete selected nodes and links
+   */
+  public deleteNodes() {
+    const ids = this.inState.selection;
     this.inState.nodes = this.inState.nodes.filter((p) => !ids.includes(p.id!));
     this.inState.links = this.inState.links.filter((c) => !ids.includes(c.sourceId) && !ids.includes(c.targetId!));
     this.emit();

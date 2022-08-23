@@ -57,7 +57,7 @@ export class WorkbenchComponent {
   onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Delete' || event.key === 'Backspace') {
       event.preventDefault();
-      this.graph.deleteNodes(this.state!.selection);
+      this.graph.deleteNodes();
       this.graph.updateSelection([]);
     }
 
