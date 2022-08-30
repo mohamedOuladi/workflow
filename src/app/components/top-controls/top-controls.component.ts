@@ -7,8 +7,7 @@ import { GraphService } from 'src/app/services/graph.service';
   styleUrls: ['./top-controls.component.scss'],
 })
 export class TopControlsComponent {
-
-  constructor(private graphService: GraphService) { }
+  constructor(private graphService: GraphService) {}
 
   remove() {
     this.graphService.deleteNodes();

@@ -21,7 +21,7 @@ export class GraphService {
     future: [] as State[],
   };
 
-  constructor(@Inject(CONST) private constants: Config) { }
+  constructor(@Inject(CONST) private constants: Config) {}
 
   public addNode(node: NodeX) {
     const newNode = { ...node, id: this.nodeId++ };

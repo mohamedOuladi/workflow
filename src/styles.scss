@@ -1,4 +1,4 @@
-@use "./sass/colors" as colors;
+@use './sass/colors' as colors;
 
 * {
   box-sizing: border-box;
@@ -6,7 +6,7 @@
 
 body {
   margin: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .btn {

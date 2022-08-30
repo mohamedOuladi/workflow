@@ -3,13 +3,13 @@
     <h3>Selection Details</h3>
   </div>
   <div *ngFor="let node of state!.nodes" class="accordion">
-    <button class="button" [ngClass]="{'selected': selected[node.id!]}" (click)="togglePanel(node)">
+    <button class="button" [ngClass]="{ selected: selected[node.id!] }" (click)="togglePanel(node)">
       {{ node.name }}
     </button>
     <div [hidden]="!visibleNodesMap.get(node.id!)" class="node-settings">
       <div>
         <label for="setting">Setting:</label>
-        <input [(ngModel)]="node.settings" type="text" name="" id="setting">
+        <input [(ngModel)]="node.settings" type="text" name="" id="setting" />
       </div>
       <br />
     </div>

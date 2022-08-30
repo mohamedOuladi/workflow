@@ -20,7 +20,7 @@ export class RightPanelComponent {
     this.graph.state$.pipe(filter((x) => !!x)).subscribe((state) => {
       this.state = state;
       this.selected = {};
-      this.state!.selection.forEach((id) => this.selected[id] = true);
+      this.state!.selection.forEach((id) => (this.selected[id] = true));
     });
   }
 
