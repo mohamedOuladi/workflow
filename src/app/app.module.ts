@@ -16,23 +16,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RightPanelComponent } from './components/right-panel/right-panel.component';
 import { TopControlsComponent } from './components/top-controls/top-controls.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AppType, AuthService, BaseUIServicesModule, ConfigService, initializeFromUrl } from '@labshare/base-ui-services';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-
-let APP_CONF = {
-  production: false,
-  services: {
-    auth: {
-      storage: 'local'
-    }
-  }
-};
-
-function initialize(http: HttpClient, config: ConfigService, auth: AuthService): () => Promise<any> {
-  return async () => {
-    return initializeFromUrl(http, config, auth, `./assets/config/config.json`);
-  };
-}
+import { WebAuthModule } from '@labshare/base-ui-services';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -51,7 +36,7 @@ function initialize(http: HttpClient, config: ConfigService, auth: AuthService):
     TopControlsComponent,
   ],
   imports: [
-    BaseUIServicesModule.forRoot({ appConf: APP_CONF, appType: AppType.Site, appBuildVersion: '0.0.1' }),
+    WebAuthModule,
     BrowserModule, 
     AppRoutingModule, 
     BrowserAnimationsModule,
@@ -59,14 +44,7 @@ function initialize(http: HttpClient, config: ConfigService, auth: AuthService):
     FormsModule,
     HttpClientModule,
   ],
-
-  providers: [   
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initialize,
-      deps: [HttpClient, ConfigService, AuthService],
-      multi: true
-    },],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
