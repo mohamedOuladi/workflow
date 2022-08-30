@@ -1,4 +1,4 @@
-@use "/src/sass/colors" as colors;
+@use '/src/sass/colors' as colors;
 
 $bg-color: #171616;
 
@@ -24,10 +24,9 @@ $bg-color: #171616;
   .btn-noborder {
     border: none;
     padding: 0.5rem 0.25rem;
-
   }
 
   i {
-    font-size: 1.50rem;
+    font-size: 1.5rem;
   }
 }
