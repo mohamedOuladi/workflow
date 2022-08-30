@@ -31,11 +31,9 @@ export class AppComponent {
           this.sessionStorageService.setItem('route.after.login', this.route);
           this.authService.login();
         } else if (val === true) {
-          console.log(this.authService.getAccessToken());
           const routeAfterLogin = this.sessionStorageService.getItem('route.after.login');
           this.sessionStorageService.setItem('route.after.login', '');
           const route = this.getRedirectUrl();
-          console.log('route: ' + route);
           if (routeAfterLogin && routeAfterLogin !== route) {
             this.router.navigate([routeAfterLogin]);
           } 
