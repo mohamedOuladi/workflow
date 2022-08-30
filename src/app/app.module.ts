@@ -16,6 +16,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RightPanelComponent } from './components/right-panel/right-panel.component';
 import { TopControlsComponent } from './components/top-controls/top-controls.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { WebAuthModule } from '@labshare/base-ui-services';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -33,8 +35,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     RightPanelComponent,
     TopControlsComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule,
-    ReactiveFormsModule, FormsModule],
+  imports: [
+    WebAuthModule,
+    BrowserModule, 
+    AppRoutingModule, 
+    BrowserAnimationsModule,
+    ReactiveFormsModule, 
+    FormsModule,
+    HttpClientModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
