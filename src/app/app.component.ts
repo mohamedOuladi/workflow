@@ -17,7 +17,6 @@ export class AppComponent {
   async ngOnInit():  Promise<void> {
     await this.authService.onAuthCallback();
     this.onAuthorizationResult.subscribe((result: any) => {
-      console.log(result);
       if (result?.authorizationState !== 'authorized') {
         this.authService.login();
       } 
