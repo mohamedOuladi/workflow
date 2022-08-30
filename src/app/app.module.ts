@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Inject, Injectable, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +16,28 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RightPanelComponent } from './components/right-panel/right-panel.component';
 import { TopControlsComponent } from './components/top-controls/top-controls.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor, AuthService, WebAuthModule } from '@labshare/base-ui-services';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class AuthTokenInterceptor implements HttpInterceptor {
+  constructor(private authService: AuthService) {}
+
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    console.log('intercepting request', request);
+    // const accessToken = this.oktaAuth.getAccessToken();
+    // if (accessToken) {
+    //   request = request.clone({
+    //     setHeaders: {
+    //       Authorization: 'Bearer ' + accessToken,
+    //     },
+    //   });
+    // }
+
+    return next.handle(request);
+  }
+}
 
 @NgModule({
   declarations: [
@@ -32,10 +54,24 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     PluginEComponent,
     RightPanelComponent,
     TopControlsComponent,
+
   ],
-  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule,
-    ReactiveFormsModule, FormsModule],
-  providers: [],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule,
+    WebAuthModule
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

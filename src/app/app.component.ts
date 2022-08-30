@@ -18,7 +18,7 @@ export class AppComponent {
     await this.authService.onAuthCallback();
     this.onAuthorizationResult.subscribe((result: any) => {
       if (result?.authorizationState !== 'authorized') {
-        this.authService.login();
+        // this.authService.login();
       } 
     });
   }
