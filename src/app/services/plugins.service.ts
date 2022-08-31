@@ -44,8 +44,6 @@ export class PluginsService {
       },
     };
 
-    // const token = this.authService.getAccessToken();
-
     return this.http.get(this.baseUrl, { params: { filter: JSON.stringify(filter) } });
   }
 }
