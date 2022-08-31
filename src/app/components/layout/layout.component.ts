@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { filter } from 'rxjs';
 import { State } from 'src/app/types';
 import { GraphService } from 'src/app/services/graph.service';
-import { PluginsService } from 'src/app/services/plugins.service';
 
 @Component({
   selector: 'app-layout',
@@ -13,16 +12,12 @@ export class LayoutComponent {
   state?: State;
   collapsed = false;
 
-  constructor(private graph: GraphService, private plugins: PluginsService) {
+  constructor(private graph: GraphService) {
     this.graph.state$.pipe(filter((x) => !!x)).subscribe((state) => {
       this.state = state;
     });
 
     this.load();
-
-    this.plugins.getPlugins().subscribe((plugins) => {
-      console.log(plugins);
-    });
   }
 
   save() {

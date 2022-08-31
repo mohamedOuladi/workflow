@@ -6,10 +6,10 @@
   <div *ngFor="let node of nodes">
     <div
       class="plugin"
-      [attr.draggable]="!!node.type"
-      [attr.data-type]="node.type"
-      (dragstart)="start($event)"
-      [ngClass]="{ draggable: !!node.type }"
+      [attr.draggable]="!!node.name"
+      [attr.data-name]="node.name"
+      (dragstart)="dragStart($event)"
+      [ngClass]="{ draggable: !!node.name }"
     >
       <i class="expand" (click)="node.expanded = !node.expanded" [ngClass]="node.expanded ? node.expandedIcon || node.icon : node.icon"></i>
       {{ node.name }}

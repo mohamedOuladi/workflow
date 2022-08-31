@@ -2,7 +2,6 @@ export interface NodeX {
   x: number;
   y: number;
   id?: number;
-  type: string;
   selected?: boolean;
   name: string;
   expanded?: boolean;
@@ -10,6 +9,7 @@ export interface NodeX {
   hasInlet?: boolean;
   width?: number;
   settings?: any;
+  plugin: PluginX;
 }
 
 export interface Link {
@@ -26,4 +26,40 @@ export interface State {
   nodes: NodeX[];
   links: Link[];
   selection: number[];
+}
+
+export interface PluginX {
+  id: string;
+  name: string;
+  version: string;
+  title: string;
+  description: string;
+  containerId: string;
+  inputs: Array<{
+    name: string;
+    type: string;
+    label: string;
+    required: boolean;
+  }>;
+  outputs: Array<{
+    name: string;
+    type: string;
+    label: string;
+  }>;
+  ui: Array<{
+    key: string;
+    title: string;
+    description: string;
+    type: string;
+  }>;
+  author: string;
+  institution: string;
+  website: string;
+  citation: string;
+  baseCommand: Array<string>;
+  pluginHardwareRequirements: {
+    [key: string]: any;
+  }
+  cwlScript: any
+
 }

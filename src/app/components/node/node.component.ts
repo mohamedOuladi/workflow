@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, ComponentRef, Input, OnChanges, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { PLUGINS } from 'src/app/plugins';
-import { NodeX } from 'src/app/types';
+import { NodeX, PluginX } from 'src/app/types';
 import { PluginAComponent } from '../plugin-a/plugin-a.component';
 
 @Component({
@@ -24,23 +23,19 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit, OnChanges {
   hasInlet = false;
   hasOutlet = false;
   width = 250;
+  plugin?: PluginX;
 
   ngOnInit(): void {
     this.id = this.data!.id || 0;
-    this.type = this.data!.type;
     this.name = this.data!.name;
-    const plugin = PLUGINS.find((x) => x.type === this.type);
-    if (plugin) {
-      this.icon = plugin.icon;
-      this.hasInlet = plugin.hasInlet;
-      this.hasOutlet = plugin.hasOutlet;
-      this.width = plugin.width;
-    }
+    this.plugin = this.data!.plugin;
+    this.hasInlet = this.plugin!.inputs.length > 0;
+    this.hasOutlet = this.plugin!.outputs.length > 0;
+
   }
 
   ngAfterViewInit(): void {
-    const componentClass = PLUGINS.find((x) => x.type === this.type)?.component;
-    this.component = this.outlet.createComponent(componentClass!);
+    this.component = this.outlet.createComponent(PluginAComponent!);
   }
 
   ngOnChanges(changes: any): void {

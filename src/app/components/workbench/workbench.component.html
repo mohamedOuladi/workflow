@@ -11,7 +11,7 @@
   >
     <div class="drawboard" [style.transform]="'scale(' + scale + ') translate(' + dx / scale + 'px, ' + dy / scale + 'px)'">
       <ng-container *ngFor="let n of state?.nodes">
-        <app-node [data]="{ x: n.x, y: n.y, id: n.id!, type: n.type, selected: n.selected, name: n.name, expanded: n.expanded }">
+        <app-node [data]="{ x: n.x, y: n.y, id: n.id!, selected: n.selected, name: n.name, expanded: n.expanded, plugin: n.plugin}">
         </app-node>
       </ng-container>
       <ng-container *ngFor="let l of state?.links">
