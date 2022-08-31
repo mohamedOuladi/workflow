@@ -1,9 +1,8 @@
 import { Component, ElementRef, HostListener, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
-import { PLUGINS } from 'src/app/plugins';
 import { Config, CONST } from 'src/app/services/constants.service';
 import { GraphService } from 'src/app/services/graph.service';
-import { Link, NodeX, State } from 'src/app/types';
+import { Link, NodeX, PluginX, State } from 'src/app/types';
 
 const GRID_SIZE = 50;
 
@@ -91,18 +90,17 @@ export class WorkbenchComponent {
       const { containerX, containerY } = this.getContainerPosition();
       const x = (event.clientX - data.x - containerX - this.dx) / this.scale;
       const y = (event.clientY - data.y - containerY - this.dy) / this.scale;
-      const plugin = PLUGINS.find((x) => x.type === data.type)!;
+      const plugin =  data.plugin as PluginX
+      
       const node: NodeX = {
         x,
         y,
-        type: data.type,
         name: plugin.name,
-        width: plugin.width,
         selected: false,
         expanded: false,
-        hasOutlet: plugin.hasOutlet,
-        hasInlet: plugin.hasInlet,
+        plugin: plugin
       };
+      console.log(node);
       this.graph.addNode(node);
     }
   }
