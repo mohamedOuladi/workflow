@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ComponentRef, Input, OnChanges, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentRef, Inject, Input, OnChanges, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { CONST, Constants } from 'src/app/services/constants.service';
 import { NodeX, PluginX } from 'src/app/types';
 import { PluginAComponent } from '../plugin-a/plugin-a.component';
 
@@ -22,15 +23,17 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit, OnChanges {
   icon = '';
   hasInlet = false;
   hasOutlet = false;
-  width = 250;
+  width = this.constants.nodeWidth;
   plugin?: PluginX;
+
+  constructor(@Inject(CONST) private constants: Constants) { }
 
   ngOnInit(): void {
     this.id = this.data!.id || 0;
     this.name = this.data!.name;
     this.plugin = this.data!.plugin;
-    this.hasInlet = this.plugin!.inputs.length > 0;
-    this.hasOutlet = this.plugin!.outputs.length > 0;
+    this.hasInlet = this.plugin.inputs?.length > 0;
+    this.hasOutlet = this.plugin.outputs?.length > 0;
 
   }
 

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { ImmutableBehaviorSubject } from 'immutable-rxjs';
 import { NodeX, State } from '../types';
-import { CONST, Config } from './constants.service';
+import { CONST, Constants } from './constants.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +21,7 @@ export class GraphService {
     future: [] as State[],
   };
 
-  constructor(@Inject(CONST) private constants: Config) {}
+  constructor(@Inject(CONST) private constants: Constants) {}
 
   public addNode(node: NodeX) {
     const newNode = { ...node, id: this.nodeId++ };
@@ -79,7 +79,7 @@ export class GraphService {
       id: this.linkId++,
       sourceId: source.id!,
       targetId: target.id!,
-      x1: source.x + source.width!,
+      x1: source.x + this.constants.nodeWidth,
       y1: source.y + this.constants.linkTopOffset,
       x2: target.x,
       y2: target.y + this.constants.linkTopOffset,

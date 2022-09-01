@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { filter } from 'rxjs';
-import { Config, CONST } from 'src/app/services/constants.service';
+import { Constants, CONST } from 'src/app/services/constants.service';
 import { GraphService } from 'src/app/services/graph.service';
 import { Link, NodeX, PluginX, State } from 'src/app/types';
 
@@ -37,7 +37,7 @@ export class WorkbenchComponent {
   dx = 0; // x of viewport
   dy = 0; // y of viewport
 
-  constructor(@Inject(CONST) private constants: Config, private graph: GraphService) {
+  constructor(@Inject(CONST) private constants: Constants, private graph: GraphService) {
     this.graph.state$.pipe(filter((x) => !!x)).subscribe((state) => {
       this.state = state;
     });
@@ -100,7 +100,6 @@ export class WorkbenchComponent {
         expanded: false,
         plugin: plugin
       };
-      console.log(node);
       this.graph.addNode(node);
     }
   }
@@ -149,7 +148,7 @@ export class WorkbenchComponent {
       this.draggedLink = {
         id: -1,
         sourceId: nodeId,
-        x1: node.x + node.width!,
+        x1: node.x + this.constants.nodeWidth,
         y1: node.y + this.constants.linkTopOffset,
         x2: (e.clientX - containerX - this.dx) / this.scale,
         y2: (e.clientY - containerY - this.dy) / this.scale,
