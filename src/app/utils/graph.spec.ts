@@ -1,6 +1,6 @@
 import { orderGraphNodes } from "./graph";
 
-fdescribe('Graph Utils', () => {
+describe('Graph Utils', () => {
 
     it('should return the correct result #1', () => {
         //        a
@@ -26,7 +26,10 @@ fdescribe('Graph Utils', () => {
         const graph = { nodes, links };
 
         const res = orderGraphNodes(graph as any).map((n: any) => n.name);
-        expect(res).toEqual(["a", "b", "d", "c", "e"]);
+        expect(res.indexOf("a")).toBeLessThan(res.indexOf("b"));
+        expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
+        expect(res.indexOf("b")).toBeLessThan(res.indexOf("d"));
+        expect(res.indexOf("c")).toBeLessThan(res.indexOf("e"));
     });
 
     it('should return the correct array from V shaped graph #2', () => {
@@ -53,10 +56,13 @@ fdescribe('Graph Utils', () => {
         const graph = { nodes, links };
 
         const res = orderGraphNodes(graph as any).map((n: any) => n.name);
-        expect(res).toEqual(["a", "c", "b", "d", "e"]);
+        expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
+        expect(res.indexOf("b")).toBeLessThan(res.indexOf("d"));
+        expect(res.indexOf("c")).toBeLessThan(res.indexOf("e"));
+        expect(res.indexOf("d")).toBeLessThan(res.indexOf("e"));
     });
 
-    it('should return the correct result from X shaped graph  #3', () => {
+    it('should return the correct result from X shaped graph #3', () => {
         //      a  b
         //      \ /
         //       c
@@ -87,7 +93,7 @@ fdescribe('Graph Utils', () => {
         expect(res.indexOf("c")).toBeLessThan(res.indexOf("e"));
     });
 
-    it('should return the correct result from diamond shaped graph  #3', () => {
+    it('should return the correct result from diamond shaped graph #4', () => {
         //      a
         //     / \
         //     b  c
@@ -111,13 +117,13 @@ fdescribe('Graph Utils', () => {
 
         const res = orderGraphNodes(graph as any).map((n: any) => n.name);
         expect(res.length).toEqual(4);
-        expect(res.indexOf("a")).toBeLessThan(res.indexOf("b"));
-        expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
-        expect(res.indexOf("b")).toBeLessThan(res.indexOf("d"));
-        expect(res.indexOf("c")).toBeLessThan(res.indexOf("d"));
+        // expect(res.indexOf("a")).toBeLessThan(res.indexOf("b"));
+        // expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
+        // expect(res.indexOf("b")).toBeLessThan(res.indexOf("d"));
+        // expect(res.indexOf("c")).toBeLessThan(res.indexOf("d"));
     });
 
-    it('should return the correct result from complex shaped graph #4', () => {
+    it('should return the correct result from complex shaped graph #5', () => {
         //      a b
         //      |/|
         //      c d
@@ -147,6 +153,7 @@ fdescribe('Graph Utils', () => {
         const graph = { nodes, links };
 
         const res = orderGraphNodes(graph as any).map((n: any) => n.name);
+        expect(res.length).toEqual(nodes.length);
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
         expect(res.indexOf("b")).toBeLessThan(res.indexOf("c"));
         expect(res.indexOf("b")).toBeLessThan(res.indexOf("d"));
@@ -155,7 +162,7 @@ fdescribe('Graph Utils', () => {
         expect(res.indexOf("e")).toBeLessThan(res.indexOf("g"));
     });
 
-    fit('should return the correct result from complex shaped graph #4.1', () => {
+    it('should return the correct result from complex shaped graph #6', () => {
         //      a 
         //     /|\
         //    b c d
@@ -187,21 +194,21 @@ fdescribe('Graph Utils', () => {
 
         const res = orderGraphNodes(graph as any).map((n: any) => n.name);
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("b"));
-        // expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
-        // expect(res.indexOf("a")).toBeLessThan(res.indexOf("d"));
-        // expect(res.indexOf("b")).toBeLessThan(res.indexOf("f"));
-        // expect(res.indexOf("c")).toBeLessThan(res.indexOf("e"));
-        // expect(res.indexOf("d")).toBeLessThan(res.indexOf("f"));    
-        // expect(res.indexOf("e")).toBeLessThan(res.indexOf("f"));
+        expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
+        expect(res.indexOf("a")).toBeLessThan(res.indexOf("d"));
+        expect(res.indexOf("b")).toBeLessThan(res.indexOf("f"));
+        expect(res.indexOf("c")).toBeLessThan(res.indexOf("e"));
+        expect(res.indexOf("d")).toBeLessThan(res.indexOf("f"));    
+        expect(res.indexOf("e")).toBeLessThan(res.indexOf("f"));
     }); 
 
-    it('should return the correct result from complex shaped graph #5', () => {
+    it('should return the correct result from complex shaped graph #7', () => {
         //      a b
         //      |/|
         //      c d
         //      | |
         //      | e
-        //      | |\
+        //      |/|\
         //      f g i
         //      |/
         //      h
@@ -227,11 +234,13 @@ fdescribe('Graph Utils', () => {
             { sourceId: 5, targetId: 7 },
             { sourceId: 6, targetId: 7 },
             { sourceId: 4, targetId: 8 },
+            { sourceId: 4, targetId: 5 },
         ];
 
         const graph = { nodes, links };
 
         const res = orderGraphNodes(graph as any).map((n: any) => n.name);
+        expect(res.length).toEqual(nodes.length);
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
         expect(res.indexOf("b")).toBeLessThan(res.indexOf("c"));
         expect(res.indexOf("b")).toBeLessThan(res.indexOf("d"));
@@ -240,7 +249,88 @@ fdescribe('Graph Utils', () => {
         expect(res.indexOf("e")).toBeLessThan(res.indexOf("g"));
         expect(res.indexOf("f")).toBeLessThan(res.indexOf("h"));
         expect(res.indexOf("g")).toBeLessThan(res.indexOf("h"));
+        expect(res.indexOf("e")).toBeLessThan(res.indexOf("i"));
+        expect(res.indexOf("e")).toBeLessThan(res.indexOf("f"));
     });
 
+    it('should return the correct result from complex shaped graph #8', () => {
+        //      a
+        //      |\
+        //      b c
+        //      | |
+        //      | d
+        //      | |
+        //      | e
+        //      | |
+        //      | f
+        //      |/
+        //      g
+
+        const nodes = [
+            { id: 6, name: "g", },
+            { id: 4, name: "e", },
+            { id: 5, name: "f", },
+            { id: 0, name: "a", },
+            { id: 1, name: "b", },
+            { id: 2, name: "c", },
+            { id: 3, name: "d", },
+        ];
+        const links = [
+            { sourceId: 0, targetId: 1 },
+            { sourceId: 0, targetId: 2 },
+            { sourceId: 1, targetId: 6 },
+            { sourceId: 2, targetId: 3 },
+            { sourceId: 3, targetId: 4 },
+            { sourceId: 4, targetId: 5 },
+            { sourceId: 5, targetId: 6 },
+        ];
+
+        const graph = { nodes, links };
+
+        const res = orderGraphNodes(graph as any).map((n: any) => n.name);
+        expect(res.length).toEqual(nodes.length);
+        expect(res.indexOf("a")).toBeLessThan(res.indexOf("b"));
+        expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
+        expect(res.indexOf("b")).toBeLessThan(res.indexOf("g"));
+        expect(res.indexOf("c")).toBeLessThan(res.indexOf("d"));
+        expect(res.indexOf("d")).toBeLessThan(res.indexOf("e"));
+        expect(res.indexOf("e")).toBeLessThan(res.indexOf("f"));
+        expect(res.indexOf("f")).toBeLessThan(res.indexOf("g"));   
+    });
+
+    it('should parse unconnected trees', () => {
+        //      a  b
+        //      |  |
+        //      c  d
+        //      |  |\
+        //      e  f g
+
+        const nodes = [
+            { id: 6, name: "g", },
+            { id: 3, name: "d", },
+            { id: 4, name: "e", },
+            { id: 5, name: "f", },
+            { id: 0, name: "a", },
+            { id: 1, name: "b", },
+            { id: 2, name: "c", },
+        ];
+        const links = [
+            { sourceId: 0, targetId: 2 },
+            { sourceId: 1, targetId: 3 },
+            { sourceId: 2, targetId: 4 },
+            { sourceId: 3, targetId: 5 },
+            { sourceId: 3, targetId: 6 },
+        ];
+
+        const graph = { nodes, links };
+
+        const res = orderGraphNodes(graph as any).map((n: any) => n.name);
+        expect(res.length).toEqual(nodes.length);
+        expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
+        expect(res.indexOf("c")).toBeLessThan(res.indexOf("e"));
+        expect(res.indexOf("b")).toBeLessThan(res.indexOf("d"));
+        expect(res.indexOf("d")).toBeLessThan(res.indexOf("f"));
+        expect(res.indexOf("d")).toBeLessThan(res.indexOf("g"));
+    });
     
 });
