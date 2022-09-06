@@ -15,6 +15,7 @@ export class LayoutComponent {
   constructor(private graph: GraphService) {
     this.graph.state$.pipe(filter((x) => !!x)).subscribe((state) => {
       this.state = state;
+      console.log(state);
     });
 
     this.load();
