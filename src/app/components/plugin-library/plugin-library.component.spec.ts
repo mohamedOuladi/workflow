@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PluginLibraryComponent } from './plugin-library.component';
 
 describe('PluginLibraryComponent', () => {
@@ -8,6 +8,7 @@ describe('PluginLibraryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       declarations: [PluginLibraryComponent],
     }).compileComponents();
 
