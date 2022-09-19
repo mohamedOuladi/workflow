@@ -1,3 +1,7 @@
+$primary-bg-color: #3e3e3e;
+$primary-bg-color-lighter: #4b4b4b;
+$primary-bg-color-lighest: #555555;
+
 #pluginLink {
     border: none;
     border-bottom: solid 2px #007bff;
@@ -37,4 +41,8 @@
   
   .right10 {
     margin-right: 10px;
+  }
+
+  .wf-modal { 
+    background-color: $primary-bg-color;
   }

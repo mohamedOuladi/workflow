@@ -70,20 +70,22 @@ export class PluginNewComponent implements OnInit {
     }
   }
 
-  postPlugin(pluginText: any) {
+  postPlugin(pluginText: string) {
+    console.log('post plugin');
+    console.log(pluginText);
     const jsonState = this.isJsonValid(pluginText);
     if (jsonState[0]) {
-      // this.pluginService.postPlugin(pluginText).subscribe(
-      //   plugin => {
-      //     this.displayAlertMessage('success', 'Success! Redirecting...');
-      //     const pluginId = plugin ? plugin.id : null;
-      //     setTimeout(() => {
-      //       // this.router.navigate(['plugins', pluginId]);
-      //     }, 2000);
-      //   },
-      //   err => {
-      //     this.displayAlertMessage('danger', 'Could not register plugin: ' + err.error.message);
-      //   });
+      this.pluginService.postPlugin(pluginText).subscribe(
+        plugin => {
+          this.displayAlertMessage('success', 'Success! Redirecting...');
+          const pluginId = plugin ? plugin.id : null;
+          setTimeout(() => {
+            // this.router.navigate(['plugins', pluginId]);
+          }, 2000);
+        },
+        err => {
+          this.displayAlertMessage('danger', 'Could not register plugin: ' + err.error.message);
+        });
     } else {
       this.displayAlertMessage('danger', 'Invalid JSON - ' + jsonState[1]);
     }
@@ -96,14 +98,5 @@ export class PluginNewComponent implements OnInit {
   }
 
 
-  open(content: any) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result: any) => {
-      // this.closeResult = `Closed with: ${result}`;
-      console.log(result);
-    }, (reason: any) => {
-      // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      console.log('reason');
-    });
-  }
 
 }

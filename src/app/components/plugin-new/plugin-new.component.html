@@ -1,4 +1,4 @@
-<!-- <ng-template #content let-modal>   -->
+<div class="wf-modal">
   <div class="modal-header">
         <h4 class="modal-title">New plugin</h4>
         <button type="button" class="close" aria-label="Close" (click)="modalReference.dismiss('Cross click')">
@@ -6,7 +6,7 @@
         </button>
   </div>
   <div class="modal-body">
-    <!-- <ngb-alert *ngIf="displayAlert" [type]='alertType' (close)="displayAlert = false">{{alertMessage}}</ngb-alert> -->
+    <ngb-alert *ngIf="displayAlert" [type]='alertType' (close)="displayAlert = false">{{alertMessage}}</ngb-alert>
     <div class="row">
       <div class="col-md-10">
         <div class="form-group">
@@ -36,11 +36,4 @@
         <p id="registerText">Register plugin</p>
       </i></button>
   </div>
-<!-- </ng-template> -->
-
-
-<!-- <button (click)="open(content)">
-    <i class="icon-lsi-add">
-        New plugin
-    </i>
-</button> -->
+</div>

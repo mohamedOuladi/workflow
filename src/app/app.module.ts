@@ -16,6 +16,7 @@ import { AuthInterceptor, WebAuthModule } from '@labshare/base-ui-services';
 import { AppRoutingModule } from './app-routing.module';
 import { PluginNewComponent } from './components/plugin-new/plugin-new.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { PluginNewModule } from './components/plugin-new/plugin-new.module';
 
 @NgModule({
   declarations: [
@@ -28,9 +29,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     WorkbenchComponent,
     RightPanelComponent,
     TopControlsComponent,
-    PluginNewComponent,
   ],
-  imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, FormsModule, HttpClientModule, WebAuthModule, AppRoutingModule, NgbModule],
+  imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, FormsModule, HttpClientModule, WebAuthModule, AppRoutingModule, PluginNewModule],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
