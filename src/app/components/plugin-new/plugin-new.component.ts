@@ -81,6 +81,7 @@ export class PluginNewComponent implements OnInit {
           const pluginId = plugin ? plugin.id : null;
           setTimeout(() => {
             // this.router.navigate(['plugins', pluginId]);
+            this.modalReference.dismiss();
           }, 2000);
         },
         err => {

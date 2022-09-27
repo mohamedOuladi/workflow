@@ -1,0 +1,14 @@
+<div class="wf-modal">
+    <div class="modal-header">
+        <h4 class="modal-title" style="color: white;">New Workflow</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modalReference.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <p style="color: white;">Name</p>
+        <input type="text" class="form-control" />
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" style="margin-right: 20px;" (click)="modalReference.dismiss('Cancel click')">Cancel</button>
+        <button type="button" class="btn btn-green" (click)="createWorkflow()">Create</button>
+    </div>
+</div>

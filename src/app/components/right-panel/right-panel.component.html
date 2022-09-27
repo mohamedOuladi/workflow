@@ -11,7 +11,7 @@
         <div *ngFor="let input of node.plugin.cwlScript.inputs | keyvalue">
           <!-- Key: <b>{{input.key}}</b> and Value: <b>{{input.value}}</b> -->
           <label for="setting">{{input.key}}</label>
-          <input type="text" name="" id="setting" />
+          <input [(ngModel)]="node.settings" type="text" name="" id="setting" />
         </div>
         <!-- <label for="setting">Setting:</label> -->
         <!-- <pre>{{node.plugin}}</pre> -->

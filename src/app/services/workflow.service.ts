@@ -1,9 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Workflow } from '../types';
 
 const demoFlow = {
-  name: 'echo-argo',
-  driver: 'argo',
+  "name": "argo-echo-test-1",
+  "driver": 'argo',
   inputs: {
     hello1: 'string',
   },
@@ -18,7 +20,7 @@ const demoFlow = {
     },
   },
   cwlJobInputs: {
-    hello1: 'hello kevin',
+    hello1: 'hello Simo',
   },
   steps: {
     echo: {
@@ -31,18 +33,34 @@ const demoFlow = {
   },
 };
 
+const httpOptions = {
+  headers: new HttpHeaders({'Content-Type': 'application/json'}),
+  params: {}
+};
+
 @Injectable({
   providedIn: 'root',
 })
 export class WorkflowService {
-  baseUrl = 'https://compute.scb-ncats.io/compute/plugins';
+  baseUrl = 'https://compute.scb-ncats.io/compute';
   constructor(private http: HttpClient) {}
 
-  runWorkflow(workflow: any) {
-    return this.http.post(this.baseUrl, workflow, {
-      headers: {
-        accept: 'application/json',
-      },
-    });
+  runWorkflow(workflow: any): Observable<any>{
+    console.log('workflow service');
+    const httpParams = new HttpParams();
+    httpOptions.params = httpParams;
+    // return this.http.post(this.baseUrl + '/workflows', workflow, {
+    //   headers: {
+    //     accept: 'application/json',
+    //   },
+    // });
+    return this.http.post<any>(this.baseUrl + '/workflows',
+      workflow,
+      httpOptions
+    );
+  }
+
+  getWorkflows() {
+    return this.http.get<Workflow>(this.baseUrl + '/workflows');
   }
 }

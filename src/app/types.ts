@@ -63,3 +63,18 @@ export interface PluginX {
   cwlScript: any
 
 }
+
+export interface Workflow {
+  map(arg0: (workflow: any) => any): Workflow[];
+  id: string;
+  name: string;
+  driver: string;
+  inputs: any;
+  outputs: any;
+  steps: any;
+  cwlJobInputs: any;
+  status: string,
+  dateCreated: Date,
+  dateFinished: Date,
+  owner: string
+}

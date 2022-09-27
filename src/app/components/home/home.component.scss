@@ -1,0 +1,126 @@
+@use '/src/sass/colors' as colors;
+
+$header-height: 75px;
+$nav-width: 250px;
+
+.layout {
+  height: 100vh;
+  width: 100vw;
+}
+
+main {
+  display: flex;
+  height: calc(100vh - $header-height);
+  background-color: colors.$black;
+  color: colors.$primary;
+  position: static;
+}
+
+main > article {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+// main > nav,
+// main > aside {
+//   background: colors.$darkgray;
+// }
+
+// main > nav {
+//   order: -1;
+//   display: flex;
+//   width: $nav-width;
+//   overflow-x: hidden;
+//   -webkit-transition: all 300ms ease-in-out;
+//   -moz-transition: all 300ms ease-in-out;
+//   -ms-transition: all 300ms ease-in-out;
+//   -o-transition: all 300ms ease-in-out;
+//   transition: all 300ms ease-in-out;
+
+//   &.collapsed {
+//     width: 0;
+//   }
+// }
+
+// .collapser {
+//   background: colors.$darkgray;
+//   order: -1;
+//   height: 100%;
+//   border-left: 1px solid colors.$black;
+//   width: 15px;
+//   display: flex;
+//   align-items: center;
+//   cursor: w-resize;
+
+//   &.collapsed {
+//     cursor: e-resize;
+//   }
+
+//   i {
+//     font-size: 0.5rem;
+//     color: colors.$primary;
+//     padding-right: 0.25rem;
+//   }
+// }
+
+header {
+  background: colors.$darkgray;
+  height: $header-height;
+  border-bottom: 1px solid colors.$black;
+  padding: 0;
+  background-image: url('/assets/logo.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+
+  .header-menu {
+    margin-left: 20px;
+
+    button {
+      background-color: transparent;
+      border: none;
+      color: colors.$primary;
+      margin-left: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      text-decoration: underline;
+    }
+  }
+}
+
+.form-control { 
+    width: 400px; 
+    background-color: colors.$black;
+    margin-left: 40px;
+}
+
+.box {
+    display: flex;
+    justify-items: center;
+}
+
+.last {
+    margin-left: auto;
+    margin-right: 40px;
+}
+
+.separator {
+    height: 2%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.wf-area {
+    border: dashed 2px lightgray ;
+    min-height: 500px;
+    height: 60%;
+    overflow: hidden;
+    margin-top: 2rem;
+    margin-left: 40px;
+    margin-right: 40px;
+}
