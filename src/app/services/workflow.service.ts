@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Workflow } from '../types';
 
 const demoFlow = {
-  "name": "argo-echo-test-1",
+  "name": "argo-echo-test",
   "driver": 'argo',
   inputs: {
     hello1: 'string',
@@ -20,7 +20,7 @@ const demoFlow = {
     },
   },
   cwlJobInputs: {
-    hello1: 'hello Simo',
+    hello1: 'hello kevin',
   },
   steps: {
     echo: {
@@ -33,10 +33,6 @@ const demoFlow = {
   },
 };
 
-const httpOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json'}),
-  params: {}
-};
 
 @Injectable({
   providedIn: 'root',
@@ -46,14 +42,12 @@ export class WorkflowService {
   constructor(private http: HttpClient) {}
 
   runWorkflow(workflow: any): Observable<any>{
-    console.log('workflow service');
     const httpParams = new HttpParams();
+    const httpOptions = {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      params: {}
+    };
     httpOptions.params = httpParams;
-    // return this.http.post(this.baseUrl + '/workflows', workflow, {
-    //   headers: {
-    //     accept: 'application/json',
-    //   },
-    // });
     return this.http.post<any>(this.baseUrl + '/workflows',
       workflow,
       httpOptions
@@ -61,6 +55,6 @@ export class WorkflowService {
   }
 
   getWorkflows() {
-    return this.http.get<Workflow>(this.baseUrl + '/workflows');
+    return this.http.get<Workflow[]>(this.baseUrl + '/workflows');
   }
 }

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { map } from 'rxjs/internal/operators/map';
 import { WorkflowService } from 'src/app/services/workflow.service';
 import { Workflow } from 'src/app/types';
 import { PluginAComponent } from '../plugin-a/plugin-a.component';
@@ -26,6 +25,6 @@ export class LeftPanelComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
+
 }

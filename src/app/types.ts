@@ -65,7 +65,6 @@ export interface PluginX {
 }
 
 export interface Workflow {
-  map(arg0: (workflow: any) => any): Workflow[];
   id: string;
   name: string;
   driver: string;

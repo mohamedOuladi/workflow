@@ -10,13 +10,12 @@ export class WorkflowNewComponent implements OnInit {
 
   @Input() modalReference: any;
 
-
   constructor(private router: Router) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   createWorkflow() {
+    //TODO: add workflow to state
     this.router.navigate(['workbench']);
   }
 }

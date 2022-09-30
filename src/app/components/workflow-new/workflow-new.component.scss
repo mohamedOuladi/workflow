@@ -1,8 +1,6 @@
 @use '/src/sass/colors' as colors;
 
 $primary-bg-color: #3e3e3e;
-$primary-bg-color-lighter: #4b4b4b;
-$primary-bg-color-lighest: #555555;
 
 .form-control { 
     width: 700px; 
@@ -13,6 +11,6 @@ $primary-bg-color-lighest: #555555;
     background-color: $primary-bg-color;
 }
 
-// .modal-title {
-//     color: white;
-// }
+.modal-title {
+    color: colors.$primary;
+}

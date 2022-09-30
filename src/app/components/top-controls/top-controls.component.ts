@@ -57,9 +57,6 @@ export class TopControlsComponent {
   }
 
   runWorkflow() {
-    console.log('run workflow');
-    console.log(this.state);
-    console.log(demoFlow);
     demoFlow.cwlJobInputs.hello1 = this.state?.nodes[0].settings;
     this.workflowService.runWorkflow(demoFlow).subscribe(
       workflow => console.log(workflow)

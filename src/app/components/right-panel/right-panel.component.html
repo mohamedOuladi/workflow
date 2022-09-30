@@ -9,17 +9,9 @@
     <div [hidden]="!visibleNodesMap.get(node.id!)" class="node-settings">
       <div>
         <div *ngFor="let input of node.plugin.cwlScript.inputs | keyvalue">
-          <!-- Key: <b>{{input.key}}</b> and Value: <b>{{input.value}}</b> -->
           <label for="setting">{{input.key}}</label>
           <input [(ngModel)]="node.settings" type="text" name="" id="setting" />
         </div>
-        <!-- <label for="setting">Setting:</label> -->
-        <!-- <pre>{{node.plugin}}</pre> -->
-        <!-- <div *ngFor="let input of node.plugin.cwlScript.inputs">
-          <pre>{{input}}</pre>
-          <label for="setting">{{input}}</label>
-          <input [(ngModel)]="node.settings" type="text" name="" id="setting" />
-        </div> -->
       </div>
       <br />
     </div>

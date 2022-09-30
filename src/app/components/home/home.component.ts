@@ -9,11 +9,9 @@ import { WorkflowNewComponent } from '../workflow-new/workflow-new.component';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal) {}
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 
   displayNewWfModal() {
     const modalRef = this.modalService.open(WorkflowNewComponent, {size: 'lg'});
@@ -23,5 +21,4 @@ export class HomeComponent implements OnInit {
   ngOnDestroy() {
     this.modalService.dismissAll();
   }
-
 }

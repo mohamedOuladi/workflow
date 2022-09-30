@@ -30,7 +30,5 @@ export class RightPanelComponent {
 
   save() {
     this.graph.updateNodesSettings(this.state!.nodes);
-    console.log('save');
-    console.log(this.state);
   }
 }

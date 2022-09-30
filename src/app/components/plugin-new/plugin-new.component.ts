@@ -1,6 +1,4 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PluginsService } from 'src/app/services/plugins.service';
 
 @Component({
@@ -22,15 +20,9 @@ export class PluginNewComponent implements OnInit {
 
   pluginJSON: any;
 
-  constructor(
-    // private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
-    private pluginService: PluginsService,
-    private router: Router) {
-  }
+  constructor(private pluginService: PluginsService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onFileSelected(event: any) {
     const reader = new FileReader();
@@ -80,7 +72,6 @@ export class PluginNewComponent implements OnInit {
           this.displayAlertMessage('success', 'Success! Redirecting...');
           const pluginId = plugin ? plugin.id : null;
           setTimeout(() => {
-            // this.router.navigate(['plugins', pluginId]);
             this.modalReference.dismiss();
           }, 2000);
         },
@@ -97,7 +88,4 @@ export class PluginNewComponent implements OnInit {
     this.alertType = type;
     this.displayAlert = true;
   }
-
-
-
 }
