@@ -90,8 +90,8 @@ export class WorkbenchComponent {
       const { containerX, containerY } = this.getContainerPosition();
       const x = (event.clientX - data.x - containerX - this.dx) / this.scale;
       const y = (event.clientY - data.y - containerY - this.dy) / this.scale;
-      const plugin =  data.plugin as PluginX
-      
+      const plugin = data.plugin as PluginX;
+
       const node: NodeX = {
         x,
         y,
@@ -254,11 +254,11 @@ export class WorkbenchComponent {
 
       if (inlet && element) {
         const targetId = parseInt(element.getAttribute('data-id')!, 10);
-        const existingLink = this.state?.links.find((link) => link.targetId === targetId);
         const target = this.state.nodes.find((x) => x.id === targetId)!;
+        const source = this.state.nodes.find((x) => x.id === this.draggedLink!.sourceId)!;
+        const existingLink = this.state?.links.find((link) => link.targetId === targetId && link.sourceId === source.id);
         if (!existingLink) {
           if (this.linkId === -1) {
-            const source = this.state.nodes.find((x) => x.id === this.draggedLink!.sourceId)!;
             this.graph.createLink(source, target);
           } else {
             this.graph.updateLinkTarget(this.linkId, target);

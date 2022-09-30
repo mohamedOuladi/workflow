@@ -117,10 +117,10 @@ describe('Graph Utils', () => {
 
         const res = orderGraphNodes(graph as any).map((n: any) => n.name);
         expect(res.length).toEqual(4);
-        // expect(res.indexOf("a")).toBeLessThan(res.indexOf("b"));
-        // expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
-        // expect(res.indexOf("b")).toBeLessThan(res.indexOf("d"));
-        // expect(res.indexOf("c")).toBeLessThan(res.indexOf("d"));
+        expect(res.indexOf("a")).toBeLessThan(res.indexOf("b"));
+        expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
+        expect(res.indexOf("b")).toBeLessThan(res.indexOf("d"));
+        expect(res.indexOf("c")).toBeLessThan(res.indexOf("d"));
     });
 
     it('should return the correct result from complex shaped graph #5', () => {

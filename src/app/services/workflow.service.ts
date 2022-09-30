@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import { Workflow } from '../types';
 
 const demoFlow = {
-  "name": "argo-echo-test",
-  "driver": 'argo',
+  name: 'echo-argo',
+  driver: 'argo',
   inputs: {
     hello1: 'string',
   },
@@ -32,7 +32,6 @@ const demoFlow = {
     },
   },
 };
-
 
 @Injectable({
   providedIn: 'root',
