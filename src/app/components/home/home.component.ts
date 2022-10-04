@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WorkflowNewComponent } from '../workflow-new/workflow-new.component';
 
@@ -7,11 +7,9 @@ import { WorkflowNewComponent } from '../workflow-new/workflow-new.component';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
 
   constructor(private modalService: NgbModal) {}
-
-  ngOnInit(): void {}
 
   displayNewWfModal() {
     const modalRef = this.modalService.open(WorkflowNewComponent, {size: 'lg'});
