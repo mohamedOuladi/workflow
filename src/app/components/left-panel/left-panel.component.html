@@ -1,0 +1,37 @@
+<div class="left-panel">
+    <div class="accordion">
+        <button class="button" (click)="pluginsVisible = !pluginsVisible">
+            <i class="icon-lsi-plugins">
+                Plugins
+            </i>
+        </button>
+        <div [hidden]="!pluginsVisible" class="children">
+            <app-plugin-library></app-plugin-library>    
+        </div>
+
+        <button class="button" (click)="workflowsVisible = !workflowsVisible">
+            <i class="icon-lsi-workflow">
+                Workflows
+            </i>
+        </button>
+        <div [hidden]="!workflowsVisible" class="children">
+            <div class="tree">
+                <ng-container *ngTemplateOutlet="tree; context: { workflows: allWorkflows }"></ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<ng-template #tree let-workflows="workflows">
+    <div *ngFor="let workflow of workflows">
+        <div class="plugin" [attr.data-name]="workflow.name">
+            <i class="expand" (click)="workflow.expanded = !workflow.expanded" [ngClass]="workflow.expanded ? workflow.expandedIcon || workflow.icon : workflow.icon"></i>
+            {{ workflow.name }}
+        </div>
+        <div class="children" *ngIf="workflow.expanded">
+            <ng-container *ngTemplateOutlet="tree; context: { workflows: workflow.children }"> </ng-container>
+        </div>
+    </div>
+</ng-template>

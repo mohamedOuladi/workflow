@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { PluginsService } from 'src/app/services/plugins.service';
 import { PluginX } from 'src/app/types';
 import { PluginAComponent } from '../plugin-a/plugin-a.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { PluginNewComponent } from '../plugin-new/plugin-new.component';
+
 
 @Component({
   selector: 'app-plugin-library',
@@ -11,7 +14,7 @@ import { PluginAComponent } from '../plugin-a/plugin-a.component';
 export class PluginLibraryComponent {
   allNodes = [] as PluginX[];
 
-  constructor(private pluginsService: PluginsService) {
+  constructor(private pluginsService: PluginsService, private modalService: NgbModal) {
     this.pluginsService.getPlugins().subscribe((plugins) => {
       this.allNodes = plugins.map((plugin) => ({
         ...plugin,
@@ -34,5 +37,14 @@ export class PluginLibraryComponent {
     };
 
     e.dataTransfer!.setData('data', JSON.stringify(data)); // TODO: do not use hardcoded classname
+  }
+
+  displayNewPluginModal() {
+    const modalRef = this.modalService.open(PluginNewComponent, {size: 'lg'});
+    modalRef.componentInstance.modalReference = modalRef;
+  }
+
+  ngOnDestroy() {
+    this.modalService.dismissAll();
   }
 }

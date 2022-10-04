@@ -14,6 +14,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor, WebAuthModule } from '@labshare/base-ui-services';
 import { AppRoutingModule } from './app-routing.module';
+import { PluginNewComponent } from './components/plugin-new/plugin-new.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+// import { PluginNewModule } from './components/plugin-new/plugin-new.module';
+import { LeftPanelComponent } from './components/left-panel/left-panel.component';
+import { HomeComponent } from './components/home/home.component';
+import { WorkflowNewComponent } from './components/workflow-new/workflow-new.component';
 
 @NgModule({
   declarations: [
@@ -26,8 +32,21 @@ import { AppRoutingModule } from './app-routing.module';
     WorkbenchComponent,
     RightPanelComponent,
     TopControlsComponent,
+    LeftPanelComponent,
+    HomeComponent,
+    WorkflowNewComponent,
+    PluginNewComponent,
   ],
-  imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, FormsModule, HttpClientModule, WebAuthModule, AppRoutingModule],
+  imports: [
+    BrowserModule, 
+    BrowserAnimationsModule, 
+    ReactiveFormsModule, 
+    FormsModule, 
+    HttpClientModule, 
+    WebAuthModule, 
+    AppRoutingModule, 
+    NgbModule
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

@@ -2,6 +2,13 @@
   <ng-container *ngTemplateOutlet="tree; context: { nodes: allNodes }"> </ng-container>
 </div>
 
+<br/>
+<button class="btn btn-green" (click)="displayNewPluginModal()">
+  <i class="icon-lsi-add">
+    New plugin
+  </i>
+</button>
+
 <ng-template #tree let-nodes="nodes">
   <div *ngFor="let node of nodes">
     <div

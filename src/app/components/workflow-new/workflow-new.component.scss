@@ -1,0 +1,16 @@
+@use '/src/sass/colors' as colors;
+
+$primary-bg-color: #3e3e3e;
+
+.form-control { 
+    width: 700px; 
+    // background-color: colors.$black;
+}
+
+.wf-modal { 
+    background-color: $primary-bg-color;
+}
+
+.modal-title {
+    color: colors.$primary;
+}
