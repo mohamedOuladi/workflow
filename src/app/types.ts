@@ -1,3 +1,7 @@
+// add param class 
+// each node has a list of params
+// in the ui, add list of params to node (dropodown) and create anchor points for each param
+// next step is to create ParamLink between 2 params
 export interface NodeX {
   x: number;
   y: number;
@@ -10,6 +14,22 @@ export interface NodeX {
   width?: number;
   settings?: any;
   plugin: PluginX;
+  // params?: Param[];
+}
+
+export interface Param {
+  id: number;
+  name: string;
+  hasInlet: boolean;
+  hasOutlet: boolean; 
+}
+
+export interface ParamLink {
+  id: number;
+  sourceParamId: number;
+  targetParamId: number;
+  sourceNodeId: number;
+  targetNodeId: number;
 }
 
 export interface Link {
@@ -77,3 +97,9 @@ export interface Workflow {
   dateFinished: Date,
   owner: string
 }
+
+// export interface Step {
+//   in: {
+//     stepName: string;
+//   }
+// }

@@ -10,6 +10,8 @@ export function orderGraphNodes(graph: State) {
     const links = graph.links.slice();
 
     const res = [nodes[0]];
+    // console.log('----orderGraph-----');
+    // console.log(res);
     const queue = [nodes[0]];
     nodes.splice(0, 1);
 

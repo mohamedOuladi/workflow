@@ -1,22 +1,65 @@
-
 <div class="layout">
     <header>
-        <img src="/assets/logo.png" alt=""/>
+        <img src="/assets/logo.png" alt="" />
         <div class="header-menu"></div>
     </header>
     <main>
         <article>
-            <br/>
+            <br />
             <h2 style="margin-left: 40px;">Workflows</h2>
-            <br/>
+            <br />
 
-            <div class="box">
-                <input id="typeahead-http" type="text" class="form-control" placeholder="Search through collections"/>
-                <button class="btn btn-green last" (click)="displayNewWfModal()"><b>New Workflow</b></button>
+            <div class="top-box">
+                <input id="typeahead-http" type="text" class="form-control" placeholder="Search through collections" />
+                <div class="last">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <button type="radio" class="btn active" checked (click)="displayList()">
+                            <i class="icon-lsi-list-view-1"></i>
+                        </button>
+                        <button type="radio" class="btn" (click)="displayGrid()">
+                            <i class="icon-lsi-grid"></i>
+                        </button>
+                    </div>
+                    <button class="btn btn-green" (click)="displayNewWfModal()"><b>New Workflow</b></button>
+                </div>
+                <!-- <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary active">
+                        <input type="radio" name="options" id="option1" autocomplete="off" checked> Active
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> Radio
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="options" id="option3" autocomplete="off"> Radio
+                    </label>
+                </div> -->
             </div>
             <div class="separator"></div>
             <!-- TODO: display workflows and filtering options-->
-            <div class="wf-area"></div>
+            <div class="box">
+                <!-- Filtering options checkboxes -->
+                <div style="min-width: 300px;">
+                    <div class="row"><label>Filter by:</label></div>
+                    <div class="row"><label>Filter option 1</label></div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Default filter
+                        </label>
+                    </div>
+                </div>
+                <!-- Filtered results -->
+                <div class="wf-area">
+                    <div class="wrapper" id="wrapper">
+                        <div *ngFor="let workflow of workflows">
+                            <!-- list buttons vertically -->
+                            <!-- <button type="button" class="btn btn-primary btn-lg btn-block">{{workflow.name}}</button> -->
+                            <!-- list buttons in grid mode-->
+                            <button type="button" class="btn btn-primary col">{{workflow.name}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </article>
     </main>
 </div>

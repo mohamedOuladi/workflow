@@ -22,6 +22,7 @@ export class RightPanelComponent {
       this.selected = {};
       this.state!.selection.forEach((id) => (this.selected[id] = true));
     });
+    // this.addNodesInputs(this.state!.nodes);
   }
 
   togglePanel(node: NodeX) {
@@ -29,6 +30,31 @@ export class RightPanelComponent {
   }
 
   save() {
+    console.log(this.state);
     this.graph.updateNodesSettings(this.state!.nodes);
+    console.log(this.state);
   }
-}
+
+  addNodesInputs(nodes: NodeX[]) {
+    for (let node of nodes) {
+      if(!node.settings) {
+        node.settings = {};
+        node.settings.inputs = {};
+        let inputs = node.plugin.cwlScript.inputs;
+
+        for (let input in inputs) {
+          node.settings.inputs[input] = "";
+        }
+      }
+    }
+    this.save();
+  }
+
+  // getInputFromState(input: string, node: NodeX) {
+  //   return node.settings[input];
+  // }
+
+  setSettingsVal(key: string, val: any, node: NodeX) {
+    node.settings.inputs[key] = val.target.value;
+  }
+} 

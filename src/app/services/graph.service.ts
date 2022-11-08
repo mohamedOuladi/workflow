@@ -24,6 +24,7 @@ export class GraphService {
   constructor(@Inject(CONST) private constants: Constants) {}
 
   public addNode(node: NodeX) {
+    this.addSettingsToNode(node);
     const newNode = { ...node, id: this.nodeId++ };
     this.inState.nodes.push(newNode);
     this.emit();
@@ -81,6 +82,8 @@ export class GraphService {
       x2: target.x,
       y2: target.y + this.constants.linkTopOffset,
     });
+    // source.hasOutlet = true;
+    // target.hasInlet = true;
     this.emit();
   }
 
@@ -122,6 +125,7 @@ export class GraphService {
   }
 
   public updateNodesSettings(nodes: NodeX[]) {
+    console.log('--updateNodesSettings--');
     nodes.forEach((p) => {
       const node = this.inState.nodes.find((c) => c.id === p.id);
       if (node) {
@@ -129,6 +133,27 @@ export class GraphService {
       }
     });
     this.emit();
+  }
+
+  // add settings as soon as a node is added
+  public addSettingsToNode(node: NodeX) {
+    // for (let node of nodes) {
+      if(!node.settings) {
+        node.settings = {};
+        node.settings.inputs = {};
+        node.settings.outputs = {};
+        let inputs = node.plugin.cwlScript.inputs;
+        let outputs = node.plugin.cwlScript.outputs;
+
+        for (let input in inputs) {
+          node.settings.inputs[input] = "";
+        }
+        for (let output in outputs) {
+          node.settings.outputs[output]= "";
+        }
+      }
+    //}
+    this.updateNodesSettings(this.inState.nodes);
   }
 
   public undo() {

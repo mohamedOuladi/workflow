@@ -26,6 +26,8 @@ describe('Graph Utils', () => {
         const graph = { nodes, links };
 
         const res = orderGraphNodes(graph as any).map((n: any) => n.name);
+        console.log('---res #1---');
+        console.log(res);
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("b"));
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
         expect(res.indexOf("b")).toBeLessThan(res.indexOf("d"));
@@ -56,6 +58,8 @@ describe('Graph Utils', () => {
         const graph = { nodes, links };
 
         const res = orderGraphNodes(graph as any).map((n: any) => n.name);
+        console.log('---res #2---');
+        console.log(res);
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
         expect(res.indexOf("b")).toBeLessThan(res.indexOf("d"));
         expect(res.indexOf("c")).toBeLessThan(res.indexOf("e"));
@@ -86,6 +90,8 @@ describe('Graph Utils', () => {
         const graph = { nodes, links };
 
         const res = orderGraphNodes(graph as any).map((n: any) => n.name);
+        console.log('---res #3---');
+        console.log(res);
         expect(res.length).toEqual(5);
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
         expect(res.indexOf("b")).toBeLessThan(res.indexOf("c"));
@@ -116,6 +122,8 @@ describe('Graph Utils', () => {
         const graph = { nodes, links };
 
         const res = orderGraphNodes(graph as any).map((n: any) => n.name);
+        console.log('---res #4---');
+        console.log(res);
         expect(res.length).toEqual(4);
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("b"));
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
@@ -153,6 +161,8 @@ describe('Graph Utils', () => {
         const graph = { nodes, links };
 
         const res = orderGraphNodes(graph as any).map((n: any) => n.name);
+        console.log('---res #5---');
+        console.log(res);
         expect(res.length).toEqual(nodes.length);
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
         expect(res.indexOf("b")).toBeLessThan(res.indexOf("c"));
@@ -193,6 +203,8 @@ describe('Graph Utils', () => {
         const graph = { nodes, links };
 
         const res = orderGraphNodes(graph as any).map((n: any) => n.name);
+        console.log('---res #6---');
+        console.log(res);
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("b"));
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("d"));
@@ -240,6 +252,8 @@ describe('Graph Utils', () => {
         const graph = { nodes, links };
 
         const res = orderGraphNodes(graph as any).map((n: any) => n.name);
+        console.log('---res #7---');
+        console.log(res);
         expect(res.length).toEqual(nodes.length);
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
         expect(res.indexOf("b")).toBeLessThan(res.indexOf("c"));
@@ -288,6 +302,8 @@ describe('Graph Utils', () => {
         const graph = { nodes, links };
 
         const res = orderGraphNodes(graph as any).map((n: any) => n.name);
+        console.log('---res #85---');
+        console.log(res);
         expect(res.length).toEqual(nodes.length);
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("b"));
         expect(res.indexOf("a")).toBeLessThan(res.indexOf("c"));
