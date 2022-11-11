@@ -125,7 +125,7 @@ export class GraphService {
   }
 
   public updateNodesSettings(nodes: NodeX[]) {
-    console.log('--updateNodesSettings--');
+    // console.log('--updateNodesSettings--');
     nodes.forEach((p) => {
       const node = this.inState.nodes.find((c) => c.id === p.id);
       if (node) {

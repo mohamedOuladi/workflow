@@ -180,7 +180,7 @@ export class PluginLibraryComponent {
     })
 
     this.graph.state$.pipe(filter((x) => !!x)).subscribe((state) => {
-      console.log(state);
+      // console.log(state);
       this.state = state;
     });
 

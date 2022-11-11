@@ -39,6 +39,7 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngAfterViewInit(): void {
     this.component = this.outlet.createComponent(PluginAComponent!);
+    this.component.instance.setNode(this.data!);
   }
 
   ngOnChanges(changes: any): void {
