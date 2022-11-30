@@ -33,7 +33,7 @@ export class LayoutComponent {
   }
 
   reset() {
-    this.graph.loadState({ nodes: [], links: [], selection: [] });
+    this.graph.loadState({ nodes: [], links: [], paramLinks: [], selection: [] });
   }
 
   undo() {

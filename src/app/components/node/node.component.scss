@@ -72,7 +72,7 @@ $border-radius: 10px;
   .node-content {
     border-top: 2px solid $light-color;
     width: 100%;
-    padding: 10px;
+    // padding: 10px;
   }
 
   .outlet {
@@ -110,4 +110,69 @@ $border-radius: 10px;
       cursor: crosshair;
     }
   }
+
+  .param-inlet {
+    border: 1px solid $light-color;
+    width: calc($outlet-size / 2);
+    height: $outlet-size;
+    position: absolute;
+    // top: calc(vars.$link-top-offset - $outlet-size / 2);
+    left: calc(-1px - $outlet-size / 2);
+    border-top-left-radius: $outlet-size;
+    border-bottom-left-radius: $outlet-size;
+    background-color: #000;
+    z-index: 2;
+
+    &:hover {
+      background-color: colors.$green;
+      cursor: crosshair;
+    }
+  }
+
+  .param-outlet {
+    border: 1px solid $light-color;
+    width: calc($outlet-size / 2);
+    height: $outlet-size;
+    position: absolute;
+    // top: calc(vars.$link-top-offset - $outlet-size / 2);
+    left: calc(100% + 1px);
+    border-top-right-radius: $outlet-size;
+    border-bottom-right-radius: $outlet-size;
+    background-color: #000;
+    z-index: 2;
+
+    &:hover {
+      background-color: colors.$green;
+      cursor: crosshair;
+    }
+  }
+
+  ul.striped-inputs {
+    list-style-type: none;
+    margin: 0;
+    padding: 1px;
+    border: 1px solid
+  }
+
+  ul.striped-inputs > li:nth-of-type(odd) {
+    background-color:  #e66767;
+  }
+
+  ul.striped-inputs > li:nth-of-type(even) {
+    background-color: #ed7272;
+  }
+
+  ul.striped-outputs > li:nth-of-type(odd) {
+    background-color:  #9d9d9d;
+  }
+
+  ul.striped-outputs > li:nth-of-type(even) {
+    background-color: #909090;
+  }
+
+  ul.striped-inputs > li {
+    border-bottom: 1px solid rgb(221,221,221);
+    padding: 6px;
+  }
+
 }

@@ -20,6 +20,18 @@
     </div>
   </div>
   <div class="node-content" [hidden]="!expanded">
-    <ng-container #outlet></ng-container>
+    <!-- <ng-container #outlet></ng-container> -->
+    <ul class="striped-inputs">
+      <li *ngFor="let input of inputParams | keyvalue">
+          <div class="param-inlet"></div>
+          <div class="title">{{ input.key }}</div>
+      </li>
+    </ul>
+    <ul class="striped-inputs striped-outputs">
+      <li *ngFor="let output of outputParams | keyvalue">
+        <div class="param-outlet"></div>
+        <div class="title">{{ output.key }}</div>
+      </li>
+    </ul>
   </div>
 </div>

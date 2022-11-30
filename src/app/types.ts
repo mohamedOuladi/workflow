@@ -14,22 +14,29 @@ export interface NodeX {
   width?: number;
   settings?: any;
   plugin: PluginX;
-  // params?: Param[];
+  params?: Param[];
 }
 
 export interface Param {
+  x: number;
+  y: number;
   id: number;
   name: string;
   hasInlet: boolean;
   hasOutlet: boolean; 
+  // node: NodeX;
 }
 
 export interface ParamLink {
   id: number;
   sourceParamId: number;
-  targetParamId: number;
+  targetParamId?: number;
   sourceNodeId: number;
-  targetNodeId: number;
+  targetNodeId?: number;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
 }
 
 export interface Link {
@@ -45,6 +52,7 @@ export interface Link {
 export interface State {
   nodes: NodeX[];
   links: Link[];
+  paramLinks: ParamLink[];
   selection: number[];
 }
 

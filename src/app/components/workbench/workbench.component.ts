@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, Inject, ViewChild, ViewEncapsulati
 import { filter } from 'rxjs';
 import { Constants, CONST } from 'src/app/services/constants.service';
 import { GraphService } from 'src/app/services/graph.service';
-import { Link, NodeX, PluginX, State } from 'src/app/types';
+import { Link, NodeX, ParamLink, PluginX, State } from 'src/app/types';
 
 const GRID_SIZE = 50;
 
@@ -19,11 +19,15 @@ export class WorkbenchComponent {
 
   isDragging = false; // dragging node
   isDrawingLink = false; // dragging ink
+  isDrawingParamLink = false; // dragging param link
   isMoving = false; // moving viewport
   isSelecting = false; // selecting area
 
   linkId = 0; // id of dragged link
   draggedLink?: Link;
+
+  paramLinkId = 0;
+  draggedParamLink?: ParamLink;
 
   tempX = 0; // just for temporary use
   tempY = 0; // just for temporary use
@@ -40,6 +44,7 @@ export class WorkbenchComponent {
   constructor(@Inject(CONST) private constants: Constants, private graph: GraphService) {
     this.graph.state$.pipe(filter((x) => !!x)).subscribe((state) => {
       this.state = state;
+      console.log(this.state);
     });
   }
 
@@ -105,11 +110,22 @@ export class WorkbenchComponent {
   }
 
   mouseDown(e: MouseEvent) {
+    
+    console.log('----mouse down---');
     const inlet = (e.target as HTMLElement)!.closest('.inlet');
     const outlet = (e.target as HTMLElement)!.closest('.outlet');
+    const paramInlet = (e.target as HTMLElement)!.closest('.param-inlet');
+    const paramOutlet = (e.target as HTMLElement)!.closest('.param-outlet');
     const element = (e.target as HTMLElement)!.closest('[data-id]');
     const expander = (e.target as HTMLElement)!.closest('.expander');
     const nodeId = parseInt(element?.getAttribute('data-id')!, 10);
+    const paramElement = (e.target as HTMLElement)!.closest('.title');
+    const paramId =  parseInt(paramElement?.getAttribute('title')!, 10);
+
+    console.log('paramOutlet');
+    console.log(paramOutlet);
+    console.log('element');
+    console.log(element);
 
     // click on expand button
     if (expander) {
@@ -118,7 +134,7 @@ export class WorkbenchComponent {
     }
 
     // dragging node
-    if (!outlet && !inlet && element) {
+    if (!paramInlet && !paramOutlet && !outlet && !inlet && element) {
       this.startX = e.clientX;
       this.startY = e.clientY;
       this.tempX = e.clientX;
@@ -141,7 +157,8 @@ export class WorkbenchComponent {
     }
 
     // new link from outlet
-    if (outlet && element) {
+    if (outlet && element ) {
+      console.log(outlet);
       this.isDrawingLink = true;
       const node = this.state.nodes.find((x) => x.id === nodeId)!;
       const { containerX, containerY } = this.getContainerPosition();
@@ -168,6 +185,37 @@ export class WorkbenchComponent {
       return;
     }
 
+    // new param link from outlet
+    if (paramOutlet && element ) {
+      console.log('---param outlet---');
+      console.log(paramOutlet);
+      this.isDrawingParamLink = true;
+      const node = this.state.nodes.find((x) => x.id === nodeId)!;
+      const { containerX, containerY } = this.getContainerPosition();
+      this.draggedParamLink = {
+        id: -1,
+        sourceParamId: paramId,
+        sourceNodeId: nodeId,
+        x1: node.x + this.constants.nodeWidth,
+        y1: node.y + this.constants.linkTopOffset,
+        x2: (e.clientX - containerX - this.dx) / this.scale,
+        y2: (e.clientY - containerY - this.dy) / this.scale,
+      };
+      this.paramLinkId = this.draggedParamLink.id;
+      this.state.paramLinks.push(this.draggedParamLink);
+      return;
+    }
+
+    // existing param link from inlet
+    if (paramInlet && element) {
+      const paramLinkId = this.state?.paramLinks.find((paramLink) => paramLink.targetParamId === nodeId)?.id;
+      if (paramLinkId) {
+        this.paramLinkId = paramLinkId;
+        this.isDrawingParamLink = true;
+      }
+      return;
+    }
+
     this.graph.updateSelection([]);
 
     // moving container
@@ -187,6 +235,8 @@ export class WorkbenchComponent {
   }
 
   mouseMove(e: MouseEvent) {
+    console.log('----mouse move---');
+
     const { containerX, containerY } = this.getContainerPosition();
 
     // dragging node
@@ -224,6 +274,16 @@ export class WorkbenchComponent {
       return;
     }
 
+    // drawing Param link
+    if (this.isDrawingParamLink) {
+      const dx = (e.clientX - containerX - this.dx) / this.scale;
+      const dy = (e.clientY - containerY - this.dy) / this.scale;
+      const paramLink = this.state?.paramLinks.find((x) => x.id === this.paramLinkId) || this.state?.paramLinks[this.state.paramLinks.length - 1];
+      paramLink.x2 = dx;
+      paramLink.y2 = dy;
+      return;
+    }
+
     // moving container
     if (this.isMoving) {
       this.dx = e.clientX - this.startX;
@@ -247,6 +307,8 @@ export class WorkbenchComponent {
   }
 
   mouseUp(e: MouseEvent) {
+    console.log('----mouse up---');
+
     // link
     if (this.isDrawingLink) {
       const inlet = (e.target as HTMLElement)!.closest('.inlet'); // TODO: classname from shared constant
@@ -271,6 +333,36 @@ export class WorkbenchComponent {
       }
       this.state.links = this.state.links.filter((x) => x.id !== -1);
     }
+
+    // param link
+    if (this.isDrawingParamLink) {
+      const paramInlet = (e.target as HTMLElement)!.closest('.param-inlet'); // TODO: classname from shared constant
+      const element = (e.target as HTMLElement)!.closest('[data-id]'); // TODO: classname from shared constant
+      const paramElement = (e.target as HTMLElement)!.closest('.title');
+
+      if (paramInlet && element) {
+        const targetNodeId = parseInt(element.getAttribute('data-id')!, 10);
+        const targetNode = this.state.nodes.find((x) => x.id === targetNodeId)!;
+        const sourceNode = this.state.nodes.find((x) => x.id === this.draggedParamLink!.sourceNodeId)!;
+        // const targetParam = this.state.nodes.params.find((x) => x.id === targetNodeId)!;
+        const targetParamId = parseInt(paramElement!.getAttribute('title')!, 10);
+        const targetParam = targetNode.params?.find((x) => x.id === targetParamId)!;
+        const sourceParam = sourceNode.params?.find((x) => x.id === this.draggedParamLink!.sourceParamId)!;
+        const existingParamLink = this.state?.paramLinks.find((paramLink) => paramLink.targetNodeId === targetNodeId && paramLink.sourceNodeId === sourceNode.id);
+        if (!existingParamLink) {
+          if (this.paramLinkId === -1) {
+            this.graph.createParamLink(sourceParam, targetParam, sourceNode, targetNode);
+          } else {
+            // this.graph.updateParamLinkTarget(this.paramLinkId, targetParam);
+          }
+        }
+      } else {
+        if (this.linkId !== -1) {
+          this.graph.destroyParamLink(this.paramLinkId);
+        }
+      }
+      this.state.links = this.state.links.filter((x) => x.id !== -1);
+    }    
 
     // node
     if (this.isDragging) {

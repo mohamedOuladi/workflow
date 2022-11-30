@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { ImmutableBehaviorSubject } from 'immutable-rxjs';
-import { NodeX, State } from '../types';
+import { NodeX, Param, State } from '../types';
 import { CONST, Constants } from './constants.service';
 
 @Injectable({
@@ -9,7 +9,9 @@ import { CONST, Constants } from './constants.service';
 export class GraphService {
   private nodeId = 1; // latest node id
   private linkId = 1; // latest link id
-  private inState = { nodes: [], links: [], selection: [] } as State;
+  private paramLinkId = 1; // latest param link id
+  private paramId = 1; 
+  private inState = { nodes: [], links: [], paramLinks: [], selection: [] } as State;
   private state$$ = new ImmutableBehaviorSubject<State>(this.inState);
   public state$ = this.state$$.asObservable();
   public get state() {
@@ -25,6 +27,7 @@ export class GraphService {
 
   public addNode(node: NodeX) {
     this.addSettingsToNode(node);
+    this.addParamsToNode(node);
     const newNode = { ...node, id: this.nodeId++ };
     this.inState.nodes.push(newNode);
     this.emit();
@@ -102,6 +105,38 @@ export class GraphService {
     this.emit();
   }
 
+  public createParamLink(sourceParam: Param, targetParam: Param, sourceNode: NodeX, targetNode: NodeX) {
+    this.inState.paramLinks.push({
+      id: this.linkId++,
+      sourceParamId: sourceParam.id!,
+      targetParamId: targetParam.id!,
+      sourceNodeId: sourceNode.id!,
+      targetNodeId: targetNode.id!,
+      x1: sourceParam.x + this.constants.nodeWidth,
+      y1: sourceParam.y + this.constants.linkTopOffset,
+      x2: targetParam.x,
+      y2: targetParam.y + this.constants.linkTopOffset,
+    });
+    // source.hasOutlet = true;
+    // target.hasInlet = true;
+    this.emit();
+  }
+
+  public destroyParamLink(id: number) {
+    this.inState.paramLinks = id === 0 ? this.inState.paramLinks.slice(0, -1) : this.inState.paramLinks.filter((c) => c.id !== id);
+    this.emit();
+  }
+
+  public updateParamLinkTarget(id: number, param: Param) {
+    const paramLink = this.inState.paramLinks.find((c) => c.id === id);
+    if (paramLink) {
+      paramLink.targetParamId = param.id;
+      paramLink.x2 = param.x;
+      paramLink.y2 = param.y + this.constants.linkTopOffset;
+    }
+    this.emit();
+  }
+
   public expand(id: number) {
     const node = this.inState.nodes.find((c) => c.id === id);
     if (node) {
@@ -154,6 +189,37 @@ export class GraphService {
       }
     //}
     this.updateNodesSettings(this.inState.nodes);
+  }
+
+  addParamsToNode(node: NodeX) {
+    if(!node.params) {
+      node.params = [];
+      let paramHeightCnt = this.constants.paramHeight;
+      // loop over inputs
+      for (let inputParam in node.plugin.cwlScript.inputs) {
+        node.params.push({
+          id: this.paramId++,
+          x: node.x,
+          y: node.y + paramHeightCnt,
+          name: inputParam,
+          hasInlet: true,
+          hasOutlet: false
+        });
+        paramHeightCnt = paramHeightCnt + paramHeightCnt;
+      }
+      // loop over outputs
+      for (let outputParam in node.plugin.cwlScript.outputs) {
+        node.params.push({
+          id: this.paramId++,
+          x: node.x + this.constants.nodeWidth,
+          y: node.y + paramHeightCnt,
+          name: outputParam,
+          hasInlet: false,
+          hasOutlet: true
+        });
+        paramHeightCnt = paramHeightCnt + paramHeightCnt;
+      }
+    }
   }
 
   public undo() {

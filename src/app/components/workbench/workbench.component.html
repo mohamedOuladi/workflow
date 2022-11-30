@@ -17,6 +17,9 @@
       <ng-container *ngFor="let l of state?.links">
         <app-link [data]="{ id: l.id, x1: l.x1, x2: l.x2, y1: l.y1, y2: l.y2 }"></app-link>
       </ng-container>
+      <ng-container *ngFor="let pl of state?.paramLinks">
+        <app-link [data]="{ id: pl.id, x1: pl.x1, x2: pl.x2, y1: pl.y1, y2: pl.y2 }"></app-link>
+      </ng-container>
       <div #selectarea class="select-zone"></div>
     </div>
   </div>
