@@ -18,7 +18,7 @@ export class WorkbenchComponent {
   @ViewChild('selectarea', { read: ElementRef }) selectArea!: ElementRef;
 
   isDragging = false; // dragging node
-  isDrawingLink = false; // dragging ink
+  isDrawingLink = false; // dragging ink 
   isMoving = false; // moving viewport
   isSelecting = false; // selecting area
 
