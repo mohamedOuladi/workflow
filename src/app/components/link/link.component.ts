@@ -10,7 +10,7 @@ const ZIGZAG_MIN_END_LENGTH = 25;
   encapsulation: ViewEncapsulation.None,
 })
 export class LinkComponent implements OnInit, OnChanges, AfterViewInit {
-  @Input() data!: { x1: number; y1: number; x2: number; y2: number; id: number };
+  @Input() data!: { x1: number; y1: number; x2: number; y2: number; id: number; selected: boolean };
   @ViewChild('host', { read: ElementRef }) host!: ElementRef<HTMLDivElement>;
 
   id: number = -1;
@@ -18,6 +18,7 @@ export class LinkComponent implements OnInit, OnChanges, AfterViewInit {
   y1: number = 0;
   x2: number = 0;
   y2: number = 0;
+  selected = false;
 
   constructor() {}
 
@@ -27,6 +28,7 @@ export class LinkComponent implements OnInit, OnChanges, AfterViewInit {
     this.x2 = this.data.x2;
     this.y2 = this.data.y2;
     this.id = this.data.id;
+    this.selected = this.data.selected;
   }
 
   ngAfterViewInit(): void {
@@ -38,6 +40,7 @@ export class LinkComponent implements OnInit, OnChanges, AfterViewInit {
     this.y1 = changes['data'].currentValue.y1;
     this.x2 = changes['data'].currentValue.x2;
     this.y2 = changes['data'].currentValue.y2;
+    this.selected = changes['data'].currentValue.selected;
     this.updatePath();
   }
 

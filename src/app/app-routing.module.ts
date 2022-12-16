@@ -9,7 +9,7 @@ const routes: Routes = [
   {
     path: 'workbench',
     component: LayoutComponent,
-    canActivate: [AuthGuardService],
+    // canActivate: [AuthGuardService],
   },
   {
     path: 'home',

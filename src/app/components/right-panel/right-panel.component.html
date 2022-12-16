@@ -1,7 +1,31 @@
 <div class="right-panel">
   <div class="panel-header">
-    <h3>Selection Details</h3>
+    <h5>Selection Details</h5>
   </div>
+  <!-- <div *ngFor="let node of state!.nodes" class="accordion">
+    <button class="button" [ngClass]="{ selected: selected[node.id!] }" (click)="togglePanel(node)">
+      {{ node.name }}
+    </button>
+    <div [hidden]="!visibleNodesMap.get(node.id!)" class="node-settings">
+      <div>
+        <div *ngFor="let input of node.plugin.cwlScript.inputs | keyvalue">
+          <label for="setting">{{input.key}}</label>
+          <input [(ngModel)]="node.settings" type="text" name="" id="setting" />
+        </div>
+      </div>
+      <br />
+    </div>
+  </div>
+  <div class="node-settings">
+    <button class="btn btn-green" (click)="save()">Save</button>
+  </div> -->
+  <div *ngIf="linkSelected else nodesList">
+       linkSelected
+  </div>
+</div>
+
+
+<ng-template #nodesList>
   <div *ngFor="let node of state!.nodes" class="accordion">
     <button class="button" [ngClass]="{ selected: selected[node.id!] }" (click)="togglePanel(node)">
       {{ node.name }}
@@ -19,4 +43,4 @@
   <div class="node-settings">
     <button class="btn btn-green" (click)="save()">Save</button>
   </div>
-</div>
+</ng-template>
