@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LinkDetailComponent } from './'']';
+import { LinkDetailComponent } from './link-detail.component';
 
 describe('LinkDetailComponent', () => {
   let component: LinkDetailComponent;

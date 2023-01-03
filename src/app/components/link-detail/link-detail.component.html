@@ -1,1 +1,24 @@
-<p>link-detail works!</p>
+<div class="link-detail-panel">
+    <div class="accordion">
+        <button class="button" (click)="sourceNodeToggled=!sourceNodeToggled">
+            {{ sourceNode.name }}
+        </button>
+        <div [hidden]="!sourceNodeToggled" class="node-settings">
+            <div *ngFor="let output of sourceNode.plugin.cwlScript.outputs | keyvalue">
+                <label for="setting">{{output.key}}</label>
+                <input [(ngModel)]="sourceNode.settings" type="text" name="" id="setting" />
+            </div>
+            <br />
+        </div>
+        <button class="button" (click)="targetNodeToggled=!targetNodeToggled">
+            {{ targetNode.name }}
+        </button>
+        <div [hidden]="!targetNodeToggled" class="node-settings">
+            <div *ngFor="let input of targetNode.plugin.cwlScript.inputs | keyvalue">
+                <label for="setting">{{input.key}}</label>
+                <input [(ngModel)]="targetNode.settings" type="text" name="" id="setting" />
+            </div>
+            <br />
+        </div>
+    </div>
+</div>

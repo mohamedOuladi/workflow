@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { ImmutableBehaviorSubject } from 'immutable-rxjs';
-import { NodeX, State } from '../types';
+import { Link, NodeX, State } from '../types';
 import { CONST, Constants } from './constants.service';
 
 @Injectable({
@@ -98,6 +98,11 @@ export class GraphService {
       link.x2 = node.x;
       link.y2 = node.y + this.constants.linkTopOffset;
     }
+    this.emit();
+  }
+
+  updateLinkSelection(id: number) {
+    this.inState.links.forEach((x) => x.id === id ? x.selected = true : x.selected = false);
     this.emit();
   }
 

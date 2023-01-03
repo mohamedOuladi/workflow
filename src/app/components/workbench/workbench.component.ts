@@ -114,16 +114,11 @@ export class WorkbenchComponent {
     const nodeId = parseInt(element?.getAttribute('data-id')!, 10);
 
     // click on link
-    if (link) {
+    if (!element && link) {
       console.log('link selected');
+      this.graph.updateSelection([]);
       const linkObj = this.state.links.find((x) => x.id === linkId)!;
-      linkObj.selected = true;
-      let selectedLinks = this.state.links.filter((x) => x.id !== linkId);
-      selectedLinks.forEach((l) => {
-        if (l.selected) {
-          l.selected = false;
-        }
-      });
+      this.graph.updateLinkSelection(linkObj.id);
       return;
     }
 
@@ -152,6 +147,7 @@ export class WorkbenchComponent {
           selection = [nodeId];
         }
       }
+      this.graph.updateLinkSelection(0);
       this.graph.updateSelection(selection);
       return;
     }
@@ -185,6 +181,7 @@ export class WorkbenchComponent {
       return;
     }
 
+    this.graph.updateLinkSelection(0);
     this.graph.updateSelection([]);
 
     // moving container
