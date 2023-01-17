@@ -12,6 +12,7 @@ type Dictionary<T> = { [key: string]: T };
 })
 export class RightPanelComponent {
   visibleNodesMap = new Map<number, boolean>();
+  inputOptionalMap = new Map<string, boolean>();
 
   selected = {} as Dictionary<boolean>;
   state?: State;
@@ -26,11 +27,32 @@ export class RightPanelComponent {
       this.state!.selection.forEach((id) => (this.selected[id] = true));
       this.link = this.state!.links.filter((x) => (x.selected === true))[0];
       this.linkSubject.next(this.link);
+      this.setOptionalInputs();
+      console.log(state);
     });
   }
 
   togglePanel(node: NodeX) {
     this.visibleNodesMap.set(node.id!, !this.visibleNodesMap.get(node.id!));
+  }
+
+  setSettingsVal(key: string, val: any, node: NodeX) {
+    node.settings.inputs[key] = val.target.value;
+    this.graph.updateNodesSettings(this.state!.nodes);
+    console.log('state');
+    console.log(this.state);
+  }
+
+  setOptionalInputs() {
+    for(let node of this.state!.nodes) {
+      for(let input in node.plugin.cwlScript.inputs) {
+        if (node.plugin.cwlScript.inputs[input].type.includes('?')) {
+          this.inputOptionalMap.set(node.name + '-' + input, true);
+        } else {
+          this.inputOptionalMap.set(node.name + '-' + input, false);
+        }
+      }
+    }
   }
 
   save() {

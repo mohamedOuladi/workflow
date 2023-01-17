@@ -31,4 +31,7 @@ export class LinkDetailComponent implements OnChanges {
     this.targetNode = this.state.nodes.find((x) => x.id === this.targetId)!;
   }
 
+  setSettingsVal(key: string, val: any, node: NodeX) {
+    node.settings.inputs[key] = val.target.value;
+  }
 }

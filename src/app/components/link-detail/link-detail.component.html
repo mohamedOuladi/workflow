@@ -4,9 +4,13 @@
             {{ sourceNode.name }}
         </button>
         <div [hidden]="!sourceNodeToggled" class="node-settings">
-            <div *ngFor="let output of sourceNode.plugin.cwlScript.outputs | keyvalue">
+            <!-- <div *ngFor="let output of sourceNode.plugin.cwlScript.outputs | keyvalue">
                 <label for="setting">{{output.key}}</label>
                 <input [(ngModel)]="sourceNode.settings" type="text" name="" id="setting" />
+            </div> -->
+            <div *ngFor="let output of sourceNode.settings.outputs | keyvalue; let i = index;" [attr.data-index]="i">
+                <label for="setting">{{output.key}}</label>
+                <input [(ngModel)]="output.value" (change)="setSettingsVal(output.key + '', $event, sourceNode)" type="text" name="{{'input' + i}}" id="setting"/>
             </div>
             <br />
         </div>
@@ -14,9 +18,13 @@
             {{ targetNode.name }}
         </button>
         <div [hidden]="!targetNodeToggled" class="node-settings">
-            <div *ngFor="let input of targetNode.plugin.cwlScript.inputs | keyvalue">
+            <!-- <div *ngFor="let input of targetNode.plugin.cwlScript.inputs | keyvalue">
                 <label for="setting">{{input.key}}</label>
                 <input [(ngModel)]="targetNode.settings" type="text" name="" id="setting" />
+            </div> -->
+            <div *ngFor="let input of targetNode.settings.inputs | keyvalue; let i = index;" [attr.data-index]="i">
+                <label for="setting">{{input.key}}</label>
+                <input [(ngModel)]="input.value" (change)="setSettingsVal(input.key + '', $event, targetNode)" type="text" name="{{'input' + i}}" id="setting"/>
             </div>
             <br />
         </div>

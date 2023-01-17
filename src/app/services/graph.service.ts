@@ -24,7 +24,10 @@ export class GraphService {
   constructor(@Inject(CONST) private constants: Constants) {}
 
   public addNode(node: NodeX) {
+    this.addSettingsToNode(node);
     const newNode = { ...node, id: this.nodeId++ };
+    console.log('newNode');
+    console.log(newNode);
     this.inState.nodes.push(newNode);
     this.emit();
   }
@@ -82,6 +85,8 @@ export class GraphService {
       x2: target.x,
       y2: target.y + this.constants.linkTopOffset,
     });
+    this.mapSettings(source, target);
+    console.log(this.state);
     this.emit();
   }
 
@@ -136,6 +141,75 @@ export class GraphService {
       }
     });
     this.emit();
+  }
+
+  // add settings as soon as a node is added
+  public addSettingsToNode(node: NodeX) {
+    if(!node.settings) {
+      node.settings = {};
+      node.settings.inputs = {};
+      node.settings.outputs = {};
+      let inputs = node.plugin.cwlScript.inputs;
+      let outputs = node.plugin.cwlScript.outputs;
+      
+      // works only for strings
+      // add initialization for params of other types
+      for (let input in inputs) {
+        node.settings.inputs[input] = "";
+      }
+      for (let output in outputs) {
+        node.settings.outputs[output]= "";
+      }
+    }
+    this.updateNodesSettings(this.inState.nodes);
+  }
+
+  public ssupdateNodesSettings(nodes: NodeX[]) {
+    nodes.forEach((p) => {
+      const node = this.inState.nodes.find((c) => c.id === p.id);
+      if (node) {
+        node.settings = p.settings;
+      }
+    });
+    this.emit();
+  }
+
+  mapSettings(source: NodeX, target: NodeX) {
+    let outputKey = '';
+    const mapOutputStr = '&' + source.name + '-' + this.linkId + '.pdb';
+    const mapInputStr = '*' + source.name + '-' + this.linkId + '.pdb';
+    // find output from source
+    // start with simple case where we have one output only
+    if (Object.keys(source.settings.outputs).length == 1) {
+      outputKey = Object.keys(source.settings.outputs)[0];
+      source.settings.inputs[outputKey] = mapOutputStr;
+      source.settings.outputs[outputKey] = mapOutputStr;
+      const sourceNode = this.inState.nodes.find((x) => x.id === source.id);
+      if (sourceNode) {
+        sourceNode.settings = source.settings;
+      }
+    }
+
+    Object.entries(target.settings.inputs).forEach(([key, value]) => {
+      if(key.includes('input') && key.includes('path')) {
+        target.settings.inputs[key] = mapInputStr;
+      }
+      if(key.includes('output') && key.includes('path')) {
+        target.settings.inputs[key] = '&' + target.name + '-' + this.linkId + '.pdb';
+      }
+    });
+    console.log('source');
+    console.log(source);
+    console.log('target');
+    console.log(target);
+    const targetNode = this.inState.nodes.find((x) => x.id === target.id);
+    if (targetNode) {
+      targetNode.settings = target.settings;
+    }
+    this.emit();
+
+    // use string the node.name + link.id + .pdb to map output (&) to input (*)
+
   }
 
   public undo() {

@@ -130,7 +130,7 @@ export class PluginLibraryComponent {
           "outputBinding": {
             "glob": "$(inputs.my-output)"
           }
-        },
+        }
       },
       "stdout": "$(inputs.my-output)"
     }
@@ -138,8 +138,8 @@ export class PluginLibraryComponent {
 
 
   constructor(private pluginsService: PluginsService, private modalService: NgbModal) {
-    // this.pluginsService.getPlugins().subscribe((plugins) => {
-    this.getFakePlugins().subscribe((plugins) => {
+    this.pluginsService.getPlugins().subscribe((plugins) => {
+    // this.getFakePlugins().subscribe((plugins) => {
       this.allNodes = plugins.map((plugin) => ({
         ...plugin,
         name: plugin.name,

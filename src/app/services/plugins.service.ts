@@ -13,6 +13,7 @@ const httpOptions = {
 })
 export class PluginsService {
   private readonly baseUrl = 'https://compute.scb-ncats.io/compute/plugins';
+  private readonly localUrl = 'http://127.0.0.1:8000/compute/plugins';
   private httpExternal: HttpClient;
 
   constructor(private http: HttpClient, private httpBackend: HttpBackend) {
@@ -20,7 +21,7 @@ export class PluginsService {
   }
 
   getPlugins() {
-    return this.http.get<PluginX[]>(this.baseUrl);
+    return this.http.get<PluginX[]>(this.localUrl);
   }
 
   getJsonFromURL(url: string): Observable<JSON> {
@@ -30,7 +31,7 @@ export class PluginsService {
   postPlugin(pluginDescriptor: any): Observable<any> {
     const httpParams = new HttpParams();
     httpOptions.params = httpParams;
-    return this.http.post<any>(this.baseUrl,
+    return this.http.post<any>(this.localUrl,
       pluginDescriptor,
       httpOptions
     );

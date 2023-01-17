@@ -59,7 +59,9 @@ export class WorkbenchComponent {
       this.graph.duplicateNodes();
     }
 
-    if (event.key === 'Delete' || event.key === 'Backspace') {
+    // disabled deleting nodes woth Backspace key
+    // Backspace is used in the right panel when entering params values 
+    if (event.key === 'Delete') {
       event.preventDefault();
       this.graph.deleteNodes();
       this.graph.updateSelection([]);

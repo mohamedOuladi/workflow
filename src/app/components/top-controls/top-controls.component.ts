@@ -112,4 +112,25 @@ export class TopControlsComponent {
       workflow => console.log(workflow)
     );
   }
+
+  // not needed
+  // testing only
+  buildWorkflow() {
+    if(this.state) {
+      console.log('buildWorkflow');
+      console.log(this.state);
+      let res = this.workflowService.buildWorkflow(this.state);
+      console.log("res");
+      console.log(res);
+    }
+  }
+
+  runWorkflowX() {
+    console.log('runWorkflowX');
+    console.log(this.state!);
+    this.workflowService.runWorkflowX(this.state!).subscribe(
+      workflow => console.log(workflow)
+    );
+  }
+
 }
