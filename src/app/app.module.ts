@@ -19,6 +19,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LeftPanelComponent } from './components/left-panel/left-panel.component';
 import { HomeComponent } from './components/home/home.component';
 import { WorkflowNewComponent } from './components/workflow-new/workflow-new.component';
+import { LinkDetailComponent } from './components/link-detail/link-detail.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { WorkflowNewComponent } from './components/workflow-new/workflow-new.com
     HomeComponent,
     WorkflowNewComponent,
     PluginNewComponent,
+    LinkDetailComponent,
   ],
   imports: [
     BrowserModule, 

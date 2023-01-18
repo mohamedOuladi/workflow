@@ -14,6 +14,7 @@ export class RightPanelComponent {
   visibleNodesMap = new Map<number, boolean>();
 
   selected = {} as Dictionary<boolean>;
+  linkSelected = false;
   state?: State;
 
   constructor(private graph: GraphService) {
@@ -21,6 +22,15 @@ export class RightPanelComponent {
       this.state = state;
       this.selected = {};
       this.state!.selection.forEach((id) => (this.selected[id] = true));
+      console.log(state);
+      this.state!.links.forEach((l) => {
+        console.log(l);
+        if (l.selected) {
+          console.log(l);
+          console.log('watching');
+          this.linkSelected = true;
+        }
+      })
     });
   }
 

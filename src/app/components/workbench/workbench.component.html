@@ -15,7 +15,7 @@
         </app-node>
       </ng-container>
       <ng-container *ngFor="let l of state?.links">
-        <app-link [data]="{ id: l.id, x1: l.x1, x2: l.x2, y1: l.y1, y2: l.y2 }"></app-link>
+        <app-link [data]="{ id: l.id, x1: l.x1, x2: l.x2, y1: l.y1, y2: l.y2, selected: l.selected }"></app-link>
       </ng-container>
       <div #selectarea class="select-zone"></div>
     </div>

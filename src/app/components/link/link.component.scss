@@ -1,4 +1,6 @@
 $light-color: #d8e2fa;
+$gold-color: #fec966;
+
 
 svg {
   z-index: 0;
@@ -7,7 +9,12 @@ svg {
 
   path {
     fill: none;
+    cursor: grab;
     stroke: $light-color;
     stroke-width: 2;
+
+    &.selected {
+      stroke: $gold-color
+    }
   }
 }

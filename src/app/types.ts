@@ -16,6 +16,7 @@ export interface Link {
   sourceId: number;
   targetId?: number;
   id: number;
+  selected: boolean;
   x1: number;
   y1: number;
   x2: number;

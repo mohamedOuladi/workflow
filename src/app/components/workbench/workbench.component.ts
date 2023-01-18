@@ -109,7 +109,23 @@ export class WorkbenchComponent {
     const outlet = (e.target as HTMLElement)!.closest('.outlet');
     const element = (e.target as HTMLElement)!.closest('[data-id]');
     const expander = (e.target as HTMLElement)!.closest('.expander');
+    const link = (e.target as HTMLElement)!.closest('.link');
+    const linkId = parseInt(link?.getAttribute('link-id')!, 10);
     const nodeId = parseInt(element?.getAttribute('data-id')!, 10);
+
+    // click on link
+    if (link) {
+      console.log('link selected');
+      const linkObj = this.state.links.find((x) => x.id === linkId)!;
+      linkObj.selected = true;
+      let selectedLinks = this.state.links.filter((x) => x.id !== linkId);
+      selectedLinks.forEach((l) => {
+        if (l.selected) {
+          l.selected = false;
+        }
+      });
+      return;
+    }
 
     // click on expand button
     if (expander) {
@@ -118,7 +134,7 @@ export class WorkbenchComponent {
     }
 
     // dragging node
-    if (!outlet && !inlet && element) {
+    if (!link && !outlet && !inlet && element) {
       this.startX = e.clientX;
       this.startY = e.clientY;
       this.tempX = e.clientX;
@@ -147,6 +163,7 @@ export class WorkbenchComponent {
       const { containerX, containerY } = this.getContainerPosition();
       this.draggedLink = {
         id: -1,
+        selected: false,
         sourceId: nodeId,
         x1: node.x + this.constants.nodeWidth,
         y1: node.y + this.constants.linkTopOffset,

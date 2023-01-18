@@ -74,6 +74,7 @@ export class GraphService {
   public createLink(source: NodeX, target: NodeX) {
     this.inState.links.push({
       id: this.linkId++,
+      selected: false,
       sourceId: source.id!,
       targetId: target.id!,
       x1: source.x + this.constants.nodeWidth,
@@ -93,6 +94,7 @@ export class GraphService {
     const link = this.inState.links.find((c) => c.id === id);
     if (link) {
       link.targetId = node.id;
+      link.selected = false;
       link.x2 = node.x;
       link.y2 = node.y + this.constants.linkTopOffset;
     }
