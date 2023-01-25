@@ -10,6 +10,8 @@ export interface NodeX {
   width?: number;
   settings?: any;
   plugin: PluginX;
+  job?: Job;
+  isHovering?: boolean;
 }
 
 export interface Link {
@@ -76,4 +78,18 @@ export interface Workflow {
   dateCreated: Date,
   dateFinished: Date,
   owner: string
+}
+
+export interface Job {
+  id: string;
+  name: string;
+  driver: string;
+  inputs: any;
+  outputs: any;
+  steps: any;
+  cwlJobInputs: any;
+  status: string;
+  dateCreated: Date;
+  dateFinished: Date;
+  owner: string;
 }

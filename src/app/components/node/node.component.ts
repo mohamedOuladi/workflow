@@ -25,6 +25,7 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit, OnChanges {
   hasOutlet = false;
   width = this.constants.nodeWidth;
   plugin?: PluginX;
+  jobStatus = "RUNNING";
 
   constructor(@Inject(CONST) private constants: Constants) { }
 
@@ -47,5 +48,20 @@ export class DynamicNodeComponent implements OnInit, AfterViewInit, OnChanges {
     this.name = changes.data.currentValue.name || this.name;
     this.selected = changes.data.currentValue.selected;
     this.expanded = changes.data.currentValue.expanded;
+  }
+
+  // replace by actual job status from compute
+  getJobStatus() {
+    if (this.jobStatus === "PENDING") {
+      return "node-pending";
+    } else if (this.jobStatus === "COMPLETED") {
+      return "node-completed";
+    } else if (this.jobStatus === "RUNNING") {
+      return "node-running";
+    } else if (this.jobStatus === "CANCELLED") {
+      return "node-cancelled";
+    } else {
+      return "node-pending";
+    }
   }
 }

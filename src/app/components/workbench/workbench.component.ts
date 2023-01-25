@@ -98,6 +98,7 @@ export class WorkbenchComponent {
         name: plugin.name,
         selected: false,
         expanded: false,
+        isHovering: false,
         plugin: plugin
       };
       this.graph.addNode(node);
@@ -211,6 +212,18 @@ export class WorkbenchComponent {
           }
         });
       });
+      return;
+    } else {
+      const element = (e.target as HTMLElement)!.closest('[data-id]'); // TODO: classname from shared constant
+      if (element) {
+        const nodeId = parseInt(element.getAttribute('data-id')!, 10);
+        const node = this.state.nodes.find((x) => x.id === nodeId)!;
+        node.isHovering = true;
+      } else {
+        this.state.nodes.forEach((node) => {
+          node.isHovering = false;
+        })
+      }
       return;
     }
 

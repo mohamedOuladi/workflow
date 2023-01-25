@@ -11,12 +11,34 @@
             <br/>
 
             <div class="box">
-                <input id="typeahead-http" type="text" class="form-control" placeholder="Search through collections"/>
+                <input id="typeahead-http" type="text" class="form-control" placeholder="Search through workflows"/>
                 <button class="btn btn-green last" (click)="displayNewWfModal()"><b>New Workflow</b></button>
             </div>
             <div class="separator"></div>
-            <!-- TODO: display workflows and filtering options-->
-            <div class="wf-area"></div>
+            <!-- TODO: display filtering options-->
+            <!-- TODO: add list/grid view-->
+            <div class="wf-area">
+                <table class="table table-bordered table-striped table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Driver</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Date Created</th>
+                            <th scope="col">Owner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let wf of allWorkflows">
+                            <th scope="row">{{wf.name}}</th>
+                            <td>{{wf.driver}}</td>
+                            <td>{{wf.status}}</td>
+                            <td>{{wf.dateCreated}}</td>
+                            <td>{{wf.owner}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </article>
     </main>
 </div>

@@ -37,6 +37,36 @@ $border-radius: 10px;
     cursor: grabbing;
   }
 
+  .node-outer-border {
+    position: absolute;
+    left: -9px;
+    top: -9px;
+    height: $height + 18px;
+    width: $width + 14px;
+    border: 2px solid $light-color;
+    border-radius: $border-radius + 7px;
+  }
+
+  .node-running {
+    position: absolute;
+    height: $height + 14px;
+    width: 50%;
+    border-top: 5px solid colors.$green;
+    border-bottom: 5px solid colors.$green;
+    border-left: 5px solid colors.$green;
+    border-top-left-radius: $border-radius + 5px;
+    border-bottom-left-radius: $border-radius + 5px;
+  } 
+
+  .node-status {
+    position: absolute;
+    height: $height + 14px;
+    width: 100%;
+    border: 5px solid;
+    border-radius: $border-radius + 5px;
+    border-color: black;
+  }
+
   .node-header {
     width: 100%;
     height: $height;

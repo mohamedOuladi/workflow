@@ -7,6 +7,13 @@
   [style.width]="width + 'px'"
   [ngClass]="{ selected: selected }"
 >
+  <div *ngIf="data?.isHovering">
+    <div class="node-outer-border">
+      <div *ngIf="getJobStatus() !== 'node-running'; else nodeRunning">
+        <div class="node-status" [ngStyle]="{'border-color': (getJobStatus() === 'node-completed') ? '#02dcc7' : ((getJobStatus() === 'node-cancelled') ? '#dc3545' : 'black')}"></div>
+      </div>
+    </div>
+  </div>
   <div class="inlet" [hidden]="!hasInlet"></div>
   <div class="outlet" [hidden]="!hasOutlet"></div>
   <div class="node-header">
@@ -23,3 +30,7 @@
     <ng-container #outlet></ng-container>
   </div>
 </div>
+
+<ng-template #nodeRunning>
+  <div class="node-running"></div>
+</ng-template>
